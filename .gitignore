@@ -16,7 +16,8 @@
 *.launch
 .settings/
 *.sublime-workspace
-
+.env.development
+.env.production
 # IDE - VSCode
 .vscode/*
 !.vscode/settings.json
@@ -33,7 +34,7 @@ npm-debug.log
 yarn-error.log
 testem.log
 /typings
-
+/uploads
 # System Files
 .DS_Store
 Thumbs.db
