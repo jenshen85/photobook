@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Message } from '@photobook/api-interfaces';
 
 @Component({
   selector: 'photobook-root',
@@ -8,6 +7,5 @@ import { Message } from '@photobook/api-interfaces';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  hello$ = this.http.get<Message>('/api/hello');
   constructor(private http: HttpClient) {}
 }

@@ -21,7 +21,15 @@
             "polyfills": "apps/client/src/polyfills.ts",
             "tsConfig": "apps/client/tsconfig.app.json",
             "aot": true,
-            "assets": ["apps/client/src/favicon.ico", "apps/client/src/assets"],
+            "assets": [
+              "apps/client/src/favicon.ico",
+              "apps/client/src/assets",
+              {
+                "glob": "**/*",
+                "input": "uploads",
+                "output": "./"
+              }
+            ],
             "styles": ["apps/client/src/styles.scss"],
             "scripts": []
           },
