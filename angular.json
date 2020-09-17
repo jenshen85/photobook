@@ -21,15 +21,7 @@
             "polyfills": "apps/client/src/polyfills.ts",
             "tsConfig": "apps/client/tsconfig.app.json",
             "aot": true,
-            "assets": [
-              "apps/client/src/favicon.ico",
-              "apps/client/src/assets",
-              {
-                "glob": "**/*",
-                "input": "uploads",
-                "output": "./"
-              }
-            ],
+            "assets": ["apps/client/src/favicon.ico", "apps/client/src/assets"],
             "styles": ["apps/client/src/styles.scss"],
             "scripts": []
           },
@@ -60,6 +52,21 @@
                   "maximumWarning": "6kb",
                   "maximumError": "10kb"
                 }
+              ],
+              "assets": [
+                "apps/client/src/favicon.ico",
+                "apps/client/src/assets"
+              ]
+            },
+            "development": {
+              "assets": [
+                "apps/client/src/favicon.ico",
+                "apps/client/src/assets",
+                {
+                  "glob": "**/*",
+                  "input": "uploads",
+                  "output": "./"
+                }
               ]
             }
           }
@@ -73,6 +80,9 @@
           "configurations": {
             "production": {
               "browserTarget": "client:build:production"
+            },
+            "development": {
+              "browserTarget": "client:build:development"
             }
           }
         },
