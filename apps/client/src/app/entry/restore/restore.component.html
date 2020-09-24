@@ -1,0 +1,74 @@
+<photobook-fade>
+  <div class="big-title big-title-white">Восстановление <br> пароля</div>
+  <div class="entry-form-out">
+    <form [formGroup]="form" (ngSubmit)="submit($event)" class="entry-form">
+
+      <photobook-control
+        className="welcome-form-control"
+        inputName="email"
+        icon="mail"
+        type="email"
+        label="Электронная почта*">
+        <mat-error *ngIf="form.get('email').invalid && form.get('email').touched">
+          <photobook-fade>
+            <small *ngIf="form.get('email').errors.required">This field is required</small>
+            <small *ngIf="form.get('email').errors.email">Email not valid</small>
+          </photobook-fade>
+        </mat-error>
+      </photobook-control>
+
+      <div class="entry-form-bottom">
+        <mat-action-row>
+          <button
+            [disabled]="form.invalid && form.touched"
+            type="submit"
+            mat-raised-button
+            class="entry-form-btn entry-form-btn--blue">
+            Восстановить пароль
+          </button>
+          <a mat-button [routerLink]="['/login']" class="entry-form-btn" color="link">
+            Войти
+          </a>
+        </mat-action-row>
+      </div>
+
+    </form>
+  </div>
+  <!-- <div class="welcome">
+    <div class="welcome__form-out">
+      <form class="welcome__form">
+        <div class="welcome__form-field welcome__form-field--border-bottom">
+          <div class="welcome__form-title">Забыли пароль?</div>
+          <div class="welcome__form-description">
+            Ничего страшного, введите свой e-mail, и мы вышлем вам инструкции по востановлению
+            пароля
+          </div>
+        </div>
+  
+        <div class="welcome__form-field welcome__form-field--border-bottom">
+          <label class="welcome__form-label">
+            <svg class="welcome__form-control-ico">
+              <use xlink:href="assets/images/sprite.svg#envelope" />
+            </svg>
+            <input
+              class="welcome__form-control"
+              name="email"
+              type="email"
+              placeholder="Электронная почта"
+            />
+          </label>
+        </div>
+        <div class="welcome__form-field">
+          <button type="submit" class="button button-bg-blue  welcome__form-button">
+            Войти
+          </button>
+        </div>
+        <div class="welcome__form-field">
+          <div class="welcome__form-bottom">
+            Вспомнили пароль? <a [routerLink]="['/login']">Войти</a>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div> -->
+</photobook-fade>

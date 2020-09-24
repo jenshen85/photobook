@@ -19,7 +19,8 @@
       "@photobook/api-interfaces": ["libs/api-interfaces/src/index.ts"],
       "@photobook/dto": ["libs/dto/src/index.ts"],
       "@photobook/enums": ["libs/enums/src/index.ts"],
-      "@photobook/entities": ["libs/entities/src/index.ts"]
+      "@photobook/entities": ["libs/entities/src/index.ts"],
+      "@photobook/ui": ["libs/ui/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

@@ -1,1 +1,359 @@
 /* You can add global styles to this file, and also import other style files */
+@import '~@angular/material/prebuilt-themes/indigo-pink.css';
+
+/* You can add global styles to this file, and also import other style files */
+@import './sass/mixins.scss';
+@import './sass/variables.scss';
+@import './sass/_reset.scss';
+@import './sass/_fonts.scss';
+
+// footer down start
+html,
+body {
+  width: 100%;
+  height: 100%;
+  @include proxima;
+}
+
+html {
+  font-size: 16px;
+
+  @media (min-width: 1950px) {
+    font-size: 18px;
+  }
+
+  @media (min-width: 2300px) {
+    font-size: 20px;
+  }
+
+  @media (min-width: 2600px) {
+    font-size: 22px;
+  }
+
+  @media (min-width: 2900px) {
+    font-size: 24px;
+  }
+
+  // @media (max-width: 1260px) {
+  //   font-size: 15px;
+  // }
+
+  // @media (max-width: 1060px) {
+  //   font-size: 14px;
+  // }
+
+  // @media (max-width: 900px) {
+  //   font-size: 13px;
+  // }
+
+  // @media (max-width: 800px) {
+  //   font-size: 12px;
+  // }
+
+  @media (max-width: 767px) {
+    font-size: 16px;
+  }
+}
+
+.wrapper {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+header,
+footer {
+  flex: 0 0 auto;
+}
+
+main {
+  flex: 1 0 auto;
+}
+// footer down end
+
+a {
+  &:hover {
+    text-decoration: none;
+  }
+}
+
+/*-------------- common --------------*/
+.container {
+  width: 100%;
+  max-width: rem(1200);
+  margin: 0 auto;
+  padding: 0 rem($container-padding);
+}
+/*-------------- common --------------*/
+
+.button {
+  outline: none;
+  @include panton;
+  color: $blue;
+  font-weight: 700;
+  font-size: rem(14);
+  outline: none;
+  cursor: pointer;
+  display: block;
+  padding: rem(15) rem(20) rem(14);
+  transition: all $tranz;
+  border: 0;
+  border-radius: rem(30);
+  background-color: transparent;
+  @include custom-outline(#28bbf0);
+
+  &-right-auto {
+    margin-right: auto;
+  }
+}
+
+.button-bg-blue {
+  color: #fff;
+  background-color: $blue;
+  border: rem(1) solid $blue;
+
+  &:hover {
+    background-color: #fff;
+    color: $blue;
+  }
+
+  &:disabled {
+    background: #d8cfcf;
+  }
+}
+
+.button-border {
+  color: $blue;
+  background-color: #fff;
+  border: rem(1) solid $blue;
+
+  &:hover {
+    background-color: $blue;
+    color: #fff;
+  }
+
+  &--more {
+    margin: 0 auto;
+    margin-top: rem(20);
+  }
+}
+
+.button-remove {
+  color: #fff;
+  background-color: $red;
+  border: rem(1) solid $red;
+  display: flex;
+  align-items: center;
+
+  &:hover {
+    background-color: #fff;
+    color: $red;
+
+    .button-remove__icon {
+      fill: $red;
+    }
+  }
+
+  &__icon {
+    width: rem(16);
+    height: rem(19);
+    display: block;
+    margin-right: rem(10);
+    fill: #fff;
+    transition: all $tranz;
+  }
+}
+
+.big-title {
+  @include panton;
+  font-size: rem(42);
+  font-weight: 700;
+  color: #323232;
+  text-align: center;
+  width: 100%;
+  margin: rem(25) auto rem(20);
+
+  &-white {
+    @include panton;
+    font-size: rem(42);
+    font-weight: 700;
+    text-align: center;
+    width: 100%;
+    margin: rem(25) auto rem(20);
+    color: #fff;
+  }
+
+  &-no-margin {
+    margin: 0;
+  }
+}
+
+@import './sass/modules/entry.scss';
+
+
+.header {
+  background-image: url('assets/images/welcom-bg.png');
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  padding: rem(50) 0 0;
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(#000000, 0.1);
+  }
+
+  &-edit {
+    z-index: 2;
+    &::before {
+      background-color: rgba(#000000, 0.8);
+      z-index: 1;
+    }
+  }
+
+  &-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    z-index: 1;
+  }
+
+  &-button-group {
+    align-self: flex-start;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    position: absolute;
+    right: rem($container-padding);
+    top: 0;
+    transform: translateY(rem(-$button-size));
+
+    .button-user {
+      margin-bottom: rem(10);
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+}
+
+.main {
+  &-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+
+  &-title {
+    @include panton;
+    color: #323232;
+    font-weight: 700;
+    font-size: rem(42);
+    line-height: lh(46, 42);
+    margin-bottom: rem(32);
+
+    &-result {
+      @include panton;
+      color: #323232;
+      font-weight: 600;
+      font-size: rem(22);
+      line-height: lh(30, 22);
+      margin-bottom: rem(30);
+    }
+  }
+
+  &.is-header-edit {
+    position: relative;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba($color: #fff, $alpha: 0.9);
+      z-index: 1;
+    }
+  }
+}
+
+.footer {
+  $padding: 30;
+  background-image: url('assets/images/welcom-bg.png');
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  padding: rem(20) 0;
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(#000000, 0.3);
+  }
+
+  &-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+  }
+
+  &-left {
+    width: 50%;
+    padding-right: rem($padding);
+    text-align: left;
+    @include proxima;
+    font-size: rem(16);
+    line-height: lh(20, 16);
+    color: #fff;
+    font-weight: 300;
+  }
+
+  &-right {
+    width: 50%;
+    padding-left: rem($padding);
+    text-align: right;
+    @include proxima;
+    font-size: rem(16);
+    line-height: lh(20, 16);
+    color: #fff;
+    font-weight: 300;
+    opacity: 0.6;
+  }
+}
+
+.button-top {
+  display: block;
+  border: 0;
+  outline: none;
+  cursor: pointer;
+  padding: 0;
+  position: absolute;
+  top: rem(0);
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: transparent;
+  @include custom-outline(#28bbf0);
+
+  &-image {
+    width: rem(29);
+    height: rem(23);
+    display: block;
+    fill: #fff;
+  }
+}

@@ -1,0 +1,62 @@
+<photobook-fade>
+  <div class="big-title big-title-white">Добро пожаловать</div>
+  <div class="entry-description">
+    Перед вами сервис, который поможет вам организовать свои фотографии в альбомы и поделиться ими со всем миром!
+  </div>
+
+  <div class="entry-form-out">
+    <form [formGroup]="form" (ngSubmit)="submit($event)" class="entry-form">
+
+      <photobook-control
+        className="welcome-form-control"
+        inputName="email"
+        icon="mail"
+        type="email"
+        label="Электронная почта*">
+        <mat-error *ngIf="form.get('email').invalid && form.get('email').touched">
+          <photobook-fade>
+            <small *ngIf="form.get('email').errors.required">This field is required</small>
+            <small *ngIf="form.get('email').errors.email">Email not valid</small>
+          </photobook-fade>
+        </mat-error>
+      </photobook-control>
+
+      <photobook-control
+        className="welcome-form-control"
+        inputName="password"
+        icon="lock"
+        type="password"
+        label="Пароль*">
+        <mat-error *ngIf="form.get('password').invalid && form.get('password').touched">
+          <photobook-fade>
+            <small *ngIf="form.get('password').errors.required">This field is required</small>
+            <small *ngIf="form.get('password').errors.minlength">
+              Password where short, min length: {{form.get('password').errors.minlength.requiredLength}}
+            </small>
+          </photobook-fade>
+        </mat-error>
+      </photobook-control>
+
+      <div class="entry-form-bottom">
+        <mat-action-row>
+          <button
+            [disabled]="form.invalid && form.touched"
+            type="submit"
+            mat-raised-button
+            class="entry-form-btn entry-form-btn--blue">
+            Войти
+          </button>
+          <a mat-button [routerLink]="['/']" class="entry-form-btn" color="link">
+            Зарегистрироваться
+          </a>
+        </mat-action-row>
+
+        <div class="entry-form-info">
+          <a [routerLink]="['/restore']" class="welcome__form-recovery">
+            Забыли пароль?
+          </a>
+        </div>
+      </div>
+    </form>
+  </div>
+</photobook-fade>

@@ -1,0 +1,41 @@
+@import '../../../sass/mixins.scss';
+@import '../../../sass/variables.scss';
+
+.mat-action-row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: rem(16) auto 0;
+  max-width: rem(200);
+
+  .entry-form-btn {
+    margin-bottom: rem(8);
+    width: 100%;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.photobook-control {
+  position: relative;
+  margin-bottom: rem(20);
+
+  mat-error {
+    position: absolute;
+    top: calc(100% - #{rem(-2)});
+  }
+}
+
+.entry-form-btn {
+  line-height: rem(48);
+  padding: 0 rem(10);
+  margin-bottom: rem(10);
+
+  &--blue {
+    background-color: $blue;
+    color: $white;
+  }
+}

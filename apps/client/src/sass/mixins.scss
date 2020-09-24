@@ -1,0 +1,95 @@
+@import 'variables';
+
+@mixin proxima {
+  font-family: 'proxima nova', sans-serif;
+}
+
+@mixin panton {
+  font-family: 'panton', sans-serif;
+}
+
+@function rem($pixels, $context: $browser-context) {
+  @return #{$pixels/$context}rem;
+}
+
+@function em($pixels, $context: $browser-context) {
+  @return #{$pixels/$context}em;
+}
+
+@function lh($lh, $fs) {
+  @return #{$lh/$fs};
+}
+
+@mixin nav-link-hover($color) {
+  display: block;
+  position: relative;
+  &::before {
+    content: '';
+    width: 0;
+    height: rem(1.5);
+    position: absolute;
+    left: 0;
+    bottom: rem(-5);
+    background-color: $color;
+    transition: all 0.3s;
+  }
+  &:hover {
+    &::before {
+      width: 100%;
+    }
+  }
+}
+
+// custom outline
+@mixin custom-outline($color) {
+  outline: none;
+
+  &:focus,
+  &:active {
+    box-shadow: rem(0) rem(0) rem(0) rem(3.2) rgba($color, 0.6);
+    @content;
+  }
+}
+
+/*-------------- media --------------*/
+@mixin desktop {
+  @media screen and (max-width: $desktop) {
+    @content;
+  }
+}
+
+@mixin laptop {
+  @media screen and (max-width: $laptop) {
+    @content;
+  }
+}
+
+@mixin tablets {
+  @media screen and (max-width: $tablets) {
+    @content;
+  }
+}
+
+@mixin tablets-min {
+  @media screen and (max-width: $tablets-min) {
+    @content;
+  }
+}
+
+@mixin phones {
+  @media screen and (max-width: $phones) {
+    @content;
+  }
+}
+
+@mixin phones-min {
+  @media screen and (max-width: $phones-min) {
+    @content;
+  }
+}
+
+@mixin custom($prop) {
+  @media screen and (max-width: $prop) {
+    @content;
+  }
+}
