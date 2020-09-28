@@ -1,5 +1,6 @@
+import "reflect-metadata";
 import { Exclude, Expose, Type } from "class-transformer";
-import { PhotoUserRoDto } from './user-ro.dto';
+import { PhotoUserRoDto } from './photo-user-ro.dto';
 
 @Exclude()
 export class PhotoRoDto {

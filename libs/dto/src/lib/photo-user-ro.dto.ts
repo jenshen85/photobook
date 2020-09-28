@@ -3,17 +3,14 @@ import { Exclude, Expose, Type } from 'class-transformer';
 
 import { UserRoleEnum } from '@photobook/enums';
 import { UserProfileRODto } from './user-profile-ro.dto'
-import { AlbumRoDto } from './album-ro.dto';
 
 @Exclude()
-export class UserRoDto {
+export class PhotoUserRoDto {
   @Expose()
   id: number;
 
   @Expose()
   email: string;
-
-  password: string;
 
   @Expose()
   username: string;
@@ -24,8 +21,6 @@ export class UserRoDto {
   @Expose()
   updated_at: Date;
 
-  deleted_at: Date;
-
   @Expose()
   is_active: boolean;
 
@@ -35,9 +30,4 @@ export class UserRoDto {
   @Expose()
   @Type(() => UserProfileRODto)
   user_profile: UserProfileRODto;
-
-  @Expose()
-  @Type(() => AlbumRoDto)
-  albums: AlbumRoDto[];
 }
-

@@ -4,6 +4,7 @@
 
 export const environment = {
   production: false,
+  tokenWhiteListedDomains: ['localhost:4200']
 };
 
 /*

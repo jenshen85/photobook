@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthCredentialsDto } from '@photobook/dto';
-import { EntryService } from '../entry.service';
+import { AuthService } from '../../auth/auth.service';
 
 @Component({
   selector: 'photobook-login',
@@ -12,7 +12,7 @@ import { EntryService } from '../entry.service';
 export class LoginComponent implements OnInit {
 
   form: FormGroup;
-  constructor( private readonly entryService: EntryService) {}
+  constructor( private readonly _authService: AuthService) {}
   ngOnInit(): void {
     this.form = new FormGroup({
       email: new FormControl(null, [Validators.required, Validators.email]),
@@ -24,7 +24,7 @@ export class LoginComponent implements OnInit {
   submit($event: Event) {
     if(this.form.valid) {
       const data: AuthCredentialsDto = this.form.value;
-      this.entryService.signin(data).subscribe((userdata) => console.log(userdata));
+      this._authService.login(data).subscribe((userdata) => console.log(userdata));
     } else {
       this.form.markAsTouched();
     }

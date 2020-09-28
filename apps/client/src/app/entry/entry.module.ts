@@ -16,11 +16,11 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        component: RegisterComponent,
+        component: LoginComponent,
       },
       {
-        path: 'login',
-        component: LoginComponent,
+        path: 'register',
+        component: RegisterComponent,
       },
       {
         path: 'restore',
