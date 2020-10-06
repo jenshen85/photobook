@@ -27,6 +27,11 @@ export class UserController {
     return this._userService.getUsers();
   }
 
+  @Get('/me')
+  getMe(@GetUser() user: User): Promise<UserRoDto> {
+    return this._userService.getUserById(user.id);
+  }
+
   @Get('/:id')
   getUserById(@Param('id', ParseIntPipe) id: number): Promise<UserRoDto> {
     return this._userService.getUserById(id);

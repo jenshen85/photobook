@@ -1,0 +1,80 @@
+@import '../../../../sass/mixins.scss';
+@import '../../../../sass/variables.scss';
+
+:host {
+  &.photobook-btn {
+    background: $white;
+    border: none;
+    box-shadow: 0 rem(1) rem(2) 0 rgba($black, 0.22);
+    color: $white;
+    border-radius: rem(20);
+    display: flex;
+    align-items: center;
+    padding: 0;
+    overflow: hidden;
+    cursor: pointer;
+    @include panton;
+    font-size: rem(14);
+    color: $white;
+    font-weight: bold;
+    line-height: 1.5;
+    transition: background 0.3s;
+    outline: none;
+
+    &:focus,
+    &:active,
+    &:hover {
+      background: $blue;
+      box-shadow: 0 rem(1) rem(4) 0 rgba($black, 0.22);
+
+      & > .photobook-btn-icon {
+        svg {
+          fill: $white;
+        }
+      }
+
+      & > .photobook-btn-text {
+        opacity: 1;
+        visibility: visible;
+
+        span {
+          margin-left: 0;
+        }
+      }
+    }
+  }
+}
+
+.photobook-btn {
+  &-icon {
+    width: rem(40);
+    height: rem(40);
+    padding: rem(10);
+
+    svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+      fill: #a0a09f;
+      transition: fill 0.3s;
+    }
+  }
+
+  &-text {
+    display: block;
+    opacity: 0;
+    white-space: nowrap;
+    visibility: hidden;
+    overflow: hidden;
+    position: relative;
+    transition: opacity 0.3s;
+    text-align: right;
+
+    span {
+      display: block;
+      padding: 0 rem(12) 0 0;
+      margin-left: rem(-200);
+      transition: margin 0.3s;
+    }
+  }
+}

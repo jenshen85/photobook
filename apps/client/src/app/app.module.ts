@@ -2,14 +2,19 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { JwtModule } from  '@auth0/angular-jwt';
+import { JwtModule } from '@auth0/angular-jwt';
+import {
+  FormsModule,
+  ReactiveFormsModule,
+  FormControlDirective,
+} from '@angular/forms';
 
-import { environment } from '../environments/environment'
-import { AppComponent } from './app.component';
+import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { EntryModule } from './entry/entry.module';
-import { NotfoundComponent } from './components/notfound/notfound.component';
-import { AuthService, tokenGetter } from './auth/auth.service'
+import { AuthService, tokenGetter } from './auth/auth.service';
+import { AppComponent } from './app.component';
+import { NotfoundComponent } from './shared/components/notfound/notfound.component';
 
 @NgModule({
   declarations: [AppComponent, NotfoundComponent],
@@ -22,11 +27,13 @@ import { AuthService, tokenGetter } from './auth/auth.service'
     JwtModule.forRoot({
       config: {
         tokenGetter,
-        allowedDomains: environment.tokenWhiteListedDomains
-      }
-    })
+        allowedDomains: environment.tokenWhiteListedDomains,
+      },
+    }),
+    FormsModule,
+    ReactiveFormsModule,
   ],
-  providers: [ AuthService ],
+  providers: [AuthService, FormControlDirective],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

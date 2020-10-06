@@ -1,0 +1,49 @@
+@import '../../../../sass/mixins.scss';
+@import '../../../../sass/variables.scss';
+
+:host {
+  width: 100%;
+}
+
+.photobook-search-control {
+  &__form {
+    position: relative;
+    width: 100%;
+  }
+
+  &__field {
+    display: block;
+  }
+
+  &__control {
+    width: 100%;
+    height: rem(40);
+    line-height: rem(40);
+    padding: 0 rem(24) 0 rem(48);
+    font-size: rem(16);
+    color: $text-color;
+    border-radius: rem(20);
+    background-color: $white;
+    border: 0;
+    outline: none;
+
+    &::-webkit-input-placeholder {
+      color: rgba($text-color, 0.6);
+    }
+    &::-moz-placeholder {
+      color: rgba($text-color, 0.6);
+    }
+    &:-ms-input-placeholder {
+      color: rgba($text-color, 0.6);
+    }
+    &:-moz-placeholder {
+      color: rgba($text-color, 0.6);
+    }
+  }
+}
+
+.photobook-btn {
+  position: absolute;
+  top: 0;
+  left: 0;
+}

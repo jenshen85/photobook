@@ -1,3 +1,54 @@
-<photobook-header [userBg]="user && user.user_profile.cover">
-  <photobook-user *ngIf="loadUser" [user]="user"></photobook-user>
-</photobook-header>
+<photobook-spinner *ngIf="pendingLoadUser; else content"></photobook-spinner>
+<ng-template #content>
+
+  <photobook-header
+    [formGroup]="profileForm"
+    [userBg]="user.user_profile.cover"
+    [ngClass]="isEdit && 'user-edit'">
+
+    <photobook-user
+      firstNameControl="first_name"
+      lastNameControl="last_name"
+      descriptionControl="description"
+      avatarControl="avatar"
+      [username]="user.username"
+      [isEdit]="isEdit"
+      [profile]="profile" [@fade]></photobook-user>
+
+    <div class="header-actions" *ngIf="!isEdit; else userBg" [@fade]>
+      <button (click)="editHandler()" icon="{{editIcon}}" photobook-ph-button>Редактировать</button>
+      <button (click)="logOut()" icon="{{logOutIcon}}" photobook-ph-button>Выйти</button>
+      <a [routerLink]="['user/', user.id]" icon="{{albumIcon}}" photobook-ph-button>Альбомы</a>
+    </div>
+    <ng-template #userBg>
+      <photobook-upload-image formControlName="cover" [@fade]>
+        Изменить фон
+      </photobook-upload-image>
+    </ng-template>
+
+    <div class="edit-bar" *ngIf="isEdit" [@fade]>
+      <div class="container">
+        <div class="edit-bar__content">
+          <div class="edit-bar__actions">
+            <button (click)="editHandler()" class="button btn-white">Отменить</button>
+            <button (click)="updateProfileHandler()" class="button button-bg-blue">Сохранить</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </photobook-header>
+
+  <div class="top-bar">
+    <div class="container top-bar__container">
+      <photobook-search-control placeholder="Исследовать мир"></photobook-search-control>
+    </div>
+  </div>
+
+  <main class="photobook-main" [ngClass]="isEdit && 'user-edit'">
+
+  </main>
+
+  <photobook-footer [userBg]="user.user_profile.cover"></photobook-footer>
+  <photobook-spinner *ngIf="savePending"></photobook-spinner>
+</ng-template>

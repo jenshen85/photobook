@@ -1,0 +1,58 @@
+@import '../../../../sass/mixins.scss';
+@import '../../../../sass/variables.scss';
+
+:host {
+  width: 100%;
+  height: 100%;
+  display: block;
+
+  &:hover {
+    .photobook-upload-image {
+      &__icon {
+        fill: $white;
+      }
+    }
+  }
+}
+
+.photobook-upload-image {
+  width: 100%;
+  height: 100%;
+  background-color: rgba($black, .8);
+  position: relative;
+
+  &__field {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+  }
+
+  &__control {
+    position: absolute;
+    width: 0;
+    height: 0;
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  &__icon {
+    width: rem(40);
+    height: rem(32);
+    margin-bottom: rem(10);
+    fill: #d6d6d6;
+    transition: fill 0.3s;
+  }
+
+  &__label {
+    font-size: rem(16);
+    color: rgba($white, 0.8);
+    line-height: 1.3;
+    text-align: center;
+    width: 100%;
+    padding: 0 rem(10);
+  }
+}

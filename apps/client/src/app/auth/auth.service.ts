@@ -11,6 +11,8 @@ import {
   UserCredentialsDto,
   UserRoDto,
 } from '@photobook/dto';
+import { JwtPayload } from '@photobook/api-interfaces';
+import { PATHS } from '../shared/utils/api'
 
 export const ACCESS_TOKEN_KEY = 'access_token';
 
@@ -26,8 +28,6 @@ export function tokenSetter(token: string): void {
   providedIn: 'root',
 })
 export class AuthService {
-  api = 'api/auth/signup';
-  api2 = 'api/auth/signin';
   constructor(
     private readonly _http: HttpClient,
     private readonly _jwtHelper: JwtHelperService,
@@ -35,16 +35,16 @@ export class AuthService {
   ) {}
 
   register(userCredentials: UserCredentialsDto): Observable<UserRoDto> {
-    return this._http.post<UserRoDto>(this.api, userCredentials).pipe(
+    return this._http.post<UserRoDto>(PATHS.signup, userCredentials).pipe(
       tap((data) => {
         this._router.navigate(['']);
       }),
-      shareReplay({ refCount: true }),
+      shareReplay({ refCount: true })
     );
   }
 
   login(authCredential: AuthCredentialsDto): Observable<AuthRoDto> {
-    return this._http.post<AuthRoDto>(this.api2, authCredential).pipe(
+    return this._http.post<AuthRoDto>(PATHS.signin, authCredential).pipe(
       tap((token) => {
         tokenSetter(token.accessToken);
         this._router.navigate(['photobook']);
@@ -58,6 +58,11 @@ export class AuthService {
   isAuthenticated(): boolean {
     const token = tokenGetter();
     return token && !this._jwtHelper.isTokenExpired(token);
+  }
+
+  getPayload(): JwtPayload {
+    const token = tokenGetter();
+    return this._jwtHelper.decodeToken(token);
   }
 
   logout(): void {
