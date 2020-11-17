@@ -6,17 +6,17 @@ import {
 } from '@nestjs/common';
 import { plainToClass } from 'class-transformer';
 
-import { Album, User } from '@photobook/entities';
+import { Album, User } from '../entities';
 import { AlbumCredentialsDto, AlbumRoDto } from '@photobook/dto';
 
 @EntityRepository(Album)
 export class AlbumRepository extends Repository<Album> {
-  async getAll(): Promise<AlbumRoDto[]> {
-    const albums = await this.find();
+  async getAll(user: User): Promise<AlbumRoDto[]> {
+    const albums = await this.find({where: {user_id: user.id}});
     return albums.map((album) => plainToClass(AlbumRoDto, album));
   }
 
-  async getAllUserAlbums(user_id: number): Promise<AlbumRoDto[]> {
+  async getAlbumsByUserId(user_id: number): Promise<AlbumRoDto[]> {
     const albums = await this.find({where: { user_id }});
     return albums.map((album) => plainToClass(AlbumRoDto, album));
   }
@@ -55,7 +55,7 @@ export class AlbumRepository extends Repository<Album> {
     const { title, description } = albumCredentials;
     const album = new Album();
     album.title = title;
-    album.description = description;
+    description && (album.description = description);
     album.user_id = user.id;
 
     try {

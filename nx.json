@@ -32,19 +32,13 @@
     "api": {
       "tags": []
     },
-    "api-interfaces": {
-      "tags": []
-    },
     "dto": {
       "tags": []
     },
-    "enums": {
-      "tags": []
-    },
-    "entities": {
-      "tags": []
-    },
     "ui": {
+      "tags": []
+    },
+    "data": {
       "tags": []
     }
   }

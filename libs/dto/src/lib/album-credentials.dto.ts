@@ -1,6 +1,13 @@
-import { IsString, IsNotEmpty, MinLength, MaxLength, IsOptional } from "class-validator";
+import {
+  IsString,
+  IsNotEmpty,
+  MinLength,
+  MaxLength,
+  IsOptional,
+} from 'class-validator';
+import { AlbumCredentialsI } from '@photobook/data';
 
-export class AlbumCredentialsDto {
+export class AlbumCredentialsDto implements AlbumCredentialsI {
   @IsString()
   @IsNotEmpty()
   @MinLength(2)

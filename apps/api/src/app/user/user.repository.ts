@@ -8,9 +8,9 @@ import * as bcrypt from 'bcryptjs';
 import { plainToClass } from 'class-transformer';
 
 import { UserRoDto, UserCredentialsDto, AuthCredentialsDto } from '@photobook/dto';
-import { JwtPayload } from '@photobook/api-interfaces';
+import { JwtPayload } from '@photobook/data';
 
-import { User, UserProfile } from '@photobook/entities';
+import { User, UserProfile } from '../entities';
 
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {

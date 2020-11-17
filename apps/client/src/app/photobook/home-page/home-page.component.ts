@@ -1,15 +1,19 @@
-import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { transition, trigger, useAnimation } from '@angular/animations';
 import { fadeIn } from 'ng-animate';
-import { Subscription } from 'rxjs';
+import { SubSink } from 'subsink';
 
-import { SpriteIconEnum } from '@photobook/api-interfaces';
-import { UserProfileCredentialsDto, UserProfileRODto, UserRoDto } from '@photobook/dto';
-import { AuthService } from '../../auth/auth.service';
+import {
+  UserRoI,
+  PhotoRoI,
+  SpriteIconEnum,
+  UserProfileCredentialsI,
+} from '@photobook/data';
 import { PhotobookService } from '../photobook.service';
+import { DialogService } from '../../shared/components/dialog/dialog.service';
 
-import { toFormData } from '../../shared/utils/utils';
+import { DialogRefDirective } from '../../shared/directives/dialog-ref.directive';
+import { PhotoViewComponent } from '../../shared/components/photo-view/photo-view.component';
 
 @Component({
   selector: 'photobook-home-page',
@@ -25,75 +29,73 @@ import { toFormData } from '../../shared/utils/utils';
   ],
 })
 export class HomePageComponent implements OnInit {
-  userSubscription$: Subscription;
-  updateUserSubscription$: Subscription;
-  user: UserRoDto;
-  profile: UserProfileRODto;
-  editIcon: SpriteIconEnum = SpriteIconEnum.edit;
-  logOutIcon: SpriteIconEnum = SpriteIconEnum.off;
-  albumIcon: SpriteIconEnum = SpriteIconEnum.album;
+  @ViewChild(DialogRefDirective)
+  dialogRefDir: DialogRefDirective;
+
+  subs = new SubSink();
+
+  user: UserRoI;
+  profile: UserProfileCredentialsI;
+  photos: PhotoRoI[] = [];
+  addIcon: SpriteIconEnum = SpriteIconEnum.add;
+
   isEdit: boolean;
   pendingLoadUser: boolean;
-  savePending: boolean;
-  profileForm: FormGroup;
+  photosLoadPending: boolean;
 
   constructor(
     private readonly _photoService: PhotobookService,
-    private readonly _authService: AuthService
+    private readonly dialog: DialogService
   ) {}
 
   ngOnInit(): void {
     this.getMe();
+    this.getPhotos();
   }
 
   getMe(): void {
     this.pendingLoadUser = true;
-    this.userSubscription$ = this._photoService.getUser().subscribe(
+    this.subs.sink = this._photoService.getUser().subscribe(
       (user) => {
         this.user = user;
-        this.profile = user.user_profile
+        this.profile = user.user_profile;
         this.pendingLoadUser = false;
-
-        this.profileForm = new FormGroup({
-          first_name: new FormControl(this.user.user_profile.first_name, [Validators.required, Validators.maxLength(20)]),
-          last_name: new FormControl(this.user.user_profile.last_name, [Validators.maxLength(20)]),
-          description: new FormControl(this.user.user_profile.description, [Validators.maxLength(300)]),
-          avatar: new FormControl(null),
-          cover: new FormControl(null),
-        });
       },
       (error) => {
-        console.log(error);
+        // TODO: error handling
+        this.pendingLoadUser = false;
+      }
+    );
+  }
+
+  getPhotos() {
+    this.photosLoadPending = true;
+    this.subs.sink = this._photoService.getPhotos().subscribe(
+      (photos) => {
+        this.photos = photos;
+        this.photosLoadPending = false;
+      },
+      (error) => {
+        // TODO: error handling
+        this.photosLoadPending = false;
       }
     );
   }
 
   ngOnDestroy(): void {
-    this.userSubscription$.unsubscribe();
-    this.updateUserSubscription$.unsubscribe();
+    this.subs.unsubscribe();
   }
 
   editHandler(_: Event) {
     this.isEdit = !this.isEdit;
   }
 
-  logOut(): void {
-    this._authService.logout();
+  openPhotoDialog(photo: PhotoRoI): void {
+    this.dialog.open(this.dialogRefDir, PhotoViewComponent, {
+      data: { photo, user: this.user },
+      dialogContentClass: 'photo-view-content',
+    });
   }
 
-  updateProfileHandler() {
-    const data = toFormData<UserProfileCredentialsDto>(this.profileForm.value);
-    this.savePending = true;
-    this.updateUserSubscription$ = this._photoService.updateProfile(data)
-      .subscribe(
-        (profile: UserProfileRODto) => {
-          this.profile = profile;
-          this.savePending = false;
-          this.isEdit = false;
-        },
-        (error) => {
-          console.log(error);
-        }
-      )
-  }
+  loadMoreHandler() {}
 }

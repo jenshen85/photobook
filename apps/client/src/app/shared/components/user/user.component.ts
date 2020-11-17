@@ -1,9 +1,16 @@
-import { Component, Input, OnInit } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+} from '@angular/core';
 import { ControlContainer, FormGroupDirective } from '@angular/forms';
 import { transition, trigger, useAnimation } from '@angular/animations';
 import { fadeIn } from 'ng-animate';
 
-import { UserProfileRODto, UserRoDto } from '@photobook/dto';
+import { UserProfileRoI } from '@photobook/data';
+import { getUserName } from '../../../shared/utils/utils';
 
 @Component({
   selector: 'photobook-user',
@@ -15,7 +22,7 @@ import { UserProfileRODto, UserRoDto } from '@photobook/dto';
       transition(
         'void => *',
         useAnimation(fadeIn, { params: { timing: 0.3 } })
-      )
+      ),
     ]),
   ],
   viewProviders: [
@@ -25,8 +32,8 @@ import { UserProfileRODto, UserRoDto } from '@photobook/dto';
     },
   ],
 })
-export class UserComponent implements OnInit {
-  @Input() profile: UserProfileRODto;
+export class UserComponentComponent implements OnInit, OnChanges {
+  @Input() profile: UserProfileRoI;
   @Input() isEdit: boolean;
   @Input() username: string;
   @Input() avatarControl: string;
@@ -36,16 +43,18 @@ export class UserComponent implements OnInit {
   userName = '';
 
   ngOnInit(): void {
-    this.userName = this.getUserName(this.username);
+    this.userName = getUserName(
+      this.username,
+      this.profile.first_name,
+      this.profile.last_name
+    );
   }
 
-  private getUserName(username: string): string {
-    let userName: string;
-    if (this.profile.first_name) {
-      userName = `${this.profile.first_name}${this.profile.last_name ? ' ' + this.profile.last_name : ''}`;
-    } else {
-      userName = username;
-    }
-    return userName;
+  ngOnChanges(_: SimpleChanges): void {
+    this.userName = getUserName(
+      this.username,
+      this.profile.first_name,
+      this.profile.last_name
+    );
   }
 }

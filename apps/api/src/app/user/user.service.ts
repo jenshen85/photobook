@@ -3,10 +3,10 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { plainToClass } from 'class-transformer';
 
 import { UserCredentialsDto, AuthCredentialsDto } from '@photobook/dto';
-import { JwtPayload } from '@photobook/api-interfaces';
+import { JwtPayload } from '@photobook/data';
 import { UserRoDto } from '@photobook/dto';
 
-import { User } from '@photobook/entities';
+import { User } from '../entities';
 import { UserRepository } from './user.repository';
 import { UserProfileService } from '../user-profile/user-profile.service';
 

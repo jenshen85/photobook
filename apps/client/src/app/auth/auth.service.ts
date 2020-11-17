@@ -11,7 +11,7 @@ import {
   UserCredentialsDto,
   UserRoDto,
 } from '@photobook/dto';
-import { JwtPayload } from '@photobook/api-interfaces';
+import { JwtPayload } from '@photobook/data';
 import { PATHS } from '../shared/utils/api'
 
 export const ACCESS_TOKEN_KEY = 'access_token';

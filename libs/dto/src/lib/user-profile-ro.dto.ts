@@ -1,7 +1,8 @@
 import { Exclude, Expose } from 'class-transformer';
+import { UserProfileRoI } from '@photobook/data';
 
 @Exclude()
-export class UserProfileRODto {
+export class UserProfileRODto implements UserProfileRoI {
   @Expose()
   id: number;
 

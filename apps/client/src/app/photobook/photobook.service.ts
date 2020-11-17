@@ -1,10 +1,10 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { UserProfileCredentialsDto, UserProfileRODto, UserRoDto } from '@photobook/dto';
+import { AlbumRoI, PhotoRoI, UserProfileRoI, UserRoI } from '@photobook/data';
 import { Observable } from 'rxjs';
 
-import { PATHS } from '../shared/utils/api'
+import { PATHS } from '../shared/utils/api';
 
 @Injectable({
   providedIn: 'root',
@@ -15,11 +15,39 @@ export class PhotobookService {
     private readonly _router: Router
   ) {}
 
-  getUser(): Observable<UserRoDto> {
-    return this._http.get<UserRoDto>(PATHS.me);
+  getUser(): Observable<UserRoI> {
+    return this._http.get<UserRoI>(PATHS.me);
   }
 
-  updateProfile(data: FormData): Observable<UserProfileRODto> {
-    return this._http.patch<UserProfileRODto>(PATHS.updateProfile, data);
+  getUserById(id: number): Observable<UserRoI> {
+    return this._http.get<UserRoI>(PATHS.getUserById(id));
+  }
+
+  updateProfile(data: FormData): Observable<UserProfileRoI> {
+    return this._http.patch<UserProfileRoI>(PATHS.updateProfile, data);
+  }
+
+  getPhotos(): Observable<PhotoRoI[]> {
+    return this._http.get<PhotoRoI[]>(PATHS.getAllPhoto);
+  }
+
+  getAllAlbums(): Observable<AlbumRoI[]> {
+    return this._http.get<AlbumRoI[]>(PATHS.album);
+  }
+
+  getAllAlbumsByUserId(user_id: number): Observable<AlbumRoI[]> {
+    return this._http.get<AlbumRoI[]>(PATHS.getUserAllbums(user_id));
+  }
+
+  createAlbum(data: FormData): Observable<AlbumRoI> {
+    return this._http.post<AlbumRoI>(PATHS.album, data);
+  }
+
+  updateAlbum(album_id: number, data: FormData): Observable<AlbumRoI> {
+    return this._http.patch<AlbumRoI>(PATHS.updateAlbums(album_id), data);
+  }
+
+  removeAlbum(album_id: number): Observable<void> {
+    return this._http.delete<void>(PATHS.deleteAlbums(album_id))
   }
 }

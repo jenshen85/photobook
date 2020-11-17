@@ -1,7 +1,7 @@
 import { ConfigService } from '@nestjs/config';
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 
-import * as entities from '@photobook/entities';
+import * as entities from '../entities';
 
 export enum ConfigEnum {
   DB_HOST = 'DB_HOST',

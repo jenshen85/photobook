@@ -1,6 +1,7 @@
 import { IsString, IsNotEmpty, MaxLength, IsOptional } from 'class-validator';
+import { UserProfileCredentialsI } from '@photobook/data';
 
-export class UserProfileCredentialsDto {
+export class UserProfileCredentialsDto implements UserProfileCredentialsI {
   @IsString()
   @IsNotEmpty()
   @MaxLength(20)

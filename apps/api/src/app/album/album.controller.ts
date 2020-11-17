@@ -17,7 +17,7 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { memoryStorage } from 'multer';
 
-import { User } from '@photobook/entities';
+import { User } from '../entities';
 import { AlbumCredentialsDto, AlbumRoDto } from '@photobook/dto';
 
 import { AlbumService } from './album.service';
@@ -51,21 +51,27 @@ export class AlbumController {
     @Body(ValidationPipe) albumCredentials: AlbumCredentialsDto,
     @GetUser() user: User
   ): Promise<AlbumRoDto> {
+    console.log(file);
+    console.log(album_id);
     return this._albumService.updateAlbum(album_id, file, albumCredentials, user);
   }
 
   @Get()
-  getAll(): Promise<AlbumRoDto[]> {
-    return this._albumService.getAll();
+  getAll(@GetUser() user: User): Promise<AlbumRoDto[]> {
+    return this._albumService.getAll(user);
   }
 
   @Get('/:user_id')
-  getAllUserAlbums(@Param('user_id', ParseIntPipe) user_id: number): Promise<AlbumRoDto[]> {
-    return this._albumService.getAllUserAlbums(user_id);
+  getAlbumsByUserId(@Param('user_id', ParseIntPipe) user_id: number): Promise<AlbumRoDto[]> {
+    return this._albumService.getAlbumsByUserId(user_id);
   }
 
-  @Get('/:album_id')
-  getById(@Param('album_id', ParseIntPipe) album_id: number): Promise<AlbumRoDto> {
+  @Get('/:user_id/:album_id')
+  getById(
+    @Param('user_id', ParseIntPipe) user_id: number,
+    @Param('album_id', ParseIntPipe) album_id: number,
+    @GetUser() user: User
+  ): Promise<AlbumRoDto> {
     return this._albumService.getById(album_id);
   }
 

@@ -6,8 +6,9 @@ import {
   Matches,
   IsNotEmpty,
 } from 'class-validator';
+import { UserCredentialsI } from '@photobook/data';
 
-export class UserCredentialsDto {
+export class UserCredentialsDto implements UserCredentialsI {
   @IsString()
   @IsEmail()
   @IsNotEmpty()

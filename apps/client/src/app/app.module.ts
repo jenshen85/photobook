@@ -11,19 +11,24 @@ import {
 
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
-import { EntryModule } from './entry/entry.module';
+// import { EntryModule } from './entry/entry.module';
 import { AuthService, tokenGetter } from './auth/auth.service';
 import { AppComponent } from './app.component';
 import { NotfoundComponent } from './shared/components/notfound/notfound.component';
+// import { SmallAvaComponent } from './shared/components/small-ava/small-ava.component';
 
 @NgModule({
-  declarations: [AppComponent, NotfoundComponent],
+  declarations: [
+    AppComponent,
+    NotfoundComponent,
+    // SmallAvaComponent,
+  ],
   imports: [
     BrowserModule,
     HttpClientModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    EntryModule,
+    // EntryModule,
     JwtModule.forRoot({
       config: {
         tokenGetter,

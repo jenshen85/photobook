@@ -1,6 +1,14 @@
-import { IsString, IsEmail, MinLength, MaxLength, Matches, IsNotEmpty } from 'class-validator'
+import {
+  IsString,
+  IsEmail,
+  MinLength,
+  MaxLength,
+  Matches,
+  IsNotEmpty,
+} from 'class-validator';
+import { AuthCredentialsI } from '@photobook/data';
 
-export class AuthCredentialsDto {
+export class AuthCredentialsDto implements AuthCredentialsI {
   @IsString()
   @IsEmail()
   @IsNotEmpty()

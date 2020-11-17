@@ -5,7 +5,7 @@ import {
 import { Repository, EntityRepository } from 'typeorm';
 import { plainToClass } from 'class-transformer';
 
-import { User, UserProfile } from '@photobook/entities';
+import { User, UserProfile } from '../entities';
 import { UserProfileCredentialsDto, UserProfileRODto } from '@photobook/dto';
 import { IProfileFilesData } from './user-profile.service';
 

@@ -1,0 +1,33 @@
+@import '../../../sass/mixins.scss';
+@import '../../../sass/variables.scss';
+
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+photobook-footer,
+photobook-header {
+  flex: 0 0 auto;
+}
+
+.photobook-main {
+  flex: 1 0 auto;
+}
+
+.photobook-search-control {
+  align-self: center;
+  margin-left: auto;
+  max-width: rem(380);
+}
+
+.top-bar {
+  height: rem(60);
+  background-color: #e8e8e8;
+
+  &__container {
+    display: flex;
+    height: 100%;
+  }
+}

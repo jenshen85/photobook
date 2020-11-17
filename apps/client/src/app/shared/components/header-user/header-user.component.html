@@ -1,0 +1,50 @@
+<header
+  class="header"
+  [style.background-image]="user.user_profile.cover ? 'url(' + user.user_profile.cover + ')' : 'assets/images/welcom-bg.png'"
+  [formGroup]="profileForm"
+  [ngClass]="isEdit && 'user-edit'">
+
+  <div class="container header__container">
+    <div class="header__inner">
+      <photobook-user
+        firstNameControl="first_name"
+        lastNameControl="last_name"
+        descriptionControl="description"
+        avatarControl="avatar"
+        [username]="user.username"
+        [isEdit]="isEdit"
+        [profile]="profile" [@fade]></photobook-user>
+
+      <div class="header-actions" *ngIf="!isEdit; else userBg" [@fade]>
+        <span class="header-actions__inner" *ngIf="isAuthUser === undefined; else authbtns">
+          <button type="button" (click)="editHandler()" icon="{{editIcon}}" photobook-ph-button>Редактировать</button>
+          <button type="button" (click)="logOut()" icon="{{logOutIcon}}" photobook-ph-button>Выйти</button>
+          <a [routerLink]="['user/', user.id]" icon="{{albumIcon}}" photobook-ph-button>Альбомы</a>
+        </span>
+        <ng-template #authbtns>
+          <span class="header-actions__inner">
+            <button *ngIf="isAuthUser" type="button" (click)="editHandler()" icon="{{editIcon}}" photobook-ph-button>Редактировать</button>
+            <button *ngIf="isAuthUser" type="button" (click)="logOut()" icon="{{logOutIcon}}" photobook-ph-button>Выйти</button>
+            <a [routerLink]="['/', 'photobook']" icon="{{homeIcon}}" photobook-ph-button>Домой</a>
+          </span>
+        </ng-template>
+      </div>
+      <ng-template #userBg>
+        <photobook-upload-image formControlName="cover" [@fade]>
+          Изменить фон
+        </photobook-upload-image>
+      </ng-template>
+    </div>
+  </div>
+  <div class="edit-bar" *ngIf="isEdit" [@fade]>
+    <div class="container">
+      <div class="edit-bar__content">
+        <div class="edit-bar__actions">
+          <button type="button" (click)="editHandler()" class="button btn-white">Отменить</button>
+          <button type="button" (click)="updateProfileHandler()" class="button button-bg-blue">Сохранить</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <photobook-spinner position="absolute" *ngIf="savePending"></photobook-spinner>
+</header>

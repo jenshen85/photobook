@@ -1,6 +1,13 @@
-import { IsString, IsNotEmpty, MinLength, MaxLength, IsNumber } from "class-validator";
+import {
+  IsString,
+  IsNotEmpty,
+  MinLength,
+  MaxLength,
+  IsNumber,
+} from 'class-validator';
+import { PhotoCredentialsI } from '@photobook/data';
 
-export class PhotoCredentialsDto {
+export class PhotoCredentialsDto implements PhotoCredentialsI {
   @IsString()
   @IsNotEmpty()
   @MinLength(2)

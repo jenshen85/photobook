@@ -1,0 +1,49 @@
+<div class="photo-card">
+
+  <div class="photo-card__top">
+    <div class="photo-card__img" (click)="onPhotoClick.emit(photo)">
+      <img [src]="photo.image" [alt]="photo.title">
+      <svg class="photo-card__img-zoom">
+        <use [attr.xlink:href]="'assets/images/sprite.svg#' + loupeIcon"/>
+      </svg>
+    </div>
+  </div>
+
+  <div class="photo-card__middle">
+
+    <div class="photo-card__info">
+      <photobook-small-ava [user]="photo.user"
+        [profile]="photo.user_profile"></photobook-small-ava>
+
+      <div *ngIf="photo.title"
+        class="photo-card__photo"
+        title="{{photo.title}}">{{photo.title}}</div>
+
+      <div class="photo-card__actions">
+        <button class="photo-card__action">
+          <svg class="photo-card__action-ico">
+            <use [attr.xlink:href]="'assets/images/sprite.svg#' + commentIcon"/>
+          </svg>
+          <span class="photo-card__action-num">9</span>
+        </button>
+        <!-- liked -->
+        <button class="photo-card__action" [ngClass]="">
+          <svg class="photo-card__action-ico">
+            <use [attr.xlink:href]="'assets/images/sprite.svg#' + likeIcon"/>
+          </svg>
+          <span class="photo-card__action-num">22</span>
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="photo-card__bottom">
+    <a [routerLink]="['/', 'photobook', 'user', photo.user_id, photo.album_id]" class="photo-card__album">
+      <svg class="photo-card__album-ico">
+        <use [attr.xlink:href]="'assets/images/sprite.svg#' + albumIcon"/>
+      </svg>
+      {{photo.album.title}}
+    </a>
+  </div>
+</div>

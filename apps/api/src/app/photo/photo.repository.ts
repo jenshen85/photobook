@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { plainToClass } from 'class-transformer';
 
-import { Photo, User, Album } from '@photobook/entities';
+import { Photo, User, Album } from '../entities';
 import { PhotoCredentialsDto, PhotoRoDto } from '@photobook/dto';
 
 import { IFileData } from '../file/file.service';
@@ -14,7 +14,7 @@ import { IFileData } from '../file/file.service';
 @EntityRepository(Photo)
 export class PhotoRepository extends Repository<Photo> {
   async getAll(): Promise<PhotoRoDto[]> {
-    const photos = await this.find({relations: ['user']});
+    const photos = await this.find({relations: ['user', 'album', 'user_profile']});
     // const photos = await this.find({relations: ['user'], take: 10, skip: 10});
     return photos.map((photo) => plainToClass(PhotoRoDto, photo));
   }
@@ -55,6 +55,7 @@ export class PhotoRepository extends Repository<Photo> {
     const photo = new Photo();
     photo.user = user;
     photo.album = album;
+    photo.user_profile = user.user_profile;
     photo.image = imageData.imageUrl;
     photo.image_name = imageData.fileName;
 

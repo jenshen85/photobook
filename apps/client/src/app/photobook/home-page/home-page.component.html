@@ -1,43 +1,11 @@
 <photobook-spinner *ngIf="pendingLoadUser; else content"></photobook-spinner>
+
 <ng-template #content>
-
-  <photobook-header
-    [formGroup]="profileForm"
-    [userBg]="user.user_profile.cover"
-    [ngClass]="isEdit && 'user-edit'">
-
-    <photobook-user
-      firstNameControl="first_name"
-      lastNameControl="last_name"
-      descriptionControl="description"
-      avatarControl="avatar"
-      [username]="user.username"
-      [isEdit]="isEdit"
-      [profile]="profile" [@fade]></photobook-user>
-
-    <div class="header-actions" *ngIf="!isEdit; else userBg" [@fade]>
-      <button (click)="editHandler()" icon="{{editIcon}}" photobook-ph-button>Редактировать</button>
-      <button (click)="logOut()" icon="{{logOutIcon}}" photobook-ph-button>Выйти</button>
-      <a [routerLink]="['user/', user.id]" icon="{{albumIcon}}" photobook-ph-button>Альбомы</a>
-    </div>
-    <ng-template #userBg>
-      <photobook-upload-image formControlName="cover" [@fade]>
-        Изменить фон
-      </photobook-upload-image>
-    </ng-template>
-
-    <div class="edit-bar" *ngIf="isEdit" [@fade]>
-      <div class="container">
-        <div class="edit-bar__content">
-          <div class="edit-bar__actions">
-            <button (click)="editHandler()" class="button btn-white">Отменить</button>
-            <button (click)="updateProfileHandler()" class="button button-bg-blue">Сохранить</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-  </photobook-header>
+  <photobook-header-user
+    [user]="user"
+    [profile]="user.user_profile"
+    (onEditHandler)="editHandler(isEdit)">
+  </photobook-header-user>
 
   <div class="top-bar">
     <div class="container top-bar__container">
@@ -45,10 +13,31 @@
     </div>
   </div>
 
-  <main class="photobook-main" [ngClass]="isEdit && 'user-edit'">
+  <main class="photobook-main">
 
+    <section class="photobook-section photos">
+      <div class="container">
+        <div class="photobook-head">
+          <h2 class="photobook-main-title">Новое в мире</h2>
+        </div>
+        <div class="photo-cards">
+          <photobook-spinner position="absolute" *ngIf="photosLoadPending; else photosTmp"></photobook-spinner>
+          <ng-template #photosTmp>
+            <photobook-photo-card
+              *ngFor="let photo of photos" [photo]="photo" [@fade]
+              (onPhotoClick)="openPhotoDialog(photo)"
+            ></photobook-photo-card>
+          </ng-template>
+        </div>
+        <div class="photos-actions">
+          <button (click)="loadMoreHandler()" type="button" class="button button-border">Показать еще</button>
+        </div>
+      </div>
+    </section>
+
+    <div class="photobook-main-overlay" *ngIf="isEdit" [@fade]></div>
   </main>
 
   <photobook-footer [userBg]="user.user_profile.cover"></photobook-footer>
-  <photobook-spinner *ngIf="savePending"></photobook-spinner>
+  <ng-template dialogRef></ng-template>
 </ng-template>

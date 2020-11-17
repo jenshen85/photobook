@@ -1,1 +1,37 @@
-<p>user works!</p>
+<photobook-spinner *ngIf="loadUserPending; else content"></photobook-spinner>
+
+<ng-template #content>
+  <photobook-header-user
+    [user]="user"
+    [profile]="user.user_profile"
+    (onEditHandler)="editHandler(isEdit)"
+    [isAuthUser]="isAuthUser">
+  </photobook-header-user>
+
+  <main class="photobook-main">
+
+    <section class="photobook-section albums">
+      <div class="container">
+        <div class="photobook-head">
+          <h2 class="photobook-main-title">Мои альбомы</h2>
+          <button *ngIf="isAuthUser" type="button" (click)="addAlbum()" icon="{{addIcon}}" photobook-ph-button>Добавить</button>
+        </div>
+
+        <div class="photo-albums">
+          <photbook-photo-album
+            *ngFor="let album of albums"
+            [album]="album"
+            (editClick)="addAlbum(album)"
+            [editable]="isAuthUser"
+            [@fade]
+            ></photbook-photo-album>
+        </div>
+      </div>
+    </section>
+
+    <div class="photobook-main-overlay" *ngIf="isEdit" [@fade]></div>
+  </main>
+
+  <photobook-footer [userBg]="user.user_profile.cover"></photobook-footer>
+  <ng-template dialogRef></ng-template>
+</ng-template>

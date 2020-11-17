@@ -34,6 +34,12 @@ html {
   }
 }
 
+input,
+textarea {
+  &:focus {
+    box-shadow: 0 0 rem(2) rem(2) rgba($blue, 0.9);
+  }
+}
 
 a {
   &:hover {
@@ -109,12 +115,12 @@ a {
     background-color: #fff;
     color: $red;
 
-    .button-remove__icon {
+    .icon {
       fill: $red;
     }
   }
 
-  &__icon {
+  .photobook-icon {
     width: rem(16);
     height: rem(19);
     display: block;
@@ -156,12 +162,29 @@ a {
   flex-direction: column;
 }
 
-.main {
-  &-head {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
+.header-actions {
+  position: absolute;
+  top: rem(50);
+  right: 0;
+
+  .photobook-btn {
+    margin-bottom: rem(10);
+
+    &:last-child {
+      margin-bottom: 0;
+    }
   }
+
+  &__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    align-self: flex-start;
+  }
+}
+
+.photobook-main {
+  position: relative;
 
   &-title {
     @include panton;
@@ -169,7 +192,6 @@ a {
     font-weight: 700;
     font-size: rem(42);
     line-height: lh(46, 42);
-    margin-bottom: rem(32);
 
     &-result {
       @include panton;
@@ -181,20 +203,138 @@ a {
     }
   }
 
-  &.is-header-edit {
-    position: relative;
+  &-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba($color: #fff, $alpha: 0.9);
+    z-index: 1;
+  }
+}
 
-    &::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba($color: #fff, $alpha: 0.9);
-      z-index: 1;
+.photobook-section {
+  padding-top: rem(56);
+  padding-bottom: rem(64);
+}
+
+.photobook-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: rem(32);
+}
+
+.dialog-open .photobook-dialog {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.photo-view-content {
+  padding: rem(32) rem(40) 0;
+  width: 100%;
+  max-width: rem(828);
+  margin: 0 auto;
+
+  .dialog-close {
+    top: 0;
+    right: 0;
+
+    .photobook-icon {
+      color: $white;
     }
   }
 }
 
+.common-dialog-content {
+  width: 100%;
+  max-width: rem(680);
+  margin: 0 auto;
+  border-radius: rem(4);
+  overflow: hidden;
 
+  .dialog-close {
+    top: rem(21);
+    right: rem(22);
+
+    .photobook-icon {
+      color: #a0a09f;
+    }
+  }
+}
+
+.common-dialog-head {
+  padding: rem(24) rem(70) rem(24) rem(24);
+  background-color: #f1f1f1;
+  @include panton;
+  @include fz(21, 21);
+  font-weight: bold;
+  color: $text-color;
+}
+
+.common-dialog-body {
+  background-color: $white;
+  padding: rem(40) rem(20) rem(40) rem(50);
+}
+
+.common-dialog-footer {
+  padding: rem(24);
+  background-color: #f1f1f1;
+  display: flex;
+  align-items: center;
+
+  .button-bg-blue {
+    margin-right: rem(16);
+  }
+
+  .button-remove {
+    margin-left: auto;
+  }
+}
+
+.photo-cards {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 rem(-10) rem(20);
+
+  .photobook-photo-card {
+    width: 33.3333%;
+    padding: 0 rem(10);
+    margin-bottom: rem(20);
+
+    @include desktop-sm-down() {
+      width: 50%;
+    }
+  }
+}
+
+.photos-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.albums {
+  background-color: #f6f6f6;
+}
+
+.photo-albums {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 rem(-10) rem(20);
+
+  .photbook-photo-album {
+    width: 25%;
+    padding: 0 rem(10);
+    margin-bottom: rem(20);
+
+    @include desktop-down() {
+      width: 33.3333%;
+    }
+
+    @include tablets-lg-down() {
+      width: 50%;
+    }
+  }
+}

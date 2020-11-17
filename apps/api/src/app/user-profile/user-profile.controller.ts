@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 
-import { User } from '@photobook/entities';
+import { User } from '../entities';
 import { UserProfileCredentialsDto, UserProfileRODto } from '@photobook/dto';
 
 import { JwtAuthGuard } from '../shared/guards/jwt-auth.guard';

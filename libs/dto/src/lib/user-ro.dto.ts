@@ -1,12 +1,12 @@
-import "reflect-metadata";
+import 'reflect-metadata';
 import { Exclude, Expose, Type } from 'class-transformer';
 
-import { UserRoleEnum } from '@photobook/enums';
-import { UserProfileRODto } from './user-profile-ro.dto'
+import { UserRoleEnum, UserRoI } from '@photobook/data';
+import { UserProfileRODto } from './user-profile-ro.dto';
 import { AlbumRoDto } from './album-ro.dto';
 
 @Exclude()
-export class UserRoDto {
+export class UserRoDto implements UserRoI {
   @Expose()
   id: number;
 
@@ -40,4 +40,3 @@ export class UserRoDto {
   @Type(() => AlbumRoDto)
   albums: AlbumRoDto[];
 }
-

@@ -1,10 +1,32 @@
 $browser-context: 16; // Default
-$desktop: 1200px;
-$laptop: 1023px;
-$tablets: 768px;
-$tablets-min: 600px;
-$phones: 480px;
-$phones-min: 320px;
+
+$desktop-lg-down: 1439.98px;
+$desktop-lg-up: 1440px;
+
+$desktop-down: 1199.98px;
+$desktop-up: 1200px;
+
+$desktop-sm-down: 991.98px;
+$desktop-sm-up: 992px;
+
+$tablets-lg-down: 899.98px;
+$tablets-lg-up: 900px;
+
+$tablets-down: 767.98px;
+$tablets-up: 768px;
+
+$tablets-sm-down: 599.98px;
+$tablets-sm-up: 600px;
+
+$phones-lg-down: 575.98px;
+$phones-lg-up: 576px;
+
+$phones-down: 374.98px;
+$phones-up: 375px;
+
+$phones-sm-down: 319.98px;
+$phones-sm-up: 320px;
+
 $tranz: 0.3s;
 $white: #ffffff;
 $black: #000000;

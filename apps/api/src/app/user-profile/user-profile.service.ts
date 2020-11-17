@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
-import { User, UserProfile } from '@photobook/entities';
+import { User, UserProfile } from '../entities';
 import { UserProfileCredentialsDto, UserProfileRODto } from '@photobook/dto';
 
 import { UserProfileRepository } from './user-profile.repository';

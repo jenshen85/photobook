@@ -1,0 +1,22 @@
+<div class="album-card">
+  <a [routerLink]="['/', 'photobook', 'user', album.user_id, album.id]" class="album-card__top">
+    <div class="album-card__img">
+      <img [src]="album.preview
+        ? album.preview
+        : '../../../../assets/images/picture.svg'"
+        [alt]="album.title">
+    </div>
+    <div class="album-card__info">
+      <div class="album-card__desc" *ngIf="album.description">{{album.description}}</div>
+      <div class="album-card__length">{{album.photos.length}} фотографий</div>
+    </div>
+  </a>
+  <div class="album-card__bottom">
+    <button *ngIf="editable" class="album-card__edit" (click)="editClick.emit(album)">
+      <span photobook-icon [icon]="editIcon"></span>
+    </button>
+    <a [routerLink]="['/', 'photobook', 'user', album.user_id, album.id]" class="album-card__name">
+      {{album.title}}
+    </a>
+  </div>
+</div>

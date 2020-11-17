@@ -16,14 +16,14 @@ photobook-header {
   flex: 1 0 auto;
 }
 
-.photobook-user {
-  width: 100%;
-  max-width: rem(660);
-}
+// .photobook-user {
+//   width: 100%;
+//   max-width: rem(660);
+// }
 
-.photobook-upload-image {
-  max-width: rem(110);
-}
+// .photobook-upload-image {
+//   max-width: rem(110);
+// }
 
 .photobook-search-control {
   align-self: center;
@@ -41,40 +41,22 @@ photobook-header {
   }
 }
 
-.header-actions {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  align-self: flex-start;
-  position: absolute;
-  top: rem(50);
-  right: 0;
+// .edit-bar {
+//   position: absolute;
+//   top: 100%;
+//   width: 100%;
+//   background-color: rgba($white, 0.9);
+//   z-index: 1;
 
-  .photobook-btn {
-    margin-bottom: rem(10);
+//   &__content {
+//     height: rem(60);
+//     display: flex;
+//   }
 
-    &:last-child {
-      margin-bottom: 0;
-    }
-  }
-}
-
-.edit-bar {
-  position: absolute;
-  top: 100%;
-  width: 100%;
-  background-color: rgba($white, 0.9);
-  z-index: 1;
-
-  &__content {
-    height: rem(60);
-    display: flex;
-  }
-
-  &__actions {
-    display: flex;
-    align-items: center;
-    margin-left: auto;
-    align-self: stretch;
-  }
-}
+//   &__actions {
+//     display: flex;
+//     align-items: center;
+//     margin-left: auto;
+//     align-self: stretch;
+//   }
+// }

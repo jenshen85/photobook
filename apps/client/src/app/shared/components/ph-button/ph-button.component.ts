@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { SpriteIconEnum } from '@photobook/data';
 
 @Component({
   selector: 'button[photobook-ph-button], a[photobook-ph-button]',
@@ -8,8 +9,8 @@ import { Component, Input, OnInit } from '@angular/core';
     class: 'photobook-btn',
   },
 })
-export class PhButton implements OnInit {
-  @Input() icon: string;
+export class PhButtonComponent implements OnInit {
+  @Input() icon: SpriteIconEnum;
   @Input() iconOnly: boolean = false;
   ngOnInit(): void {}
 }

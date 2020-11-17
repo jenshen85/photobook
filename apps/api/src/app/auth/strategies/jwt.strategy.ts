@@ -1,12 +1,12 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy, ExtractJwt } from 'passport-jwt';
 import { InjectRepository } from '@nestjs/typeorm';
-import { JwtPayload } from '@photobook/api-interfaces';
+import { JwtPayload } from '@photobook/data';
 
-import { User } from '@photobook/entities';
+import { User } from '../../entities';
 import { UserRepository } from '../../user/user.repository';
-import { ConfigService } from '@nestjs/config';
 import { ConfigEnum } from '../../config/typeorm.config';
 
 @Injectable()

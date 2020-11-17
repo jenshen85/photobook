@@ -51,44 +51,175 @@
   }
 }
 
+@mixin text_clamp($mxHeight, $rows) {
+  max-height: rem($mxHeight);
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+  -webkit-line-clamp: $rows;
+}
+
+@mixin bg($url) {
+  background-image: url($url);
+  background-repeat: no-repeat;
+  background-position: 50%  50%;
+  background-size: contain;
+}
+
+@mixin fz($fz, $lh) {
+  font-size: rem($fz);
+  line-height: lh($lh, $fz);
+}
+
+@mixin object-fit($fit: fill, $position: null){
+  -o-object-fit: $fit;
+    object-fit: $fit;
+  @if $position {
+    -o-object-position: $position;
+      object-position: $position;
+    font-family: 'object-fit: #{$fit}; object-position: #{$position}';
+  } @else {
+    font-family: 'object-fit: #{$fit}';
+  }
+}
+
 /*-------------- media --------------*/
-@mixin desktop {
-  @media screen and (max-width: $desktop) {
+
+// IE10+ CSS styles go here
+@mixin target-ie11 {
+  @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
     @content;
   }
 }
 
-@mixin laptop {
-  @media screen and (max-width: $laptop) {
+@mixin target-edge {
+  @supports (-ms-ime-align: auto) {
     @content;
   }
 }
 
-@mixin tablets {
-  @media screen and (max-width: $tablets) {
+@mixin target-safari {
+  @media not all and (min-resolution: .001dpcm) {
     @content;
   }
 }
 
-@mixin tablets-min {
-  @media screen and (max-width: $tablets-min) {
+@mixin desktop-lg-down {
+  @media screen and (max-width: $desktop-lg-down) {
     @content;
   }
 }
 
-@mixin phones {
-  @media screen and (max-width: $phones) {
+@mixin desktop-lg-up {
+  @media screen and (min-width: $desktop-lg-up) {
     @content;
   }
 }
 
-@mixin phones-min {
-  @media screen and (max-width: $phones-min) {
+@mixin desktop-down {
+  @media screen and (max-width: $desktop-down) {
     @content;
   }
 }
 
-@mixin custom($prop) {
+@mixin desktop-up {
+  @media screen and (min-width: $desktop-up) {
+    @content;
+  }
+}
+
+@mixin desktop-sm-down {
+  @media screen and (max-width: $desktop-sm-down) {
+    @content;
+  }
+}
+
+@mixin desktop-sm-up {
+  @media screen and (min-width: $desktop-sm-up) {
+    @content;
+  }
+}
+
+@mixin tablets-lg-down {
+  @media screen and (max-width: $tablets-lg-down) {
+    @content;
+  }
+}
+
+@mixin tablets-lg-up {
+  @media screen and (min-width: $tablets-lg-up) {
+    @content;
+  }
+}
+
+@mixin tablets-down {
+  @media screen and (max-width: $tablets-down) {
+    @content;
+  }
+}
+
+@mixin tablets-up {
+  @media screen and (min-width: $tablets-up) {
+    @content;
+  }
+}
+
+@mixin tablets-sm-down {
+  @media screen and (max-width: $tablets-sm-down) {
+    @content;
+  }
+}
+
+@mixin tablets-sm-up {
+  @media screen and (min-width: $tablets-sm-up) {
+    @content;
+  }
+}
+
+@mixin phones-lg-down {
+  @media screen and (max-width: $phones-lg-down) {
+    @content;
+  }
+}
+
+@mixin phones-lg-up {
+  @media screen and (min-width: $phones-lg-up) {
+    @content;
+  }
+}
+
+@mixin phones-down {
+  @media screen and (max-width: $phones-down) {
+    @content;
+  }
+}
+
+@mixin phones-up {
+  @media screen and (min-width: $phones-up) {
+    @content;
+  }
+}
+
+@mixin phones-sm-down {
+  @media screen and (max-width: $phones-sm-down) {
+    @content;
+  }
+}
+
+@mixin phones-sm-up {
+  @media screen and (min-width: $phones-sm-up) {
+    @content;
+  }
+}
+
+@mixin custom-down($prop) {
+  @media screen and (max-width: $prop) {
+    @content;
+  }
+}
+
+@mixin custom-up($prop) {
   @media screen and (max-width: $prop) {
     @content;
   }

@@ -2,10 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { AlbumCredentialsDto, AlbumRoDto } from '@photobook/dto';
-import { User, Album } from '@photobook/entities';
+import { User, Album } from '../entities';
 
 import { AlbumRepository } from './album.repository';
-import { FileService } from '../file/file.service';
+import { FileService, IFileData } from '../file/file.service';
 
 @Injectable()
 export class AlbumService {
@@ -24,15 +24,19 @@ export class AlbumService {
       albumCredentials,
       user
     );
-    const pathToAlbumPreview = `images/${user.id}/albums/${album.id}/preview`;
-    const savedImageData = await this._fileService.saveFile(
-      file,
-      pathToAlbumPreview,
-      'preview'
-    );
+
+    let savedImageData: IFileData;
+    if(file) {
+      const pathToAlbumPreview = `images/${user.id}/albums/${album.id}/preview`;
+      savedImageData = await this._fileService.saveFile(
+        file,
+        pathToAlbumPreview,
+        'preview'
+      );
+    }
     return await this._albumRepository.updateAlbum(
       album.id,
-      { ...albumCredentials, preview: savedImageData.imageUrl },
+      { ...albumCredentials, preview: savedImageData && savedImageData.imageUrl },
       user
     );
   }
@@ -44,26 +48,29 @@ export class AlbumService {
     user: User
   ): Promise<AlbumRoDto> {
     const album = await this._albumRepository.getById(album_id);
-    const pathToAlbumPreview = `images/${user.id}/albums/${album_id}/preview`;
-    await this._fileService.deleteFile(album.preview);
-    const savedImageData = await this._fileService.saveFile(
-      file,
-      pathToAlbumPreview,
-      'preview'
-    );
+    let savedImageData: IFileData;
+    if(file) {
+      const pathToAlbumPreview = `images/${user.id}/albums/${album_id}/preview`;
+      album.preview && await this._fileService.deleteFile(album.preview);
+      savedImageData = await this._fileService.saveFile(
+        file,
+        pathToAlbumPreview,
+        'preview'
+      );
+    }
     return this._albumRepository.updateAlbum(
       album_id,
-      { ...albumCredentials, preview: savedImageData.imageUrl },
+      { ...albumCredentials, preview: savedImageData && savedImageData.imageUrl },
       user
     );
   }
 
-  async getAll(): Promise<AlbumRoDto[]> {
-    return await this._albumRepository.getAll();
+  async getAll(user: User): Promise<AlbumRoDto[]> {
+    return await this._albumRepository.getAll(user);
   }
 
-  async getAllUserAlbums(user_id: number): Promise<AlbumRoDto[]> {
-    return await this._albumRepository.getAllUserAlbums(user_id);
+  async getAlbumsByUserId(user_id: number): Promise<AlbumRoDto[]> {
+    return await this._albumRepository.getAlbumsByUserId(user_id);
   }
 
   async getById(id: number): Promise<AlbumRoDto> {

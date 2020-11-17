@@ -1,12 +1,5 @@
-import {
-  Component,
-  ElementRef,
-  HostListener,
-} from '@angular/core';
-import {
-  ControlValueAccessor,
-  NG_VALUE_ACCESSOR,
-} from '@angular/forms';
+import { Component, ElementRef, HostListener } from '@angular/core';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
   selector: 'photobook-upload-image',
@@ -16,12 +9,12 @@ import {
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: UploadImage,
+      useExisting: UploadImageComponent,
       multi: true,
     },
   ],
 })
-export class UploadImage implements ControlValueAccessor {
+export class UploadImageComponent implements ControlValueAccessor {
   onChange: Function;
   private file: File | null = null;
   @HostListener('change', ['$event.target.files']) emitFiles(event: FileList) {

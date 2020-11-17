@@ -1,0 +1,188 @@
+@import '../../../../sass/mixins.scss';
+@import '../../../../sass/variables.scss';
+
+.photo-view {
+  position: relative;
+  background-color: $white;
+
+  &__top {
+    width: 100%;
+    background-color: #e8e8e8;
+    position: relative;
+  }
+
+  &__arrow {
+    position: absolute;
+    width: rem(32);
+    height: 100%;
+    border: 0;
+    background: transparent;
+    transition: background 0.2s;
+    position: absolute;
+    top: 0;
+    cursor: pointer;
+
+    &:hover {
+      background: rgba($white, 0.1);
+
+      .photobook-icon {
+        opacity: 1;
+      }
+    }
+
+    .photobook-icon {
+      opacity: 0.8;
+      transition: opacity 0.2s;
+      color: $white;
+    }
+  }
+
+  &__prev {
+    left: rem(-40);
+  }
+
+  &__next {
+    right: rem(-40);
+  }
+
+  &__middle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: rem(16);
+  }
+
+  &__user {
+    display: flex;
+    align-items: center;
+
+    &-name {
+      font-size: rem(16);
+      font-weight: 700;
+      color: $text-color;
+      transition: color 0.2s;
+
+      &:hover {
+        color: $blue;
+      }
+    }
+
+    .photobook-small-ava {
+      margin-right: rem(16);
+    }
+  }
+
+  &__info {
+    padding: 0 rem(16) rem(32);
+  }
+
+  &__title {
+    font-size: rem(21);
+    font-weight: 600;
+    color: $text-color;
+    margin-bottom: rem(16);
+  }
+
+  &__description {
+    font-size: rem(21);
+    font-weight: 300;
+    color: $text-color;
+
+    a {
+      color: $blue;
+    }
+  }
+
+  &__comments {
+    padding: rem(32) 0;
+    background-color: #f6f6f6;
+
+    &-label {
+      padding: 0 rem(16);
+      font-size: rem(16);
+      font-weight: 600;
+      color: $text-color;
+      margin-bottom: rem(16);
+    }
+  }
+}
+
+.photobook-small-ava {
+  width: rem(50);
+  height: rem(50);
+}
+
+.comments {
+  &__row {
+    padding: 0 rem(24) 0 rem(56);
+    display: flex;
+    align-items: flex-start;
+    border-bottom: 1px solid #e1e1e1;
+    padding-bottom: rem(24);
+    margin-bottom: rem(24);
+
+    &:last-child {
+      border-bottom: 0;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+  }
+
+  &__ava {
+    width: rem(74);
+  }
+
+  &__cont {
+    width: calc(100% - #{rem(74)});
+  }
+
+  &__name {
+    font-size: rem(16);
+    font-weight: 700;
+    color: $text-color;
+    margin-bottom: rem(16);
+  }
+
+  &__text {
+    font-size: rem(16);
+    color: $text-color;
+    line-height: 1.5;
+    font-weight: 300;
+  }
+}
+
+.comment-form {
+  &__field {
+    display: block;
+    position: relative;
+    margin-bottom: rem(16);
+  }
+
+  &__control {
+    width: 100%;
+    background-color: $white;
+    resize: vertical;
+    min-height: rem(100);
+    border-radius: rem(4);
+    font-size: rem(14);
+    font-weight: 300;
+    padding: rem(16);
+    color: $text-color;
+    border: 1px solid #d8d6d6;
+    outline: none;
+
+    &::-webkit-input-placeholder {
+      color: rgba($text-color, 0.6);
+    }
+    &::-moz-placeholder {
+      color: rgba($text-color, 0.6);
+    }
+    &:-ms-input-placeholder {
+      color: rgba($text-color, 0.6);
+    }
+    &:-moz-placeholder {
+      color: rgba($text-color, 0.6);
+    }
+  }
+}
+

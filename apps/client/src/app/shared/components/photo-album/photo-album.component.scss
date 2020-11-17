@@ -1,0 +1,124 @@
+@import '../../../../sass/mixins.scss';
+@import '../../../../sass/variables.scss';
+
+:host {
+  display: block;
+}
+
+.album-card {
+  box-shadow: 0 rem(1) rem(4) 0 rgba($black, 0.15);
+  border-radius: rem(3);
+  overflow: hidden;
+
+  &__top {
+    position: relative;
+    display: block;
+
+    &:hover {
+      .album-card__img {
+        &::before {
+          opacity: 1;
+        }
+      }
+
+      .album-card__info {
+        opacity: 1;
+      }
+    }
+  }
+
+  &__img {
+    width: 100%;
+    height: rem(280);
+    cursor: pointer;
+    position: relative;
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba($black, 0.8);
+      opacity: 0;
+      transition: opacity 0.3s;
+      z-index: 1;
+    }
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  &__info {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 0 rem(16) rem(35) rem(20);
+    color: $white;
+    transition: opacity 0.2s;
+    opacity: 0;
+    z-index: 1;
+  }
+
+  &__desc {
+    font-size: rem(16);
+    line-height: 1.5;
+    font-weight: 300;
+    margin-bottom: rem(32);
+    @include text_clamp(50, 2);
+  }
+
+  &__length {
+    font-size: rem(16);
+    @include panton();
+    font-weight: bold;
+    line-height: 1.5;
+  }
+
+  &__bottom {
+    padding: rem(16) rem(20);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__edit {
+    width: rem(20);
+    height: rem(20);
+    padding: 0;
+    border: 0;
+    background: none;
+    outline: none;
+    cursor: pointer;
+  }
+
+  &__name {
+    font-size: rem(16);
+    color: $text-color;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    max-width: rem(160);
+    text-overflow: ellipsis;
+    transition: color 0.3s;
+    margin-left: auto;
+
+    &:hover {
+      color: $blue;
+    }
+  }
+}
+
+.photobook-icon {
+  color: #d6d6d6;
+  transition: color 0.2s;
+
+  &:hover {
+    color: #848484;
+  }
+}

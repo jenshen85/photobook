@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 
 import { UserRoDto } from '@photobook/dto';
-import { User } from '@photobook/entities';
+import { User } from '../entities';
 
 import { UserService } from './user.service';
 import { JwtAuthGuard } from '../shared/guards/jwt-auth.guard';

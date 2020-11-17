@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
-import { UserCredentialsDto } from '@photobook/dto';
+import { UserCredentialsI } from '@photobook/data';
 import { AuthService } from '../../auth/auth.service';
 
 @Component({
@@ -23,8 +23,13 @@ export class RegisterComponent implements OnInit {
 
   submit($event: Event) {
     if(this.form.valid) {
-      const data: UserCredentialsDto = this.form.value;
-      this._authService.register(data).subscribe((userdata) => console.log(userdata));
+      const data: UserCredentialsI = this.form.value;
+      this._authService.register(data).subscribe(
+        (userdata) => console.log(userdata),
+        (error) => {
+          // TODO: error handling
+        },
+      );
     } else {
       this.form.markAsTouched();
     }
