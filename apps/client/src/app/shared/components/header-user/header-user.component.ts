@@ -12,6 +12,7 @@ import { toFormData } from '../../utils/utils';
   selector: 'photobook-header-user',
   templateUrl: './header-user.component.html',
   styleUrls: ['./header-user.component.scss'],
+  host: { class: 'photobook-header-user'},
   animations: [
     trigger('fade', [
       transition(

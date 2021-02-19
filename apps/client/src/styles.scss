@@ -183,6 +183,15 @@ a {
   }
 }
 
+photobook-footer,
+photobook-header {
+  flex: 0 0 auto;
+}
+
+.photobook-main {
+  flex: 1 0 auto;
+}
+
 .photobook-main {
   position: relative;
 
@@ -224,6 +233,22 @@ a {
   align-items: center;
   justify-content: space-between;
   margin-bottom: rem(32);
+}
+
+.top-bar {
+  height: rem(60);
+  background-color: #e8e8e8;
+
+  &__container {
+    display: flex;
+    height: 100%;
+  }
+
+  .photobook-search-control {
+    align-self: center;
+    margin-left: auto;
+    max-width: rem(380);
+  }
 }
 
 .dialog-open .photobook-dialog {
@@ -306,6 +331,10 @@ a {
     @include desktop-sm-down() {
       width: 50%;
     }
+
+    @include phones-lg-down() {
+      width: 100%;
+    }
   }
 }
 
@@ -335,6 +364,10 @@ a {
 
     @include tablets-lg-down() {
       width: 50%;
+    }
+
+    @include phones-lg-down() {
+      width: 100%;
     }
   }
 }

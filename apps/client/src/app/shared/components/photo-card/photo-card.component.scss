@@ -12,6 +12,14 @@
 
   &__top {
     background-color: #d6d6d6;
+    position: relative;
+
+    .photo-card__actions {
+      pointer-events: none;
+      position: absolute;
+      bottom: rem(20);
+      left: rem(20);
+    }
   }
 
   &__img {
@@ -20,8 +28,9 @@
     height: rem(250);
     cursor: pointer;
     position: relative;
+    display: block;
 
-    &::before {
+    &::after {
       content: "";
       position: absolute;
       top: 0;
@@ -31,12 +40,11 @@
       background-color: rgba($black, 0.8);
       opacity: 0;
       transition: opacity 0.3s;
-      z-index: 1;
     }
 
 
     &:hover {
-      &::before {
+      &::after {
         opacity: 1;
       }
 
@@ -60,9 +68,10 @@
       height: rem(40);
       margin-top: rem(-20);
       margin-left: rem(-20);
-      fill: $white;
+      color: $white;
       opacity: 0;
       transition: opacity 0.3s;
+      z-index: 1;
     }
   }
 
@@ -105,7 +114,6 @@
     cursor: pointer;
     border: 0;
     background: none;
-    outline: none;
 
     &:last-child {
       margin-right: 0;
@@ -113,21 +121,21 @@
 
     &.liked {
       #{$btn}-ico {
-        fill: $red;
+        color: $red;
       }
     }
 
     &:hover:not(.liked) {
       #{$btn}-ico {
-        fill: $blue;
+        color: $blue;
       }
     }
 
     &-ico {
       width: rem(20);
       height: rem(17);
-      fill: #d6d6d6;
-      transition: fill 0.3s;
+      color: #d6d6d6;
+      transition: color 0.3s;
       margin-right: rem(10);
     }
 
@@ -135,6 +143,36 @@
       font-size: rem(16);
       color: $text-color;
       font-weight: normal;
+    }
+
+    &--noinfo {
+      #{$btn}-ico {
+        color: $white;
+      }
+
+      #{$btn}-num {
+        color: $white;
+      }
+    }
+  }
+
+  &__edit {
+    width: rem(20);
+    height: rem(20);
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+
+    .photobook-icon {
+      width: 100%;
+      height: 100%;
+      color: #d6d6d6;
+      transition: color 0.2s;
+
+      &:hover {
+        color: #848484;
+      }
     }
   }
 
@@ -165,7 +203,7 @@
       color: $blue;
 
       #{$album}-ico {
-        fill: $blue;
+        color: $blue;
       }
     }
 
@@ -176,8 +214,8 @@
       top: 50%;
       left: 0;
       margin-top: rem(-10);
-      fill: #c5c5c5;
-      transition: fill 0.4s;
+      color: #c5c5c5;
+      transition: color 0.4s;
     }
   }
 }
@@ -186,9 +224,6 @@
   position: absolute;
   top: 0;
   left: 0;
-  // display: block;
-  // border-radius: 50%;
-  // overflow: hidden;
   width: rem(48);
   min-width: rem(48);
   height: rem(48);

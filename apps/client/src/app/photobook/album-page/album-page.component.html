@@ -1,1 +1,62 @@
-<p>album works!</p>
+<photobook-spinner *ngIf="pendingLoadUser; else content"></photobook-spinner>
+
+<ng-template #content>
+  <photobook-header-album
+    [user]="user"
+    [album]="album"
+    (onEditHandler)="editHandler(isEdit)"
+    [isAuthUser]="isAuthUser"
+    *ngIf="!pendingLoadAlbum"
+  ></photobook-header-album>
+
+  <div class="top-bar">
+    <div class="container top-bar__container">
+      <div class="photo-stat">
+        <div class="photo-stat__item">
+          {{ photos.length }} Фотографий
+        </div>
+
+        <div class="photo-stat__item">
+          12 Лайков
+        </div>
+
+        <div class="photo-stat__item">
+          4 Комментария
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <main class="photobook-main">
+
+    <section class="photobook-section photos">
+      <div class="container">
+        <div class="photo-cards">
+          <photobook-spinner position="absolute" *ngIf="pendingLoadAlbum; else photosTmp"></photobook-spinner>
+          <ng-template #photosTmp>
+            <photobook-photo-card
+              [isAuthUser]="isAuthUser"
+              [hasInfo]="false"
+              *ngFor="let photo of photos" [photo]="photo" [@fade]
+              (onPhotoClick)="openPhotoDialog(photo)"
+            ></photobook-photo-card>
+          </ng-template>
+        </div>
+      </div>
+    </section>
+
+    <div class="photobook-main-overlay" *ngIf="isEdit" [@fade]></div>
+  </main>
+
+  <photobook-footer [userBg]="album && album.preview ? album.preview : 'assets/images/default-bg.jpg'"></photobook-footer>
+  <ng-template dialogRef></ng-template>
+
+  <!-- <div class="top-bar top-bar--fixed">
+    <div class="container top-bar__container">
+      <div class="header-user">
+        <photobook-small-ava [user]="user" [profile]="user.user_profile"></photobook-small-ava>
+        <span class="header-user__name">{{user.user_profile.first_name}}</span>
+      </div>
+    </div>
+  </div> -->
+</ng-template>

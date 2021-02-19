@@ -31,9 +31,9 @@ export class AlbumRepository extends Repository<Album> {
     return plainToClass(AlbumRoDto, album);
   }
 
-  async getUserAlbumById(album_id: number, user: User): Promise<Album> {
+  async getUserAlbumById(user_id: number, album_id: number): Promise<Album> {
     const found = await this.findOne({
-      where: { id: album_id, user_id: user.id },
+      where: { id: album_id, user_id: user_id },
     });
 
     if (!found) {
@@ -76,7 +76,7 @@ export class AlbumRepository extends Repository<Album> {
     user: User
   ): Promise<AlbumRoDto> {
     const { title, description, preview } = albumCredentials;
-    const album = await this.getUserAlbumById(album_id, user);
+    const album = await this.getUserAlbumById(user.id, album_id);
     title && (album.title = title);
     description && (album.description = description);
     preview && (album.preview = preview);
@@ -97,7 +97,7 @@ export class AlbumRepository extends Repository<Album> {
     id: number,
     user: User /*, handler: (album: Album) => Promise<void>*/
   ): Promise<void> {
-    const result = await this.getUserAlbumById(id, user);
+    const result = await this.getUserAlbumById(user.id, id);
     result.deleted_at = new Date();
 
     try {

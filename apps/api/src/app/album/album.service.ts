@@ -77,8 +77,8 @@ export class AlbumService {
     return await this._albumRepository.getById(id);
   }
 
-  async getUserAlbumById(album_id: number, user: User): Promise<Album> {
-    return await this._albumRepository.getUserAlbumById(album_id, user);
+  async getUserAlbumById(user_id: number, album_id: number): Promise<Album> {
+    return await this._albumRepository.getUserAlbumById(user_id, album_id);
   }
 
   async delete(id: number, user: User): Promise<void> {

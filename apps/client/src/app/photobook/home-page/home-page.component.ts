@@ -41,7 +41,7 @@ export class HomePageComponent implements OnInit {
 
   isEdit: boolean;
   pendingLoadUser: boolean;
-  photosLoadPending: boolean;
+  pendingLoadPhotos: boolean;
 
   constructor(
     private readonly _photoService: PhotobookService,
@@ -69,15 +69,15 @@ export class HomePageComponent implements OnInit {
   }
 
   getPhotos() {
-    this.photosLoadPending = true;
+    this.pendingLoadPhotos = true;
     this.subs.sink = this._photoService.getPhotos().subscribe(
       (photos) => {
         this.photos = photos;
-        this.photosLoadPending = false;
+        this.pendingLoadPhotos = false;
       },
       (error) => {
         // TODO: error handling
-        this.photosLoadPending = false;
+        this.pendingLoadPhotos = false;
       }
     );
   }

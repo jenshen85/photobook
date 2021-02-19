@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core';
-// import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 
 import { UiModule } from '@photobook/ui';
@@ -10,6 +9,7 @@ import { HomePageComponent } from './home-page/home-page.component';
 import { UserPageComponent } from './user-page/user-page.component';
 import { AlbumPageComponent } from './album-page/album-page.component';
 import { HeaderUserComponent } from '../shared/components/header-user/header-user.component';
+import { HeaderAlbumComponent } from '../shared/components/header-album/header-album.component';
 import { UserComponentComponent } from '../shared/components/user/user.component';
 import { FooterComponent } from '../shared/components/footer/footer.component';
 import { PhButtonComponent } from '../shared/components/ph-button/ph-button.component';
@@ -20,10 +20,13 @@ import { FallbackImageComponent } from '../shared/components/fallback-image/fall
 import { PhotoAlbumComponent } from '../shared/components/photo-album/photo-album.component';
 import { DialogModule } from '../shared/components/dialog/dialog.module';
 import { DialogRefDirective } from '../shared/directives/dialog-ref.directive';
+import { DialogCloseRefDirective } from '../shared/directives/dialog-close-ref.directive';
 import { PhotoViewComponent } from '../shared/components/photo-view/photo-view.component';
 import { SmallAvaComponent } from '../shared/components/small-ava/small-ava.component';
 import { AddAlbumComponent } from '../shared/components/add-album/add-album.component';
-import { FileControlComponent } from '../shared/components/file-control/file-control.component'
+import { FileControlComponent } from '../shared/components/file-control/file-control.component';
+import { AppControlComponent } from '../shared/components/app-control/app-control.component';
+import { AddPhotoComponent } from '../shared/components/add-photo/add-photo.component'
 
 const routes: Routes = [
   {
@@ -53,6 +56,7 @@ const routes: Routes = [
     UserPageComponent,
     AlbumPageComponent,
     HeaderUserComponent,
+    HeaderAlbumComponent,
     UserComponentComponent,
     FooterComponent,
     PhButtonComponent,
@@ -62,10 +66,13 @@ const routes: Routes = [
     FallbackImageComponent,
     PhotoAlbumComponent,
     DialogRefDirective,
+    DialogCloseRefDirective,
     PhotoViewComponent,
     SmallAvaComponent,
     AddAlbumComponent,
-    FileControlComponent
+    FileControlComponent,
+    AppControlComponent,
+    AddPhotoComponent
   ],
   imports: [
     RouterModule.forChild(routes),
@@ -73,7 +80,7 @@ const routes: Routes = [
     UiModule,
   ],
   providers: [PhotobookService],
-  entryComponents: [PhotoViewComponent, AddAlbumComponent],
+  entryComponents: [PhotoViewComponent, AddAlbumComponent, AddPhotoComponent],
   exports: [RouterModule, DialogModule],
 })
 export class PhotobookModule {}

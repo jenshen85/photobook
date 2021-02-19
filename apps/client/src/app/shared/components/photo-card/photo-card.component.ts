@@ -11,6 +11,8 @@ import { getUserName } from '../../utils/utils';
 export class PhotoCardComponent implements OnInit {
   @Output() onPhotoClick: EventEmitter<PhotoRoI> = new EventEmitter()
   @Input() photo: PhotoRoI;
+  @Input() hasInfo?: boolean = true;
+  @Input() isAuthUser?: boolean = false;
 
   user: PhotoUserRoI;
   profile: UserProfileRoI;
@@ -19,6 +21,7 @@ export class PhotoCardComponent implements OnInit {
   likeIcon = SpriteIconEnum.like;
   loupeIcon = SpriteIconEnum.loupe;
   albumIcon = SpriteIconEnum.album;
+  editIcon = SpriteIconEnum.edit;
 
   ngOnInit(): void {
     this.user = this.photo.user;
@@ -28,5 +31,10 @@ export class PhotoCardComponent implements OnInit {
       this.profile.first_name,
       this.profile.last_name
     );
+  }
+
+  onPhotoClickHandler(e: Event, photo: PhotoRoI) {
+    e.preventDefault();
+    this.onPhotoClick.emit(photo)
   }
 }

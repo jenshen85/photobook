@@ -1,0 +1,32 @@
+@import '../../../sass/mixins.scss';
+@import '../../../sass/variables.scss';
+
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.photo-stat {
+  display: flex;
+  align-items: center;
+  margin: 0 auto;
+
+  &__item {
+    @include fz(16, 24);
+    font-weight: 600;
+    color: $text-color;
+    margin-right: rem(32);
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+}
+
+.top-bar--fixed {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+}

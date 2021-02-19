@@ -1,15 +1,24 @@
 <div class="photo-card">
 
   <div class="photo-card__top">
-    <div class="photo-card__img" (click)="onPhotoClick.emit(photo)">
+    <a href="#" class="photo-card__img" (click)="onPhotoClickHandler($event, photo)">
       <img [src]="photo.image" [alt]="photo.title">
-      <svg class="photo-card__img-zoom">
-        <use [attr.xlink:href]="'assets/images/sprite.svg#' + loupeIcon"/>
-      </svg>
+      <span class="photo-card__img-zoom" photobook-icon [icon]="loupeIcon"></span>
+    </a>
+    <div class="photo-card__actions" *ngIf="!hasInfo">
+      <button class="photo-card__action photo-card__action--noinfo" disabled>
+        <span class="photo-card__action-ico" photobook-icon [icon]="commentIcon"></span>
+        <span class="photo-card__action-num">9</span>
+      </button>
+      <!-- liked -->
+      <button class="photo-card__action photo-card__action--noinfo" [ngClass]="" disabled>
+        <span class="photo-card__action-ico" photobook-icon [icon]="likeIcon"></span>
+        <span class="photo-card__action-num">22</span>
+      </button>
     </div>
   </div>
 
-  <div class="photo-card__middle">
+  <div class="photo-card__middle" *ngIf="hasInfo">
 
     <div class="photo-card__info">
       <photobook-small-ava [user]="photo.user"
@@ -21,16 +30,12 @@
 
       <div class="photo-card__actions">
         <button class="photo-card__action">
-          <svg class="photo-card__action-ico">
-            <use [attr.xlink:href]="'assets/images/sprite.svg#' + commentIcon"/>
-          </svg>
+          <span class="photo-card__action-ico" photobook-icon [icon]="commentIcon"></span>
           <span class="photo-card__action-num">9</span>
         </button>
         <!-- liked -->
         <button class="photo-card__action" [ngClass]="">
-          <svg class="photo-card__action-ico">
-            <use [attr.xlink:href]="'assets/images/sprite.svg#' + likeIcon"/>
-          </svg>
+          <span class="photo-card__action-ico" photobook-icon [icon]="likeIcon"></span>
           <span class="photo-card__action-num">22</span>
         </button>
       </div>
@@ -39,10 +44,12 @@
   </div>
 
   <div class="photo-card__bottom">
+    <button *ngIf="!hasInfo && isAuthUser" class="photo-card__edit">
+      <span photobook-icon [icon]="editIcon"></span>
+    </button>
+
     <a [routerLink]="['/', 'photobook', 'user', photo.user_id, photo.album_id]" class="photo-card__album">
-      <svg class="photo-card__album-ico">
-        <use [attr.xlink:href]="'assets/images/sprite.svg#' + albumIcon"/>
-      </svg>
+      <span class="photo-card__album-ico" photobook-icon [icon]="albumIcon"></span>
       {{photo.album.title}}
     </a>
   </div>

@@ -35,7 +35,7 @@ export class PhotoService {
     files: Express.Multer.File[],
     user: User
   ): Promise<PhotoRoDto[]> {
-    const album = await this._albumService.getUserAlbumById(album_id, user);
+    const album = await this._albumService.getUserAlbumById(album_id, user.id);
     const photos = await Promise.all(
       files.map(async (file) => {
         const imageData = await this._fileService.saveFile(

@@ -1,5 +1,5 @@
-<div class="dialog-overlay" (click)="close.emit()"></div>
 <div class="dialog" [ngClass]="centered && 'dialog-centered'">
+  <div class="dialog-overlay" (click)="close.emit()"></div>
   <div class="dialog-content" [ngClass]="dialogContentClass.length && dialogContentClass">
     <ng-template dialogInsert></ng-template>
     <button class="dialog-close" (click)="close.emit()">

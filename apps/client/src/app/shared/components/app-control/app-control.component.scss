@@ -1,0 +1,39 @@
+@import '../../../../sass/mixins.scss';
+@import '../../../../sass/variables.scss';
+:host {
+  overflow: hidden;
+  border-radius: rem(4);
+  display: block;
+}
+
+.app-control {
+  display: block;
+  background-color: $white;
+  outline: none;
+  font-size: rem(16);
+  font-weight: 300;
+  color: rgba($text-color, 0.8);
+  padding: 0 rem(20);
+  border: 0;
+  width: 100%;
+  height: rem(40);
+
+  &::-webkit-input-placeholder {
+    color: rgba($text-color, 0.5);
+  }
+  &::-moz-placeholder {
+    color: rgba($text-color, 0.5);
+  }
+  &:-ms-input-placeholder {
+    color: rgba($text-color, 0.5);
+  }
+  &:-moz-placeholder {
+    color: rgba($text-color, 0.5);
+  }
+
+  &--textarea {
+    padding: rem(10) rem(20);
+    height: rem(64);
+    resize: none;
+  }
+}

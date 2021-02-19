@@ -1,0 +1,20 @@
+<input
+  *ngIf="!isTextarea"
+  class="app-control"
+  [ngClass]="className && className"
+  type="{{ type }}"
+  placeholder=" {{ placeholder }}"
+  [disabled]="isDisabled"
+  [readonly]="isReadonly"
+  [value]="value"
+  >
+
+<textarea
+  *ngIf="isTextarea"
+  placeholder=" {{ placeholder }}"
+  class="app-control app-control--textarea"
+  [ngClass]="className && className"
+  [disabled]="isDisabled"
+  [readonly]="isReadonly"
+  [value]="value"
+></textarea>

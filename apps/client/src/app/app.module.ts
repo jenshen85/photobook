@@ -15,12 +15,14 @@ import { AppRoutingModule } from './app-routing.module';
 import { AuthService, tokenGetter } from './auth/auth.service';
 import { AppComponent } from './app.component';
 import { NotfoundComponent } from './shared/components/notfound/notfound.component';
+// import { HeaderAlbumComponent } from './shared/components/header-album/header-album.component';
 // import { SmallAvaComponent } from './shared/components/small-ava/small-ava.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NotfoundComponent,
+    // HeaderAlbumComponent,
     // SmallAvaComponent,
   ],
   imports: [

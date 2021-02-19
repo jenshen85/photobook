@@ -72,7 +72,7 @@ export class AlbumController {
     @Param('album_id', ParseIntPipe) album_id: number,
     @GetUser() user: User
   ): Promise<AlbumRoDto> {
-    return this._albumService.getById(album_id);
+    return this._albumService.getUserAlbumById(user_id, album_id);
   }
 
   @Delete('/:album_id')
