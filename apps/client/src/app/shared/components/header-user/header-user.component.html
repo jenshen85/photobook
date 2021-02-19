@@ -1,6 +1,6 @@
 <header
   class="header"
-  [style.background-image]="user.user_profile.cover ? 'url(' + user.user_profile.cover + ')' : 'assets/images/welcom-bg.png'"
+  [style.background-image]="user.user_profile.cover ? 'url(' + user.user_profile.cover + ')' : 'url(assets/images/welcom-bg.png)'"
   [formGroup]="profileForm"
   [ngClass]="isEdit && 'user-edit'">
 
