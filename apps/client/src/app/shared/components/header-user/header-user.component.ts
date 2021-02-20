@@ -65,7 +65,7 @@ export class HeaderUserComponent implements OnInit {
     this.subs.unsubscribe();
   }
 
-  editHandler(_: Event) {
+  editHandler() {
     this.isEdit = !this.isEdit;
     this.onEditHandler.emit(this.isEdit);
   }

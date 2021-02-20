@@ -5,9 +5,10 @@ import { AlbumRoI, PhotoRoI, SpriteIconEnum, UserProfileCredentialsI, UserRoI } 
 import { fadeIn } from 'ng-animate';
 import { SubSink } from 'subsink';
 import { AuthService } from '../../auth/auth.service';
-import { DialogService } from '../../shared/components/dialog/dialog.service';
+import { Dialog } from '../../shared/components/dialog/dialog';
+// import { DialogService } from '../../shared/components/dialog/dialog.service';
 import { PhotoViewComponent } from '../../shared/components/photo-view/photo-view.component';
-import { DialogRefDirective } from '../../shared/directives/dialog-ref.directive';
+// import { DialogRefDirective } from '../../shared/directives/dialog-ref.directive';
 import { PhotobookService } from '../photobook.service';
 
 @Component({
@@ -24,8 +25,8 @@ import { PhotobookService } from '../photobook.service';
   ],
 })
 export class AlbumPageComponent implements OnInit {
-  @ViewChild(DialogRefDirective)
-  dialogRefDir: DialogRefDirective;
+  // @ViewChild(DialogRefDirective)
+  // dialogRefDir: DialogRefDirective;
 
   subs = new SubSink();
 
@@ -44,7 +45,7 @@ export class AlbumPageComponent implements OnInit {
   constructor(
     private readonly _authService: AuthService,
     private readonly _photoService: PhotobookService,
-    private readonly dialog: DialogService,
+    private readonly dialog: Dialog,
     // private readonly router: Router,
     private readonly route: ActivatedRoute
   ) { }
@@ -99,14 +100,16 @@ export class AlbumPageComponent implements OnInit {
   }
 
   openPhotoDialog(photo: PhotoRoI): void {
-    this.dialog.open(this.dialogRefDir, PhotoViewComponent, {
+    this.dialog.open(PhotoViewComponent, {
       data: { photo, user: this.user },
-      dialogContentClass: 'photo-view-content',
+      isScrolled: true,
+      scrolledOverlayPosition: 'top'
+      // dialogContentClass: 'photo-view-content',
     });
   }
 
 
-  editHandler(_: Event) {
+  editHandler(isEdit: boolean) {
     this.isEdit = !this.isEdit;
   }
 }

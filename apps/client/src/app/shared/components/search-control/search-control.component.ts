@@ -10,6 +10,6 @@ import { SpriteIconEnum } from '@photobook/data';
 })
 export class SearchControlComponent implements OnInit {
   @Input() placeholder: string;
-  searchIcon: string = SpriteIconEnum.search;
+  searchIcon: SpriteIconEnum = SpriteIconEnum.search;
   ngOnInit(): void {}
 }

@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { SpriteIconEnum, UserProfileRoI, UserRoI } from '@photobook/data';
+import { PhotoUserRoI, SpriteIconEnum, UserProfileRoI, UserRoI } from '@photobook/data';
 import { getUserName } from '../../utils/utils';
 
 @Component({
@@ -9,7 +9,7 @@ import { getUserName } from '../../utils/utils';
   host: { class: 'photobook-small-ava' },
 })
 export class SmallAvaComponent implements OnInit {
-  @Input() user: UserRoI;
+  @Input() user: UserRoI | PhotoUserRoI;
   @Input() profile: UserProfileRoI;
   userName: string;
   moreIcon = SpriteIconEnum.more;

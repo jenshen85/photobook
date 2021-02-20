@@ -55,7 +55,7 @@
 
   <div class="common-dialog-footer">
     <button type="submit" [disabled]="form.invalid && form.touched" class="button button-bg-blue">Сохранить</button>
-    <button type="button" (click)="close.emit()" class="button btn-white">Отменить</button>
+    <button type="button" dialogClose class="button btn-white">Отменить</button>
     <button type="button"
       *ngIf="album"
       (click)="removeAlbum(album.id)" class="button button-remove">

@@ -10,9 +10,9 @@ import {
   UserProfileCredentialsI,
 } from '@photobook/data';
 import { PhotobookService } from '../photobook.service';
-import { DialogService } from '../../shared/components/dialog/dialog.service';
-
-import { DialogRefDirective } from '../../shared/directives/dialog-ref.directive';
+import { Dialog } from '../../shared/components/dialog/dialog';
+// import { DialogService } from '../../shared/components/dialog/dialog.service';
+// import { DialogRefDirective } from '../../shared/directives/dialog-ref.directive';
 import { PhotoViewComponent } from '../../shared/components/photo-view/photo-view.component';
 
 @Component({
@@ -29,8 +29,8 @@ import { PhotoViewComponent } from '../../shared/components/photo-view/photo-vie
   ],
 })
 export class HomePageComponent implements OnInit {
-  @ViewChild(DialogRefDirective)
-  dialogRefDir: DialogRefDirective;
+  // @ViewChild(DialogRefDirective)
+  // dialogRefDir: DialogRefDirective;
 
   subs = new SubSink();
 
@@ -45,7 +45,7 @@ export class HomePageComponent implements OnInit {
 
   constructor(
     private readonly _photoService: PhotobookService,
-    private readonly dialog: DialogService
+    private readonly dialog: Dialog
   ) {}
 
   ngOnInit(): void {
@@ -86,14 +86,16 @@ export class HomePageComponent implements OnInit {
     this.subs.unsubscribe();
   }
 
-  editHandler(_: Event) {
+  editHandler(isEdit: boolean) {
     this.isEdit = !this.isEdit;
   }
 
   openPhotoDialog(photo: PhotoRoI): void {
-    this.dialog.open(this.dialogRefDir, PhotoViewComponent, {
+    this.dialog.open(PhotoViewComponent, {
       data: { photo, user: this.user },
-      dialogContentClass: 'photo-view-content',
+      isScrolled: true,
+      scrolledOverlayPosition: 'top'
+      // dialogContentClass: 'photo-view-content',
     });
   }
 

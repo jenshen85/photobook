@@ -1,5 +1,5 @@
 import { transition, trigger, useAnimation } from '@angular/animations';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Inject, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import {
   AlbumCredentialsI,
@@ -13,6 +13,8 @@ import { Subscription } from 'rxjs';
 import { SubSink } from 'subsink';
 import { PhotobookService } from '../../../photobook/photobook.service';
 import { checkFileSize, checkFileTypes, getBase64, toFormData } from '../../utils/utils';
+import { DIALOG_DATA } from '../dialog/dialog';
+import { DialogRef } from '../dialog/dialog-ref';
 
 export type addAlbumDataType = {
   type: ActionEnum,
@@ -36,8 +38,8 @@ export type addAlbumDataType = {
 })
 export class AddAlbumComponent implements OnInit {
   subs = new SubSink();
-  @Output() close = new EventEmitter<any>();
-  @Input() data: { album?: AlbumRoI; user: UserRoI; action: ActionEnum };
+  // @Output() close = new EventEmitter<any>();
+  // @Input() data: { album?: AlbumRoI; user: UserRoI; action: ActionEnum };
   actionCreate = ActionEnum.create
   removeIcon = SpriteIconEnum.delete;
   form: FormGroup;
@@ -48,7 +50,9 @@ export class AddAlbumComponent implements OnInit {
   albumSubs$: Subscription;
 
   constructor(
-    private photobookService: PhotobookService
+    private photobookService: PhotobookService,
+    private readonly dialogRef: DialogRef<AddAlbumComponent>,
+    @Inject(DIALOG_DATA) private data: any
   ) {}
 
   ngOnInit(): void {
@@ -105,7 +109,8 @@ export class AddAlbumComponent implements OnInit {
           data: album,
           album_id: album.id
         }
-        this.close.emit(data);
+        // this.close.emit(data);
+        this.dialogRef.close(data);
       },
       (error) => {
         console.log(error);
@@ -121,7 +126,8 @@ export class AddAlbumComponent implements OnInit {
           data: album,
           album_id: album.id
         }
-        this.close.emit(data);
+        // this.close.emit(data);
+        this.dialogRef.close(data);
       },
       (error) => {
         console.log(error);
@@ -136,7 +142,8 @@ export class AddAlbumComponent implements OnInit {
           type: ActionEnum.delete,
           album_id: id
         }
-        this.close.emit(data)
+        // this.close.emit(data)
+        this.dialogRef.close(data);
       }
     );
   }

@@ -17,15 +17,15 @@
 
       <div class="header-actions" *ngIf="!isEdit; else userBg" [@fade]>
         <span class="header-actions__inner" *ngIf="isAuthUser === undefined; else authbtns">
-          <button type="button" (click)="editHandler()" icon="{{editIcon}}" photobook-ph-button>Редактировать</button>
-          <button type="button" (click)="logOut()" icon="{{logOutIcon}}" photobook-ph-button>Выйти</button>
-          <a [routerLink]="['user/', user.id]" icon="{{albumIcon}}" photobook-ph-button>Альбомы</a>
+          <button type="button" (click)="editHandler()" [icon]="editIcon" photobook-ph-button>Редактировать</button>
+          <button type="button" (click)="logOut()" [icon]="logOutIcon" photobook-ph-button>Выйти</button>
+          <a [routerLink]="['user/', user.id]" [icon]="albumIcon" photobook-ph-button>Альбомы</a>
         </span>
         <ng-template #authbtns>
           <span class="header-actions__inner">
-            <button *ngIf="isAuthUser" type="button" (click)="editHandler()" icon="{{editIcon}}" photobook-ph-button>Редактировать</button>
-            <button *ngIf="isAuthUser" type="button" (click)="logOut()" icon="{{logOutIcon}}" photobook-ph-button>Выйти</button>
-            <a [routerLink]="['/', 'photobook']" icon="{{homeIcon}}" photobook-ph-button>Домой</a>
+            <button *ngIf="isAuthUser" type="button" (click)="editHandler()" [icon]="editIcon" photobook-ph-button>Редактировать</button>
+            <button *ngIf="isAuthUser" type="button" (click)="logOut()" [icon]="logOutIcon" photobook-ph-button>Выйти</button>
+            <a [routerLink]="['/', 'photobook']" [icon]="homeIcon" photobook-ph-button>Домой</a>
           </span>
         </ng-template>
       </div>

@@ -20,7 +20,7 @@
       <div class="container">
         <div class="photobook-head">
           <h2 class="photobook-main-title">Мои альбомы</h2>
-          <button *ngIf="isAuthUser" type="button" (click)="addAlbum()" icon="{{addIcon}}" photobook-ph-button>Добавить</button>
+          <button *ngIf="isAuthUser" type="button" (click)="addAlbum()" [icon]="addIcon" photobook-ph-button>Добавить</button>
         </div>
 
         <div class="photo-albums">
@@ -39,5 +39,5 @@
   </main>
 
   <photobook-footer [userBg]="user.user_profile.cover"></photobook-footer>
-  <ng-template dialogRef></ng-template>
+  <!-- <ng-template dialogRef></ng-template> -->
 </ng-template>

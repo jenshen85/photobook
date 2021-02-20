@@ -1,0 +1,93 @@
+.cdk-global-overflowblock {
+  position: fixed;
+  width: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.cdk-scrolled-overlay {
+  display: block;
+
+  .dialog-container {
+    max-width: 500px;
+    position: relative;
+    margin: 0.5rem auto;
+
+    @media (min-width: 576px) {
+      margin: 1.75rem auto;
+    }
+  }
+
+  &--top {
+    .dialog-container {
+      display: flex;
+      align-items: flex-start;
+      min-height: calc(100% - 1rem);
+
+      @media (min-width: 576px) {
+        min-height: calc(100% - 3.5rem);
+      }
+    }
+  }
+
+  &--center {
+    .dialog-container {
+      display: flex;
+      align-items: center;
+      min-height: calc(100% - 1rem);
+
+      @media (min-width: 576px) {
+        min-height: calc(100% - 3.5rem);
+      }
+    }
+  }
+
+  &--bottom {
+    .dialog-container {
+      display: flex;
+      align-items: flex-end;
+      min-height: calc(100% - 1rem);
+
+      @media (min-width: 576px) {
+        min-height: calc(100% - 3.5rem);
+      }
+    }
+  }
+
+  &--right {
+    .dialog-container {
+      display: flex;
+      justify-content: flex-end;
+      min-height: calc(100% - 1rem);
+      margin-right: 0;
+
+      @media (min-width: 576px) {
+        min-height: calc(100% - 3.5rem);
+      }
+    }
+  }
+
+  &--left {
+    .dialog-container {
+      display: flex;
+      justify-content: flex-start;
+      min-height: calc(100% - 1rem);
+      margin-left: 0;
+
+      @media (min-width: 576px) {
+        min-height: calc(100% - 3.5rem);
+      }
+    }
+  }
+}
+
+.dialog-container {
+  pointer-events: none;
+  display: block;
+  outline: none;
+}
+
+.dialog-container-content {
+  pointer-events: auto;
+}

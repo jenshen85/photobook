@@ -25,7 +25,7 @@
         <div class="header__desc" *ngIf="!isEdit; else editDesc" [@fadeIn]>{{album.description}}</div>
         <ng-template #editDesc>
           <photobook-app-control
-            isTextarea="true"
+            [isTextarea]="true"
             type="text"
             formControlName="description"
             placeholder="Описание альбома"
@@ -35,10 +35,10 @@
 
       <div class="header-actions" *ngIf="!isEdit; else albumPreview" [@fade]>
         <span class="header-actions__inner">
-          <button *ngIf="isAuthUser" type="button" (click)="editHandler()" icon="{{editIcon}}" photobook-ph-button>Редактировать</button>
-          <a [routerLink]="['/', 'photobook']" icon="{{homeIcon}}" photobook-ph-button>Домой</a>
-          <a [routerLink]="['/photobook', 'user', user.id]" icon="{{albumIcon}}" photobook-ph-button>Альбомы</a>
-          <button *ngIf="isAuthUser" type="button" (click)="addPhotoHandler()" icon="{{addIcon}}" photobook-ph-button>Добавить</button>
+          <button *ngIf="isAuthUser" type="button" (click)="editHandler()" [icon]="editIcon" photobook-ph-button>Редактировать</button>
+          <a [routerLink]="['/', 'photobook']" [icon]="homeIcon" photobook-ph-button>Домой</a>
+          <a [routerLink]="['/photobook', 'user', user.id]" [icon]="albumIcon" photobook-ph-button>Альбомы</a>
+          <button *ngIf="isAuthUser" type="button" (click)="addPhotoHandler()" [icon]="addIcon" photobook-ph-button>Добавить</button>
         </span>
       </div>
       <ng-template #albumPreview>

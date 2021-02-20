@@ -6,8 +6,9 @@ import { fadeIn } from 'ng-animate';
 import { SubSink } from 'subsink';
 import { AuthService } from '../../auth/auth.service';
 import { AddAlbumComponent, addAlbumDataType } from '../../shared/components/add-album/add-album.component';
-import { DialogService } from '../../shared/components/dialog/dialog.service';
-import { DialogRefDirective } from '../../shared/directives/dialog-ref.directive';
+// import { DialogService } from '../../shared/components/dialog/dialog.service';
+// import { DialogRefDirective } from '../../shared/directives/dialog-ref.directive';
+import { Dialog } from '../../shared/components/dialog/dialog';
 import { PhotobookService } from '../photobook.service';
 
 @Component({
@@ -26,8 +27,8 @@ import { PhotobookService } from '../photobook.service';
 export class UserPageComponent implements OnInit {
   isAuthUser: boolean;
 
-  @ViewChild(DialogRefDirective)
-  dialogRefDir: DialogRefDirective;
+  // @ViewChild(DialogRefDirective)
+  // dialogRefDir: DialogRefDirective;
 
   subs = new SubSink();
   user: UserRoI;
@@ -43,7 +44,7 @@ export class UserPageComponent implements OnInit {
   constructor(
     private readonly _photoService: PhotobookService,
     private readonly _authService: AuthService,
-    private readonly dialog: DialogService,
+    private readonly dialog: Dialog,
     private readonly router: Router,
     private readonly route: ActivatedRoute
   ) {}
@@ -92,20 +93,24 @@ export class UserPageComponent implements OnInit {
     )
   }
 
-  editHandler(_: Event) {
+  editHandler(isEdit: boolean) {
     this.isEdit = !this.isEdit;
   }
 
   addAlbum(album?: AlbumRoI) {
-    this.dialog.open(this.dialogRefDir, AddAlbumComponent, {
+    const dialogRef = this.dialog.open(AddAlbumComponent, {
       data: {
         album,
         user: this.user,
         action: album ? ActionEnum.update : ActionEnum.create,
       },
-      dialogContentClass: 'common-dialog-content',
-      centered: true,
-    }, (data: addAlbumDataType) => {
+      isScrolled: true,
+      scrolledOverlayPosition: 'top'
+      // dialogContentClass: 'common-dialog-content',
+      // centered: true,
+    });
+
+    dialogRef.afterClosed().subscribe((data: addAlbumDataType) => {
       if(data && data.type === ActionEnum.create) {
         this.albums.push(data.data);
       } else if(data && data.type === ActionEnum.update) {
@@ -115,6 +120,6 @@ export class UserPageComponent implements OnInit {
         const index = this.albums.findIndex(album => album.id === data.album_id);
         this.albums.splice(index, 1);
       }
-    });
+    })
   }
 }

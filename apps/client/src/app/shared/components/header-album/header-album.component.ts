@@ -5,7 +5,8 @@ import { AlbumRoI, SpriteIconEnum, UserRoI } from '@photobook/data';
 import { fadeIn } from 'ng-animate';
 import { DialogRefDirective } from '../../directives/dialog-ref.directive';
 import { AddPhotoComponent } from '../add-photo/add-photo.component';
-import { DialogService } from '../dialog/dialog.service';
+import { Dialog } from '../dialog/dialog';
+// import { DialogService } from '../dialog/dialog.service';
 
 @Component({
   selector: 'photobook-header-album',
@@ -43,13 +44,13 @@ export class HeaderAlbumComponent implements OnInit {
   homeIcon: SpriteIconEnum = SpriteIconEnum.home;
   addIcon: SpriteIconEnum = SpriteIconEnum.add;
 
-  constructor(private readonly dialog: DialogService) {}
+  constructor(private readonly dialog: Dialog) {}
 
   ngOnInit(): void {
     this.albumForm = new FormGroup({
       title: new FormControl(this.album.title, [
         Validators.required,
-        Validators.maxLength(20),
+        Validators.maxLength(20)
       ]),
       description: new FormControl(this.album.description, [
         Validators.maxLength(20),
@@ -58,7 +59,7 @@ export class HeaderAlbumComponent implements OnInit {
     });
   }
 
-  editHandler(_: Event) {
+  editHandler() {
     this.isEdit = !this.isEdit;
     this.onEditHandler.emit(this.isEdit);
   }
@@ -67,15 +68,19 @@ export class HeaderAlbumComponent implements OnInit {
     console.log(this.albumForm);
   }
 
-  addPhotoHandler(_: Event) {
-    this.dialog.open(this.dialogRefDir, AddPhotoComponent, {
+  addPhotoHandler() {
+    const dialogRef = this.dialog.open(AddPhotoComponent, {
       data: {
         user: this.user
       },
-      dialogContentClass: 'common-dialog-content',
-      centered: true,
-    }, (data: any) => {
-      console.log(data);
+      isScrolled: true,
+      scrolledOverlayPosition: 'top'
+      // dialogContentClass: 'common-dialog-content',
+      // centered: true,
     });
+
+    dialogRef.afterClosed().subscribe((data: any) => {
+      console.log(data);
+    })
   }
 }
