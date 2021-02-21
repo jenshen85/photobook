@@ -179,6 +179,7 @@ export abstract class _DialogContainerBase extends BasePortalOutlet {
   animations: [dialogAnimations.DialogContainer],
   host: {
     class: 'dialog-container',
+    '[class]': '_config.dialogContainerClass ? _config.dialogContainerClass : ""',
     'tabindex': '-1',
     'aria-modal': 'true',
     '[id]': '_id',

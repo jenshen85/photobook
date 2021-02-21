@@ -1,5 +1,5 @@
 import { transition, trigger, useAnimation } from '@angular/animations';
-import { Component, EventEmitter, Inject, Input, OnInit, Output } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import {
   AlbumCredentialsI,
@@ -38,8 +38,6 @@ export type addAlbumDataType = {
 })
 export class AddAlbumComponent implements OnInit {
   subs = new SubSink();
-  // @Output() close = new EventEmitter<any>();
-  // @Input() data: { album?: AlbumRoI; user: UserRoI; action: ActionEnum };
   actionCreate = ActionEnum.create
   removeIcon = SpriteIconEnum.delete;
   form: FormGroup;
@@ -109,7 +107,6 @@ export class AddAlbumComponent implements OnInit {
           data: album,
           album_id: album.id
         }
-        // this.close.emit(data);
         this.dialogRef.close(data);
       },
       (error) => {
@@ -126,7 +123,6 @@ export class AddAlbumComponent implements OnInit {
           data: album,
           album_id: album.id
         }
-        // this.close.emit(data);
         this.dialogRef.close(data);
       },
       (error) => {
@@ -142,7 +138,6 @@ export class AddAlbumComponent implements OnInit {
           type: ActionEnum.delete,
           album_id: id
         }
-        // this.close.emit(data)
         this.dialogRef.close(data);
       }
     );

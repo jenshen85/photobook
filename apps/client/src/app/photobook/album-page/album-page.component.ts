@@ -62,7 +62,7 @@ export class AlbumPageComponent implements OnInit {
           const userId = Number(params.get('id'));
           this.isAuthUser = authUserId === userId;
 
-          this.subs.sink = this._photoService.getUserById(userId).subscribe((user) => {
+          this.subs.sink = this._photoService.getUser(userId).subscribe((user) => {
             this.user = user;
             this.profile = user.user_profile;
             this.pendingLoadUser = false;

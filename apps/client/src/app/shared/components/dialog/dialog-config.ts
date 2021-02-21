@@ -16,6 +16,7 @@ export class DialogConfig<D = any> {
   id?: string;
   role?: DialogRole;
   panelClass?: string | string[] = 'panelClass';
+  dialogContainerClass?: string | string[] = '';
   hasBackdrop?: boolean = true;
   backdropClass?: string | string[] = '';
   disableClose?: boolean = false;

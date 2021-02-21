@@ -1,5 +1,5 @@
 <div class="album-card">
-  <a [routerLink]="['/', 'photobook', 'user', album.user_id, album.id]" class="album-card__top">
+  <a [routerLink]="['/', 'photobook', album.user_id, album.id]" class="album-card__top">
     <div class="album-card__img">
       <img [src]="album.preview
         ? album.preview
@@ -15,7 +15,7 @@
     <button *ngIf="editable" class="album-card__edit" (click)="editClick.emit(album)">
       <span photobook-icon [icon]="editIcon"></span>
     </button>
-    <a [routerLink]="['/', 'photobook', 'user', album.user_id, album.id]" class="album-card__name">
+    <a [routerLink]="['/', 'photobook', album.user_id, album.id]" class="album-card__name">
       {{album.title}}
     </a>
   </div>

@@ -1,0 +1,21 @@
+<section class="photobook-section photos">
+  <div class="container">
+    <div class="photobook-head">
+      <h2 class="photobook-main-title">Новое в мире</h2>
+    </div>
+
+    <div class="photo-cards">
+      <photobook-spinner position="absolute" *ngIf="pendingLoadPhotos; else photosTmp"></photobook-spinner>
+      <ng-template #photosTmp>
+        <photobook-photo-card
+          *ngFor="let photo of photos" [photo]="photo" [@fadeIn]
+          (onPhotoClick)="openPhotoDialog(photo)"
+        ></photobook-photo-card>
+      </ng-template>
+    </div>
+
+    <div class="photos-actions">
+      <button (click)="loadMoreHandler()" type="button" class="button button-border">Показать еще</button>
+    </div>
+  </div>
+</section>

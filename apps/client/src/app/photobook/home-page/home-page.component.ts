@@ -1,85 +1,94 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { transition, trigger, useAnimation } from '@angular/animations';
-import { fadeIn } from 'ng-animate';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { SubSink } from 'subsink';
 
 import {
   UserRoI,
-  PhotoRoI,
   SpriteIconEnum,
   UserProfileCredentialsI,
 } from '@photobook/data';
 import { PhotobookService } from '../photobook.service';
-import { Dialog } from '../../shared/components/dialog/dialog';
-// import { DialogService } from '../../shared/components/dialog/dialog.service';
-// import { DialogRefDirective } from '../../shared/directives/dialog-ref.directive';
-import { PhotoViewComponent } from '../../shared/components/photo-view/photo-view.component';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { Observable, Subject } from 'rxjs';
+import { fadeAnimations } from '../../shared/utils/animations';
 
 @Component({
   selector: 'photobook-home-page',
   templateUrl: './home-page.component.html',
   styleUrls: ['./home-page.component.scss'],
-  animations: [
-    trigger('fade', [
-      transition(
-        'void => *',
-        useAnimation(fadeIn, { params: { timing: 0.3 } })
-      ),
-    ]),
-  ],
+  animations: [ fadeAnimations.fadeIn() ],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HomePageComponent implements OnInit {
-  // @ViewChild(DialogRefDirective)
-  // dialogRefDir: DialogRefDirective;
-
+  isAuthUser: boolean;
   subs = new SubSink();
-
+  userSubj: Subject<UserRoI> = new Subject();
+  $user: Observable<UserRoI> = this.userSubj.asObservable();
+  authUser: UserRoI;
   user: UserRoI;
   profile: UserProfileCredentialsI;
-  photos: PhotoRoI[] = [];
   addIcon: SpriteIconEnum = SpriteIconEnum.add;
+  isAlbums: boolean;
 
-  isEdit: boolean;
-  pendingLoadUser: boolean;
-  pendingLoadPhotos: boolean;
+  isEdit = false;
+  pendingLoadUser: boolean = true;
 
   constructor(
     private readonly _photoService: PhotobookService,
-    private readonly dialog: Dialog
+    private readonly _router: Router,
+    private readonly _route: ActivatedRoute,
+    private readonly _changeDetectionRef: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
-    this.getMe();
-    this.getPhotos();
-  }
+    this.subs.add(
 
-  getMe(): void {
-    this.pendingLoadUser = true;
-    this.subs.sink = this._photoService.getUser().subscribe(
-      (user) => {
+      this.$user.subscribe((user: UserRoI): void => {
         this.user = user;
         this.profile = user.user_profile;
-        this.pendingLoadUser = false;
-      },
-      (error) => {
-        // TODO: error handling
-        this.pendingLoadUser = false;
-      }
-    );
+        this.isAuthUser = this.user.id === this.authUser.id;
+        this._changeDetectionRef.markForCheck();
+      }),
+
+      this._photoService.getAuthUser().subscribe((authUser) => {
+        this.authUser = authUser;
+        this.getUser();
+      }),
+
+      this._getRouteParamsMap().subscribe((params) => {
+        const userId = params.get('id');
+        this.isAlbums = userId ? true : false;
+      }),
+
+      this._router.events.subscribe((event) => {
+        if (event instanceof NavigationEnd) {
+          this.getUser();
+        }
+      })
+    )
   }
 
-  getPhotos() {
-    this.pendingLoadPhotos = true;
-    this.subs.sink = this._photoService.getPhotos().subscribe(
-      (photos) => {
-        this.photos = photos;
-        this.pendingLoadPhotos = false;
-      },
-      (error) => {
-        // TODO: error handling
-        this.pendingLoadPhotos = false;
+  getUser(): void {
+    this.pendingLoadUser = true;
+    this.subs.sink = this._getRouteParamsMap().subscribe(
+      params => {
+        const userId = params.get('id');
+        this.isAlbums = userId ? true : false;
+
+        if(userId && this.authUser && +userId !== this.authUser.id) {
+          this.subs.sink = this._photoService.getUser(+userId).subscribe(
+            (user) => this.userSubj.next(user),
+            (error) => {
+              // TODO: error handling
+              console.log(error);
+            },
+            () => this.pendingLoadUser = false
+          );
+        } else {
+          this.userSubj.next(this.authUser);
+          this.pendingLoadUser = false;
+        }
       }
-    );
+    )
   }
 
   ngOnDestroy(): void {
@@ -87,17 +96,14 @@ export class HomePageComponent implements OnInit {
   }
 
   editHandler(isEdit: boolean) {
-    this.isEdit = !this.isEdit;
+    this.isEdit = isEdit;
   }
 
-  openPhotoDialog(photo: PhotoRoI): void {
-    this.dialog.open(PhotoViewComponent, {
-      data: { photo, user: this.user },
-      isScrolled: true,
-      scrolledOverlayPosition: 'top'
-      // dialogContentClass: 'photo-view-content',
-    });
-  }
+  private _getRouteParamsMap() {
+    if(this._route.firstChild) {
+      return this._route.firstChild.paramMap;
+    }
 
-  loadMoreHandler() {}
+    return this._route.paramMap;
+  }
 }
