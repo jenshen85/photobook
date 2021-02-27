@@ -18,7 +18,11 @@ export class PhotobookComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.getMe();
+    this.subs.sink = this._authService.authUserProfile().subscribe((authUserProfile) => {
+      if(!authUserProfile) {
+        this.getMe();
+      }
+    });
   }
 
   ngOnDestroy(): void {

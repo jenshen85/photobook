@@ -35,6 +35,12 @@ export class HomePageComponent implements OnInit {
 
   ngOnInit(): void {
     this.subs.add(
+      this._authService.authUserProfile().subscribe((authUserProfile) => {
+        if(authUserProfile) {
+          this.authUserProfile = authUserProfile;
+          this.getUserProfile();
+        }
+      }),
 
       this._authService.currentUserProfile().subscribe((currentUserProfile): void => {
         if(currentUserProfile) {
@@ -43,14 +49,7 @@ export class HomePageComponent implements OnInit {
           this.pending = false;
           this._changeDetectionRef.markForCheck();
         }
-      }),
-
-      this._authService.authUserProfile().subscribe((authUserProfile) => {
-        if(authUserProfile) {
-          this.authUserProfile = authUserProfile;
-          this.getUserProfile();
-        }
-      }),
+      })
     )
   }
 

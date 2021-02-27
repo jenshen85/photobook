@@ -29,9 +29,6 @@ export function tokenSetter(token: string): void {
   providedIn: 'root',
 })
 export class AuthService {
-  // private _authUserSubj: BehaviorSubject<UserRoI> = new BehaviorSubject(null);
-  // private _authUser$: Observable<UserRoI> = this._authUserSubj.asObservable();
-
   private _authUserProfileSubj: BehaviorSubject<UserProfileRoI> = new BehaviorSubject(null);
   private _authUserProfile$: Observable<UserProfileRoI> = this._authUserProfileSubj.asObservable();
 
@@ -83,7 +80,6 @@ export class AuthService {
     return this._http.get<UserProfileRoI>(PATHS.profile).pipe(
       map((data) => {
         this._authUserProfileSubj.next(data);
-        // this._authUserSubj.next(data.user);
         return data;
       })
     );
@@ -99,12 +95,13 @@ export class AuthService {
   }
 
   updateMeProfile(data: FormData): Observable<UserProfileRoI> {
-    return this._http.patch<UserProfileRoI>(PATHS.profile, data);
+    return this._http.patch<UserProfileRoI>(PATHS.profile, data).pipe(
+      map((data) => {
+        this._authUserProfileSubj.next(data);
+        return data;
+      })
+    );
   }
-
-  // public authUser(): Observable<UserRoI> {
-  //   return this._authUser$;
-  // }
 
   public currentUserProfile(): Observable<UserProfileRoI> {
     return this._currentUserProfile$;
