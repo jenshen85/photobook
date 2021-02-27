@@ -18,11 +18,11 @@ import { AuthService } from '../../auth/auth.service';
 })
 export class HomePageComponent implements OnInit {
   isAuthUser: boolean = true;
+  isAlbums: boolean;
   subs = new SubSink();
   authUserProfile: UserProfileRoI;
   currentUserProfile: UserProfileRoI;
   addIcon: SpriteIconEnum = SpriteIconEnum.add;
-  isAlbums: boolean;
 
   isEdit = false;
   pending: boolean = true;

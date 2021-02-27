@@ -1,17 +1,34 @@
 <header
   class="header"
   [formGroup]="albumForm"
-  [style.background-image]="album.preview !== null ? 'url(' + album.preview + ')' : 'url(assets/images/default-bg.jpg)'"
+  [style.backgroundImage]="album.preview
+    ? 'url(' + album.preview + ')'
+    : 'url(assets/images/default-bg.jpg)'"
   [ngClass]="isEdit && 'user-edit'"
   >
 
   <div class="container header__container">
     <div class="header__inner">
 
-      <!-- <div class="header-user">
-        <photobook-small-ava [user]="user" [profile]="user.user_profile"></photobook-small-ava>
-        <span class="header-user__name">{{user.user_profile.first_name}}</span>
-      </div> -->
+      <div class="header-user">
+        <!-- <a
+          photobook-small-ava
+          [routerLink]="['/photobook', currentUserProfile.id]"
+          [avatar]="currentUserProfile.avatar ? currentUserProfile.avatar : null"
+          [userName]="getName"
+          >
+          <span class="header-user__name">{{getName}}</span>
+          {{currentUserProfile.id}}
+        </a> -->
+        <photobook-small-ava
+          class="header-user__ava"
+          [routerLink]="['/photobook', currentUserProfile.id]"
+          [avatar]="currentUserProfile.avatar ? currentUserProfile.avatar : null"
+          [userName]="getName"
+          ></photobook-small-ava>
+        <span class="header-user__name">{{getName}}</span>
+        {{currentUserProfile.id}}
+      </div>
 
       <div class="header__content">
         <div class="header__title" *ngIf="!isEdit; else editTitle" [@fadeIn]>{{album.title}}</div>
@@ -37,7 +54,7 @@
         <span class="header-actions__inner">
           <button *ngIf="isAuthUser" type="button" (click)="editHandler()" [icon]="editIcon" photobook-ph-button>Редактировать</button>
           <a [routerLink]="['/', 'photobook']" [icon]="homeIcon" photobook-ph-button>Домой</a>
-          <a [routerLink]="['/photobook', 'user', user.id]" [icon]="albumIcon" photobook-ph-button>Альбомы</a>
+          <a [routerLink]="['/photobook', currentUserProfile.id]" [icon]="albumIcon" photobook-ph-button>Альбомы</a>
           <button *ngIf="isAuthUser" type="button" (click)="addPhotoHandler()" [icon]="addIcon" photobook-ph-button>Добавить</button>
         </span>
       </div>
@@ -60,6 +77,4 @@
     </div>
   </div>
   <photobook-spinner position="absolute" *ngIf="savePending"></photobook-spinner>
-
-  <ng-template dialogRef></ng-template>
 </header>

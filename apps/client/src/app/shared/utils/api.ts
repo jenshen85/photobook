@@ -11,5 +11,4 @@ export const PATHS = {
   updateAlbums: (album_id: number | string) => `${API_PATH}/album/${album_id}`,
   deleteAlbums: (album_id: number | string) => `${API_PATH}/album/${album_id}`,
   getUserAllbums: (user_id: number | string) => `${API_PATH}/album/${user_id}`,
-  getUserAlbumById: (user_id: number | string, album_id: number | string) => `${API_PATH}/album/${user_id}/${album_id}`,
 };

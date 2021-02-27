@@ -20,8 +20,8 @@ export class PhotobookService {
     return this._http.get<AlbumRoI[]>(PATHS.album);
   }
 
-  getUserAlbumById(user_id: number | string, album_id: number | string): Observable<AlbumRoI> {
-    return this._http.get<AlbumRoI>(PATHS.getUserAlbumById(user_id, album_id));
+  getUserAlbumById(user_profile_id: number | string, album_id: number | string): Observable<AlbumRoI> {
+    return this._http.get<AlbumRoI>(`${PATHS.album}/${user_profile_id}/${album_id}`);
   }
 
   getAllAlbumsByUserId(user_id: number | string): Observable<AlbumRoI[]> {

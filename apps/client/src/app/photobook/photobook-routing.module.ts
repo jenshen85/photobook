@@ -25,10 +25,10 @@ const routes: Routes = [
           }
         ]
       },
-      // {
-      //   path: ':id/:album_id',
-      //   component: AlbumPageComponent,
-      // },
+      {
+        path: ':user_profile_id/:album_id',
+        component: AlbumPageComponent,
+      },
     ],
   },
 ];

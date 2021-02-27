@@ -3,10 +3,11 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { fadeIn } from 'ng-animate';
 
-import { AlbumRoI, SpriteIconEnum, UserRoI } from '@photobook/data';
+import { AlbumRoI, SpriteIconEnum, UserProfileRoI } from '@photobook/data';
 import { Dialog } from '@photobook/ui';
 
 import { AddPhotoComponent } from '../../../../shared/components/add-photo/add-photo.component';
+import { getUserName } from 'apps/client/src/app/shared/utils/utils';
 
 @Component({
   selector: 'photobook-header-album',
@@ -29,11 +30,11 @@ import { AddPhotoComponent } from '../../../../shared/components/add-photo/add-p
   ],
 })
 export class HeaderAlbumComponent implements OnInit {
-  // @ViewChild(DialogRefDirective) dialogRefDir: DialogRefDirective;
   @Input() isAuthUser?: boolean;
-  @Input() user: UserRoI;
+  @Input() authUserProfile: UserProfileRoI;
+  @Input() currentUserProfile: UserProfileRoI;
+  @Input() isEdit: boolean;
   @Input() album: AlbumRoI;
-  isEdit: boolean;
   savePending: boolean;
   albumForm: FormGroup;
 
@@ -71,16 +72,22 @@ export class HeaderAlbumComponent implements OnInit {
   addPhotoHandler() {
     const dialogRef = this.dialog.open(AddPhotoComponent, {
       data: {
-        user: this.user
+        user: this.authUserProfile
       },
       isScrolled: true,
       scrolledOverlayPosition: 'top'
-      // dialogContentClass: 'common-dialog-content',
-      // centered: true,
     });
 
     dialogRef.afterClosed().subscribe((data: any) => {
       console.log(data);
     })
+  }
+
+  get getName() {
+    return getUserName(
+      this.currentUserProfile.user.username,
+      this.currentUserProfile.first_name,
+      this.currentUserProfile.last_name
+    );
   }
 }

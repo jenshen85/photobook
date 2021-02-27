@@ -84,8 +84,12 @@
     color: $white;
   }
 
-  .photobook-small-ava {
+  &__ava {
     margin-right: rem(24);
+    color: $blue;
+    background-color: $white;
+    border-radius: 50%;
+    overflow: hidden;
   }
 }
 
