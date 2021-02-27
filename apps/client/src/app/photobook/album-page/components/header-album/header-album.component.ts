@@ -10,10 +10,14 @@ import { AddPhotoComponent } from '../../../../shared/components/add-photo/add-p
 import { getUserName } from 'apps/client/src/app/shared/utils/utils';
 
 @Component({
-  selector: 'photobook-header-album',
+  selector: 'header[photobook-header-album]',
   templateUrl: './header-album.component.html',
   styleUrls: ['./header-album.component.scss'],
-  host: { class: 'photobook-header-album'},
+  host: {
+    class: 'header photobook-header-album',
+    '[class]': 'isEdit ? "user-edit" : ""',
+    '[style.backgroundImage]': 'album.preview ? "url(" + album.preview + ")" : "url(assets/images/default-bg.jpg)"'
+  },
   animations: [
     trigger('fade', [
       transition(
@@ -60,9 +64,8 @@ export class HeaderAlbumComponent implements OnInit {
     });
   }
 
-  editHandler() {
-    this.isEdit = !this.isEdit;
-    this.onEditHandler.emit(this.isEdit);
+  editHandler(isEdit: boolean) {
+    this.onEditHandler.emit(isEdit);
   }
 
   updateProfileHandler() {
@@ -75,7 +78,8 @@ export class HeaderAlbumComponent implements OnInit {
         user: this.authUserProfile
       },
       isScrolled: true,
-      scrolledOverlayPosition: 'top'
+      scrolledOverlayPosition: 'center',
+      dialogContainerClass: ['add-photo-container']
     });
 
     dialogRef.afterClosed().subscribe((data: any) => {

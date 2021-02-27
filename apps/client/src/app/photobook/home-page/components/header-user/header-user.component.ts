@@ -21,8 +21,8 @@ import { toFormData } from '../../../../shared/utils/utils';
 export class HeaderUserComponent implements OnInit {
   subs = new SubSink();
 
-  @Input() isAuthUser?: boolean;
   isAlbums: boolean;
+  @Input() isAuthUser?: boolean;
   @Input() authUserProfile: UserProfileRoI;
   @Input() currentUserProfile: UserProfileRoI;
   @Input() isEdit: boolean;

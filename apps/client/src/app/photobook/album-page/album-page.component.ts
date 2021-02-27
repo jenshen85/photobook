@@ -1,7 +1,5 @@
-import { transition, trigger, useAnimation } from '@angular/animations';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { fadeIn } from 'ng-animate';
 import { SubSink } from 'subsink';
 
 import {
@@ -16,19 +14,13 @@ import { AuthService } from '../../auth/auth.service';
 import { PhotobookService } from '../photobook.service';
 
 import { openPhotoInDataType, PhotoViewComponent } from '../../shared/components/photo-view/photo-view.component';
+import { fadeAnimations } from '../../shared/utils/animations';
 
 @Component({
   selector: 'photobook-album-page',
   templateUrl: './album-page.component.html',
   styleUrls: ['./album-page.component.scss'],
-  animations: [
-    trigger('fade', [
-      transition(
-        'void => *',
-        useAnimation(fadeIn, { params: { timing: 0.3 } })
-      ),
-    ]),
-  ],
+  animations: [ fadeAnimations.fadeIn() ],
 })
 export class AlbumPageComponent implements OnInit {
   subs = new SubSink();
@@ -74,6 +66,10 @@ export class AlbumPageComponent implements OnInit {
     );
   }
 
+  ngOnDestroy(): void {
+    this.subs.unsubscribe();
+  }
+
   getUserProfile(): void {
     this.pending = true;
     const userProfileId = this._route.snapshot.paramMap.get('user_profile_id');
@@ -91,42 +87,13 @@ export class AlbumPageComponent implements OnInit {
     }
   }
 
-  // loadUser(): void {
-  //   const authUserId = Number(this._authService.getPayload().id);
-  //   this.pendingLoadUser = true;
-  //   this.route.paramMap.subscribe((params) => {
-  //       if(params.has('id')) {
-  //         const userId = Number(params.get('id'));
-  //         this.isAuthUser = authUserId === userId;
-
-  //         this.subs.sink = this._photoService.getUser(userId).subscribe((user) => {
-  //           this.user = user;
-  //           // this.profile = user.user_profile;
-  //           this.pendingLoadUser = false;
-
-  //           if(params.has('album_id')) {
-  //             const albumId = Number(params.get('album_id'));
-  //             this.loadAlbum(userId, albumId);
-  //           }
-  //         });
-
-  //       }
-  //     },
-  //     (error) => {
-  //       this.pendingLoadUser = false;
-  //       // TODO: error handling
-  //       console.log(error);
-  //     }
-  //   )
-  // }
-
   loadAlbum() {
     const userProfileId = +this._route.snapshot.paramMap.get('user_profile_id');
     const albumId = +this._route.snapshot.paramMap.get('album_id');
     this.pendingLoadAlbum = true;
     this.subs.sink = this._photoService.getUserAlbumById(userProfileId, albumId).subscribe(
       (album) => {
-        console.log(album);
+        // console.log(album);
         this.album = album;
         // this.photos = album.photos;
         this.pendingLoadAlbum = false;
@@ -146,8 +113,8 @@ export class AlbumPageComponent implements OnInit {
     this.dialog.open(PhotoViewComponent, {
       data,
       isScrolled: true,
-      scrolledOverlayPosition: 'top'
-      // dialogContentClass: 'photo-view-content',
+      scrolledOverlayPosition: 'top',
+      dialogContainerClass: ['photo-view-container']
     });
   }
 

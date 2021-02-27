@@ -1,16 +1,17 @@
-<div class="common-dialog-head">
-  <span>Добавить фотографии</span>
+<div class="common-dialog-content">
+  <div class="common-dialog-head">
+    <span>Добавить фотографии</span>
+  </div>
+  <!-- [formGroup]="form" (submit)="submitHandler()" -->
+  <form class="add-album-form" >
+    <div class="common-dialog-body">
+
+    </div>
+
+    <div class="common-dialog-footer">
+      <!-- [disabled]="form.invalid && form.touched" -->
+      <button type="submit"  class="button button-bg-blue">Сохранить</button>
+      <button type="button" dialogClose class="button btn-white">Отменить</button>
+    </div>
+  </form>
 </div>
-<!-- [formGroup]="form" (submit)="submitHandler()" -->
-<form class="add-album-form" >
-  <div class="common-dialog-body">
-
-  </div>
-
-  <div class="common-dialog-footer">
-    <!-- [disabled]="form.invalid && form.touched" -->
-    <button type="submit"  class="button button-bg-blue">Сохранить</button>
-    <button type="button" (click)="close.emit()" class="button btn-white">Отменить</button>
-    <!-- <button dialogCloseRef>Отменить</button> -->
-  </div>
-</form>
