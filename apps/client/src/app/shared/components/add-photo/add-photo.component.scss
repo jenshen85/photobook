@@ -1,3 +1,129 @@
 @import '../../../../sass/mixins.scss';
 @import '../../../../sass/variables.scss';
 
+.common-dialog-body {
+  padding: rem(40) rem(20);
+}
+
+.files-area {
+  position: relative;
+  border: rem(3) dashed #f1f1f1;
+  background-color: #f9f9f9;
+  border-radius: rem(20);
+  transition: border 0.2s, background 0.2s;
+
+  &-files {
+    padding: rem(20);
+    min-height: rem(330);
+
+    &__inner {
+      display: flex;
+      flex-wrap: wrap;
+      margin: 0 rem(-10);
+    }
+  }
+
+  &-file {
+    position: relative;
+    padding: 0 rem(10);
+    margin-bottom: rem(20);
+    width: 25%;
+
+    &__inner {
+      position: relative;
+      width: 100%;
+      padding-top: 100%;
+      background-color: #cfd8dc;
+
+      img {
+        border-radius: rem(3);
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+
+    &__close {
+      border-radius: 50%;
+      background-color: $red;
+      position: absolute;
+      top: rem(-10);
+      right: rem(-10);
+      width: rem(20);
+      height: rem(20);
+      color: $white;
+      border: 0;
+      cursor: pointer;
+
+      .photobook-app-icon {
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
+
+  &-control {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    @include fz(16, 20);
+    cursor: pointer;
+
+    .photobook-app-icon {
+      width: rem(40);
+      height: rem(32);
+      color: #d1d1d1;
+      margin-bottom: rem(20);
+      transition: color 0.3s;
+    }
+
+    &__input {
+      position: absolute;
+      width: 0;
+      height: 0;
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    &__label {
+      max-width: rem(180);
+      text-align: center;
+      transition: opacity 0.3s;
+
+      span {
+        color: $blue;
+      }
+    }
+
+    &:hover {
+      .photobook-app-icon {
+        color: $blue;
+      }
+    }
+  }
+
+  &.filesover {
+    border: rem(3) dashed #c9c7c7;
+    background-color: rgba($blue, 0.2);
+
+    .files-area-control {
+      pointer-events: none;
+
+      &__label {
+        opacity: 0.6;
+      }
+
+      .photobook-app-icon {
+        color: $blue;
+      }
+    }
+  }
+}
+

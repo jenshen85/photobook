@@ -98,6 +98,8 @@ export class AddAlbumComponent implements OnInit {
   }
 
   setImagePreview($event) {
+    console.log($event);
+    
     getBase64($event.target.files[0]).then(
       (img) => typeof img === 'string' && (this.imgPreview = img)
     );

@@ -2,10 +2,35 @@
   <div class="common-dialog-head">
     <span>Добавить фотографии</span>
   </div>
-  <!-- [formGroup]="form" (submit)="submitHandler()" -->
-  <form class="add-album-form" >
+  <form class="add-album-form" [formGroup]="form" (submit)="submitHandler()">
     <div class="common-dialog-body">
+      <div class="files-area" dragNdrop (fileDropped)="onFilesDrop($event)">
+        <div class="files-area-files">
+          <div class="files-area-files__inner">
 
+            <div *ngFor="let image of previewImages; let i = index" class="files-area-file">
+              <div class="files-area-file__inner">
+                <img src="{{image}}" alt="">
+                <button class="files-area-file__close" (click)="removeImage(i)">
+                  <span photobook-app-icon [icon]="closeIcon"></span>
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <label class="files-area-control" *ngIf="!previewImages.length">
+          <span photobook-app-icon [icon]="cameraIcon"></span>
+          <input
+            class="files-area-control__input"
+            type="file"
+            (change)="onFilesDrop($event)"
+            formControlName="files">
+            <!-- multiple -->
+          <span class="files-area-control__label">Перетащите фото сюда или <span>выберите файл</span></span>
+        </label>
+      </div>
     </div>
 
     <div class="common-dialog-footer">

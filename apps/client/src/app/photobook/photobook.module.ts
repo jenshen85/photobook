@@ -24,6 +24,8 @@ import { HomePagePhotosComponent } from './home-page/components/home-page-photos
 import { HomePageAlbumsComponent } from './home-page/components/home-page-albums/home-page-albums.component'
 import { FooterComponent } from './footer/footer.component';
 
+import { DragNDropDirective } from '../shared/directives/drag-n-drop.directive'
+
 @NgModule({
   declarations: [
     PhotobookComponent,
@@ -43,14 +45,15 @@ import { FooterComponent } from './footer/footer.component';
     AddPhotoComponent,
     HomePagePhotosComponent,
     HomePageAlbumsComponent,
-    FooterComponent
+    FooterComponent,
+    DragNDropDirective
   ],
   imports: [
     CommonModule,
     PhotobookRoutingModule,
     UiModule,
   ],
-  providers: [PhotobookService],
+  providers: [PhotobookService, DragNDropDirective],
   entryComponents: [PhotoViewComponent, AddAlbumComponent, AddPhotoComponent],
   exports: [PhotobookRoutingModule],
 })
