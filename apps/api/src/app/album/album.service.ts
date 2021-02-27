@@ -15,6 +15,14 @@ export class AlbumService {
     private readonly _fileService: FileService
   ) {}
 
+  async getAll(user_profile_id: number): Promise<AlbumRoDto[]> {
+    return await this._albumRepository.getAll(user_profile_id);
+  }
+
+  async getById(user_profile_id: number, album_id: number): Promise<AlbumRoDto> {
+    return await this._albumRepository.getById(user_profile_id, album_id);
+  }
+
   async createAlbum(
     file: Express.Multer.File,
     albumCredentials: AlbumCredentialsDto,
@@ -64,22 +72,6 @@ export class AlbumService {
       user
     );
   }
-
-  async getAll(user_id: number): Promise<AlbumRoDto[]> {
-    return await this._albumRepository.getAll(user_id);
-  }
-
-  // async getAlbumsByUserId(user_id: number): Promise<AlbumRoDto[]> {
-  //   return await this._albumRepository.getAlbumsByUserId(user_id);
-  // }
-
-  async getById(id: number, user_id: number): Promise<AlbumRoDto> {
-    return await this._albumRepository.getById(id, user_id);
-  }
-
-  // async getUserAlbumById(user_id: number, album_id: number): Promise<AlbumRoDto> {
-  //   return await this._albumRepository.getUserAlbumById(user_id, album_id);
-  // }
 
   async delete(id: number, user: Auth): Promise<void> {
     return await this._albumRepository.deleteAlbum(

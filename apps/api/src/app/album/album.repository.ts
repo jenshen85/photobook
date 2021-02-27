@@ -12,18 +12,16 @@ import { AlbumCredentialsDto, AlbumRoDto } from '@photobook/dto';
 @EntityRepository(Album)
 export class AlbumRepository extends Repository<Album> {
 
-  async getAll(user_id: number): Promise<AlbumRoDto[]> {
-    const albums = await this.find({where: { user_id }});
+  async getAll(user_profile_id: number): Promise<AlbumRoDto[]> {
+    const albums = await this.find({where: { user_profile_id }});
     return albums.map((album) => plainToClass(AlbumRoDto, album));
   }
 
-  // async getAllByUserId(user_id: number): Promise<AlbumRoDto[]> {
-  //   const albums = await this.find({where: { user_id }});
-  //   return albums.map((album) => plainToClass(AlbumRoDto, album));
-  // }
-
-  async getById(album_id: number, user_id: number): Promise<AlbumRoDto> {
-    const album = await this.findOne({ where: { id: album_id, user_id } });
+  async getById(user_profile_id: number, album_id: number): Promise<AlbumRoDto> {
+    const album = await this.createQueryBuilder('album')
+      .leftJoinAndSelect('album.user_profile', 'user_profile')
+      .where('album.user_profile_id = :user_profile_id', { user_profile_id })
+      .getOne();
 
     if (!album) {
       throw new NotFoundException(`Album with ID "${album_id}" not found`);

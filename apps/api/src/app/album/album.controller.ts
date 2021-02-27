@@ -29,6 +29,20 @@ import { GetUser } from '../shared/decorators/get-user.decorator';
 export class AlbumController {
   constructor(private readonly _albumService: AlbumService) {}
 
+  @Get('/:user_profile_id')
+  getAlbumsByUserId(@Param('user_profile_id', ParseIntPipe) user_profile_id: number): Promise<AlbumRoDto[]> {
+    return this._albumService.getAll(user_profile_id);
+  }
+
+  @Get('/:user_profile_id/:album_id')
+  getById(
+    @Param('user_profile_id', ParseIntPipe) user_profile_id: number,
+    @Param('album_id', ParseIntPipe) album_id: number,
+    @GetUser() user: Auth
+  ): Promise<AlbumRoDto> {
+    return this._albumService.getById(user_profile_id, album_id);
+  }
+
   @Post()
   @UseInterceptors(FileInterceptor('preview', {
     storage: memoryStorage()
@@ -41,38 +55,17 @@ export class AlbumController {
     return this._albumService.createAlbum(file, albumCredentials, user);
   }
 
-  @Patch('/:id')
+  @Patch('/:album_id')
   @UseInterceptors(FileInterceptor('preview', {
     storage: memoryStorage()
   }))
   updateAlbum(
-    @Param('id') album_id: number,
+    @Param('album_id') album_id: number,
     @UploadedFile() file: Express.Multer.File,
     @Body(ValidationPipe) albumCredentials: AlbumCredentialsDto,
     @GetUser() user: Auth
   ): Promise<AlbumRoDto> {
-    console.log(file);
-    console.log(album_id);
     return this._albumService.updateAlbum(album_id, file, albumCredentials, user);
-  }
-
-  // @Get()
-  // getAll(@GetUser() user: User): Promise<AlbumRoDto[]> {
-  //   return this._albumService.getAll(user.id);
-  // }
-
-  @Get('/:user_id')
-  getAlbumsByUserId(@Param('user_id', ParseIntPipe) user_id: number): Promise<AlbumRoDto[]> {
-    return this._albumService.getAll(user_id);
-  }
-
-  @Get('/:user_id/:album_id')
-  getById(
-    @Param('user_id', ParseIntPipe) user_id: number,
-    @Param('album_id', ParseIntPipe) album_id: number,
-    @GetUser() user: Auth
-  ): Promise<AlbumRoDto> {
-    return this._albumService.getById(album_id, user_id);
   }
 
   @Delete('/:album_id')

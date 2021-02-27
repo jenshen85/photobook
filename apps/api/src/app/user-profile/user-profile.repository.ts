@@ -28,9 +28,6 @@ export class UserProfileRepository extends Repository<UserProfile> {
 
   async getUserProfile(user_profile_id: number): Promise<UserProfileRODto> {
     const profile = await this.findOne({where: {id: user_profile_id}, relations: ['user']});
-    console.log(user_profile_id);
-    console.log(profile);
-    
     // const user = await this.createQueryBuilder('user_profile')
     //   .leftJoinAndSelect('user_profile.user', 'user', 'user_profile.user_id = :user_id',
     //     { user_id: user_profile_id, })
