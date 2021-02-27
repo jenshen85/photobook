@@ -33,11 +33,15 @@
       <div class="add-album-form__field">
 
         <div class="add-preview">
-          <span class="add-preview__photo">
-            <img class="add-preview__img"
-              [src]="imgPreview && !form.get('preview').invalid
-                ? imgPreview
-                : '../../../../assets/images/picture.svg'">
+          <span class="add-preview__photo"
+            [style.backgroundImage]="!imgPreview
+              ? 'url(../../../../assets/images/picture.svg)'
+              : null"
+            >
+            <img
+              class="add-preview__img"
+              *ngIf="imgPreview && !form.get('preview').invalid"
+              [src]="imgPreview">
           </span>
           <div class="add-preview__field">
             <label class="add-preview__file">
@@ -65,4 +69,5 @@
       </button>
     </div>
   </form>
+  <photobook-spinner *ngIf="pending"></photobook-spinner>
 </div>

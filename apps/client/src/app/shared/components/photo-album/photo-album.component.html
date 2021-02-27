@@ -2,7 +2,9 @@
   <a [routerLink]="['/', 'photobook', album.user_profile_id, album.id]" class="album-card__top">
     <div
       class="album-card__img"
-      [style.backgroundImage]="!album.preview ? 'url(../../../../assets/images/picture.svg)': null"
+      [style.backgroundImage]="!album.preview
+        ? 'url(../../../../assets/images/picture.svg)'
+        : null"
       >
       <img *ngIf="album.preview" [src]="album.preview" [alt]="album.title">
     </div>

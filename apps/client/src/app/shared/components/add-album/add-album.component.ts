@@ -49,6 +49,7 @@ export class AddAlbumComponent implements OnInit {
   authUserProfile: UserProfileRoI;
   action: ActionEnum;
   imgPreview: string;
+  pending: boolean;
 
   constructor(
     private photobookService: PhotobookService,
@@ -103,30 +104,36 @@ export class AddAlbumComponent implements OnInit {
   }
 
   createAlbum(data: FormData): void {
+    this.pending = true;
     this.subs.sink = this.photobookService.createAlbum(data).subscribe(
       (album) => {
         const data: addAlbumOutDataType = {
           action: ActionEnum.create,
           album
         }
+        this.pending = false;
         this.dialogRef.close(data);
       },
       (error) => {
+        this.pending = false;
         console.log(error);
       }
     );
   }
 
   updateAlbum(data: FormData): void {
+    this.pending = true;
     this.subs.sink = this.photobookService.updateAlbum(this.album.id, data).subscribe(
       (album) => {
         const data: addAlbumOutDataType = {
           action: ActionEnum.update,
           album,
         }
+        this.pending = false;
         this.dialogRef.close(data);
       },
       (error) => {
+        this.pending = false;
         console.log(error);
       }
     );
