@@ -11,7 +11,8 @@
     <div class="header__inner">
 
       <div class="header-user">
-        <!-- <a
+        <a
+          class="header-user__ava"
           photobook-small-ava
           [routerLink]="['/photobook', currentUserProfile.id]"
           [avatar]="currentUserProfile.avatar ? currentUserProfile.avatar : null"
@@ -19,13 +20,13 @@
           >
           <span class="header-user__name">{{getName}}</span>
           {{currentUserProfile.id}}
-        </a> -->
-        <photobook-small-ava
+        </a>
+        <!-- <photobook-small-ava
           class="header-user__ava"
           [routerLink]="['/photobook', currentUserProfile.id]"
           [avatar]="currentUserProfile.avatar ? currentUserProfile.avatar : null"
           [userName]="getName"
-          ></photobook-small-ava>
+          ></photobook-small-ava> -->
         <span class="header-user__name">{{getName}}</span>
         {{currentUserProfile.id}}
       </div>

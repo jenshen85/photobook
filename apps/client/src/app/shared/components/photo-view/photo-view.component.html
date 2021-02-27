@@ -14,10 +14,10 @@
 
   <div class="photo-view__middle">
     <div class="photo-view__user">
-      <photobook-small-ava
-        [routerLink]="['/photobook', 'user', photo.user_profile_id]"
+      <a photobook-small-ava
+        [routerLink]="['/photobook', photo.user_profile_id]"
         [avatar]=""
-        [userName]=""></photobook-small-ava>
+        [userName]=""></a>
       <a class="photo-view__user-name" [routerLink]="['user', photo.user_profile_id]">{{userName}}</a>
     </div>
 
@@ -37,10 +37,10 @@
       <div class="comments">
         <div class="comments__row">
           <div class="comments__ava">
-            <photobook-small-ava
-              [routerLink]="['/photobook', 'user', authUserProfile.id]"
-              [avatar]=""
-              [userName]=""></photobook-small-ava>
+            <a photobook-small-ava
+              [routerLink]="['/photobook', authUserProfile.id]"
+              [avatar]="authUserProfile.avatar"
+              [userName]=""></a>
           </div>
           <div class="comments__cont">
             <div class="comments__name">
@@ -57,10 +57,10 @@
 
         <div class="comments__row">
           <div class="comments__ava">
-            <photobook-small-ava
+            <a photobook-small-ava
               [routerLink]="['/photobook', 'user', authUserProfile.id]"
               [avatar]=""
-              [userName]=""></photobook-small-ava>
+              [userName]=""></a>
           </div>
           <div class="comments__cont">
             <div class="comments__name">Виталий Виноградов</div>
@@ -72,10 +72,10 @@
 
         <div class="comments__row">
           <div class="comments__ava">
-            <photobook-small-ava
+            <a photobook-small-ava
               [routerLink]="['/photobook', 'user', authUserProfile.id]"
               [avatar]=""
-              [userName]=""></photobook-small-ava>
+              [userName]=""></a>
           </div>
           <div class="comments__cont">
             <div class="comments__name">Виталий Виноградов</div>

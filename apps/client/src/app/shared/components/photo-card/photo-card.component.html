@@ -21,10 +21,10 @@
   <div class="photo-card__middle" *ngIf="hasInfo">
 
     <div class="photo-card__info">
-      <photobook-small-ava
-        [routerLink]="['/photobook', 'user', photo.user_profile_id]"
+      <a photobook-small-ava
+        [routerLink]="['/photobook', photo.user_profile_id]"
         [avatar]=""
-        [userName]="userName"></photobook-small-ava>
+        [userName]="userName"></a>
 
       <div *ngIf="photo.title"
         class="photo-card__photo"
