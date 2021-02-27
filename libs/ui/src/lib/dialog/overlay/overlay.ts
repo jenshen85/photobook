@@ -99,12 +99,12 @@ export class ScrolledPositionStrategy implements PositionStrategy {
       styles.height = styles.maxWidth = styles.maxHeight = styles.overflowY = styles.overflowX = '';
 
     this._overlayRef.overlayElement.classList.remove('cdk-scrolled-overlay');
-    this._overlayRef = null!;
-    this._isDisposed = true;
-
-    if(isScrolled && scrolledOverlayPosition === 'center') {
+    if(isScrolled) {
       this._overlayRef.overlayElement.classList.remove(`cdk-scrolled-overlay--${scrolledOverlayPosition}`);
     }
+
+    this._overlayRef = null!;
+    this._isDisposed = true;
   }
 }
 
