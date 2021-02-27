@@ -3,16 +3,16 @@
   <div class="photo-card__top">
     <a href="#" class="photo-card__img" (click)="onPhotoClickHandler($event, photo)">
       <img [src]="photo.image" [alt]="photo.title">
-      <span class="photo-card__img-zoom" photobook-icon [icon]="loupeIcon"></span>
+      <span class="photo-card__img-zoom" photobook-app-icon [icon]="loupeIcon"></span>
     </a>
     <div class="photo-card__actions" *ngIf="!hasInfo">
       <button class="photo-card__action photo-card__action--noinfo" disabled>
-        <span class="photo-card__action-ico" photobook-icon [icon]="commentIcon"></span>
+        <span class="photo-card__action-ico" photobook-app-icon [icon]="commentIcon"></span>
         <span class="photo-card__action-num">9</span>
       </button>
       <!-- liked -->
       <button class="photo-card__action photo-card__action--noinfo" [ngClass]="" disabled>
-        <span class="photo-card__action-ico" photobook-icon [icon]="likeIcon"></span>
+        <span class="photo-card__action-ico" photobook-app-icon [icon]="likeIcon"></span>
         <span class="photo-card__action-num">22</span>
       </button>
     </div>
@@ -21,8 +21,10 @@
   <div class="photo-card__middle" *ngIf="hasInfo">
 
     <div class="photo-card__info">
-      <photobook-small-ava [user]="photo.user"
-        [profile]="photo.user_profile"></photobook-small-ava>
+      <photobook-small-ava
+        [routerLink]="['/photobook', 'user', photo.user_profile_id]"
+        [avatar]=""
+        [userName]="userName"></photobook-small-ava>
 
       <div *ngIf="photo.title"
         class="photo-card__photo"
@@ -30,12 +32,12 @@
 
       <div class="photo-card__actions">
         <button class="photo-card__action">
-          <span class="photo-card__action-ico" photobook-icon [icon]="commentIcon"></span>
+          <span class="photo-card__action-ico" photobook-app-icon [icon]="commentIcon"></span>
           <span class="photo-card__action-num">9</span>
         </button>
         <!-- liked -->
         <button class="photo-card__action" [ngClass]="">
-          <span class="photo-card__action-ico" photobook-icon [icon]="likeIcon"></span>
+          <span class="photo-card__action-ico" photobook-app-icon [icon]="likeIcon"></span>
           <span class="photo-card__action-num">22</span>
         </button>
       </div>
@@ -45,12 +47,12 @@
 
   <div class="photo-card__bottom">
     <button *ngIf="!hasInfo && isAuthUser" class="photo-card__edit">
-      <span photobook-icon [icon]="editIcon"></span>
+      <span photobook-app-icon [icon]="editIcon"></span>
     </button>
 
-    <a [routerLink]="['/', 'photobook', 'user', photo.user_id, photo.album_id]" class="photo-card__album">
-      <span class="photo-card__album-ico" photobook-icon [icon]="albumIcon"></span>
-      {{photo.album.title}}
+    <a [routerLink]="['/', 'photobook', photo.user_profile_id, photo.album_id]" class="photo-card__album">
+      <span class="photo-card__album-ico" photobook-app-icon [icon]="albumIcon"></span>
+      {{photo.album_title}}
     </a>
   </div>
 </div>

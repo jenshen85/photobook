@@ -14,7 +14,7 @@ import {
 } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
 
-import { User, Photo } from '../entities';
+import { Auth, Photo } from '../entities';
 import { PhotoCredentialsDto, PhotoRoDto } from '@photobook/dto';
 
 import { PhotoService } from './photo.service';
@@ -26,16 +26,16 @@ import { GetUser } from '../shared/decorators/get-user.decorator';
 export class PhotoController {
   constructor(private readonly _photoService: PhotoService) {}
 
+  @Get()
+  getAll(): Promise<PhotoRoDto[]> {
+    return this._photoService.getAll();
+  }
+
   @Get('album/:album_id')
   getAllAlbumPhoto(
     @Param('album_id', ParseIntPipe) album_id: number
   ): Promise<PhotoRoDto[]> {
     return this._photoService.getAllAlbumPhoto(album_id);
-  }
-
-  @Get()
-  getAll(): Promise<PhotoRoDto[]> {
-    return this._photoService.getAll();
   }
 
   @Get('/:photo_id')
@@ -48,7 +48,7 @@ export class PhotoController {
   create(
     @Param('album_id', ParseIntPipe) album_id: number,
     @UploadedFiles() photos: Express.Multer.File[],
-    @GetUser() user: User
+    @GetUser() user: Auth
   ): Promise<PhotoRoDto[]> {
     return this._photoService.createPhoto(album_id, photos, user);
   }
@@ -57,16 +57,14 @@ export class PhotoController {
   update(
     @Param('photo_id', ParseIntPipe) photo_id: number,
     @Body(ValidationPipe) photoCredentials: PhotoCredentialsDto,
-    @GetUser() user: User
   ): Promise<PhotoRoDto> {
-    return this._photoService.updatePhoto(photo_id, photoCredentials, user);
+    return this._photoService.updatePhoto(photo_id, photoCredentials);
   }
 
   @Delete('/:photo_id')
   delete(
-    @Param('photo_id', ParseIntPipe) photo_id: number,
-    @GetUser() user: User
+    @Param('photo_id', ParseIntPipe) photo_id: number
   ): Promise<void> {
-    return this._photoService.deletePhoto(photo_id, user);
+    return this._photoService.deletePhoto(photo_id);
   }
 }

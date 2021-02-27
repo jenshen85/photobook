@@ -4,10 +4,14 @@ import {
   Body,
   Patch,
   UseInterceptors,
+  Post,
+  Get,
+  ParseIntPipe,
+  Param,
 } from '@nestjs/common';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 
-import { User } from '../entities';
+import { Auth, UserProfile } from '../entities';
 import { UserProfileCredentialsDto, UserProfileRODto } from '@photobook/dto';
 
 import { JwtAuthGuard } from '../shared/guards/jwt-auth.guard';
@@ -24,6 +28,24 @@ import { GetUserProfileFiles } from './decorators/get-user-profile-files.decorat
 export class UserProfileController {
   constructor(private readonly _userProfileService: UserProfileService) {}
 
+  @Get()
+  getMe(@GetUser() user: Auth): Promise<UserProfileRODto> {
+    return this._userProfileService.getMe(user);
+  }
+
+  @Get("/:user_profile_id")
+  getUser(@Param('user_profile_id', ParseIntPipe) user_profile_id: number): Promise<UserProfileRODto> {
+    return this._userProfileService.getUser(user_profile_id);
+  }
+
+  @Post()
+  createProfile(
+    @Body() userProfileCredentials: UserProfileCredentialsDto,
+    @GetUser() user: Auth
+  ): Promise<UserProfileRODto> {
+    return this._userProfileService.createUserProfile(user, userProfileCredentials);
+  }
+
   @Patch()
   @UseInterceptors(
     FileFieldsInterceptor([
@@ -34,7 +56,7 @@ export class UserProfileController {
   updateUserProfile(
     @GetUserProfileFiles() files: IProfileFiles,
     @Body() userProfileCredentials: UserProfileCredentialsDto,
-    @GetUser() user: User
+    @GetUser() user: Auth
   ): Promise<UserProfileRODto> {
     return this._userProfileService.updateProfile(
       files,

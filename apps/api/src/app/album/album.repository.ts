@@ -6,23 +6,24 @@ import {
 } from '@nestjs/common';
 import { plainToClass } from 'class-transformer';
 
-import { Album, User } from '../entities';
+import { Album, Auth } from '../entities';
 import { AlbumCredentialsDto, AlbumRoDto } from '@photobook/dto';
 
 @EntityRepository(Album)
 export class AlbumRepository extends Repository<Album> {
-  async getAll(user: User): Promise<AlbumRoDto[]> {
-    const albums = await this.find({where: {user_id: user.id}});
-    return albums.map((album) => plainToClass(AlbumRoDto, album));
-  }
 
-  async getAlbumsByUserId(user_id: number): Promise<AlbumRoDto[]> {
+  async getAll(user_id: number): Promise<AlbumRoDto[]> {
     const albums = await this.find({where: { user_id }});
     return albums.map((album) => plainToClass(AlbumRoDto, album));
   }
 
-  async getById(album_id: number): Promise<AlbumRoDto> {
-    const album = await this.findOne({ where: { id: album_id } });
+  // async getAllByUserId(user_id: number): Promise<AlbumRoDto[]> {
+  //   const albums = await this.find({where: { user_id }});
+  //   return albums.map((album) => plainToClass(AlbumRoDto, album));
+  // }
+
+  async getById(album_id: number, user_id: number): Promise<AlbumRoDto> {
+    const album = await this.findOne({ where: { id: album_id, user_id } });
 
     if (!album) {
       throw new NotFoundException(`Album with ID "${album_id}" not found`);
@@ -31,32 +32,43 @@ export class AlbumRepository extends Repository<Album> {
     return plainToClass(AlbumRoDto, album);
   }
 
-  async getUserAlbumById(user_id: number, album_id: number): Promise<Album> {
-    const found = await this.findOne({
-      where: { id: album_id, user_id: user_id },
-    });
+  // async getUserAlbumById(user_id: number, album_id: number): Promise<AlbumRoDto> {
+  //   const found = await this.findOne({
+  //     where: { id: album_id, user_id: user_id },
+  //   });
 
-    if (!found) {
-      throw new NotFoundException(`Album with ID ${album_id} not found`);
-    }
+  //   if (!found) {
+  //     throw new NotFoundException(`Album with ID ${album_id} not found`);
+  //   }
 
-    return found;
-  }
+  //   return plainToClass(AlbumRoDto, found);
+  // }
 
   async getWithDeleted(): Promise<Album[]> {
     const found = await this.find({ withDeleted: true });
     return found;
   }
 
+  async getOne(id: number): Promise<Album> {
+    const found = await this.findOne({ where: { id } });
+
+    if (!found) {
+      throw new NotFoundException(`Album with ID ${id} not found`);
+    }
+
+    return found;
+  }
+
   async createAlbum(
     albumCredentials: AlbumCredentialsDto,
-    user: User
+    user: Auth
   ): Promise<AlbumRoDto> {
     const { title, description } = albumCredentials;
     const album = new Album();
     album.title = title;
     description && (album.description = description);
     album.user_id = user.id;
+    album.user_profile_id = user.user_profile_id
 
     try {
       await album.save();
@@ -73,10 +85,10 @@ export class AlbumRepository extends Repository<Album> {
   async updateAlbum(
     album_id: number,
     albumCredentials: AlbumCredentialsDto,
-    user: User
+    user: Auth
   ): Promise<AlbumRoDto> {
     const { title, description, preview } = albumCredentials;
-    const album = await this.getUserAlbumById(user.id, album_id);
+    const album = await this.getOne(album_id);
     title && (album.title = title);
     description && (album.description = description);
     preview && (album.preview = preview);
@@ -95,9 +107,9 @@ export class AlbumRepository extends Repository<Album> {
 
   async deleteAlbum(
     id: number,
-    user: User /*, handler: (album: Album) => Promise<void>*/
+    user: Auth /*, handler: (album: Album) => Promise<void>*/
   ): Promise<void> {
-    const result = await this.getUserAlbumById(user.id, id);
+    const result = await this.getOne(id);
     result.deleted_at = new Date();
 
     try {

@@ -1,6 +1,6 @@
 import { Exclude, Expose, Type } from 'class-transformer';
 import { PhotoRoDto } from './photo-ro.dto';
-import { AlbumRoI } from '@photobook/data';
+import { AlbumRoI, PhotoRoI } from '@photobook/data';
 
 @Exclude()
 export class AlbumRoDto implements AlbumRoI {
@@ -9,6 +9,9 @@ export class AlbumRoDto implements AlbumRoI {
 
   @Expose()
   user_id: number;
+
+  @Expose()
+  user_profile_id: number;
 
   @Expose()
   title: string;
@@ -29,5 +32,5 @@ export class AlbumRoDto implements AlbumRoI {
 
   @Expose()
   @Type(() => PhotoRoDto)
-  photos: PhotoRoDto[];
+  photos: PhotoRoI[];
 }

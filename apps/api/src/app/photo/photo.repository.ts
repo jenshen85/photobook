@@ -6,15 +6,16 @@ import {
 } from '@nestjs/common';
 import { plainToClass } from 'class-transformer';
 
-import { Photo, User, Album } from '../entities';
+import { Photo, Auth, Album } from '../entities';
 import { PhotoCredentialsDto, PhotoRoDto } from '@photobook/dto';
 
 import { IFileData } from '../file/file.service';
 
 @EntityRepository(Photo)
 export class PhotoRepository extends Repository<Photo> {
+
   async getAll(): Promise<PhotoRoDto[]> {
-    const photos = await this.find({relations: ['user', 'album', 'user_profile']});
+    const photos = await this.find();
     // const photos = await this.find({relations: ['user'], take: 10, skip: 10});
     return photos.map((photo) => plainToClass(PhotoRoDto, photo));
   }
@@ -25,11 +26,11 @@ export class PhotoRepository extends Repository<Photo> {
   }
 
   async getOne(photo_id: number): Promise<PhotoRoDto> {
-    const photo = await this.getById(photo_id);
+    const photo = await this._getById(photo_id);
     return plainToClass(PhotoRoDto, photo);
   }
 
-  async getById(id: number) {
+  private async _getById(id: number) {
     const photo = this.findOne(id, {relations: ['user']});
     if (!photo) {
       throw new NotFoundException(`Photo with ID ${id} not found`);
@@ -38,24 +39,24 @@ export class PhotoRepository extends Repository<Photo> {
     return photo;
   }
 
-  async getUserPhotoById(id: number, user: User) {
-    const photo = this.findOne({ where: { id, user_id: user.id } });
-    if (!photo) {
-      throw new NotFoundException(`Photo with ID ${id} not found`);
-    }
+  // private async _getUserPhotoById(id: number, user: User) {
+  //   const photo = this.findOne({ where: { id, user_id: user.id } });
+  //   if (!photo) {
+  //     throw new NotFoundException(`Photo with ID ${id} not found`);
+  //   }
 
-    return photo;
-  }
+  //   return photo;
+  // }
 
   async createPhoto(
     imageData: IFileData,
-    album: Album,
-    user: User
+    album_id: number,
+    user: Auth
   ): Promise<PhotoRoDto> {
     const photo = new Photo();
-    photo.user = user;
-    photo.album = album;
-    photo.user_profile = user.user_profile;
+    photo.user_id = user.id;
+    photo.album_id = album_id;
+    photo.user_profile_id = user.user_profile_id;
     photo.image = imageData.imageUrl;
     photo.image_name = imageData.fileName;
 
@@ -73,11 +74,10 @@ export class PhotoRepository extends Repository<Photo> {
 
   async updatePhoto(
     photo_id: number,
-    photoCredentials: PhotoCredentialsDto,
-    user: User
+    photoCredentials: PhotoCredentialsDto
   ): Promise<PhotoRoDto> {
     const { title, description } = photoCredentials;
-    const photo = await this.getUserPhotoById(photo_id, user);
+    const photo = await this._getById(photo_id);
     photo.title = title;
     photo.description = description;
 
@@ -89,8 +89,8 @@ export class PhotoRepository extends Repository<Photo> {
     }
   }
 
-  async deletePhoto(photo_id: number, user: User): Promise<void> {
-    const photo = await this.getUserPhotoById(photo_id, user);
+  async deletePhoto(photo_id: number): Promise<void> {
+    const photo = await this._getById(photo_id);
     photo.deleted_at = new Date();
 
     try {

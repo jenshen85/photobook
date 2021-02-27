@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { AlbumCredentialsDto, AlbumRoDto } from '@photobook/dto';
-import { User, Album } from '../entities';
+import { Auth, Album } from '../entities';
 
 import { AlbumRepository } from './album.repository';
 import { FileService, IFileData } from '../file/file.service';
@@ -18,7 +18,7 @@ export class AlbumService {
   async createAlbum(
     file: Express.Multer.File,
     albumCredentials: AlbumCredentialsDto,
-    user: User
+    user: Auth
   ): Promise<AlbumRoDto> {
     const album = await this._albumRepository.createAlbum(
       albumCredentials,
@@ -45,9 +45,9 @@ export class AlbumService {
     album_id: number,
     file: Express.Multer.File,
     albumCredentials: AlbumCredentialsDto,
-    user: User
+    user: Auth
   ): Promise<AlbumRoDto> {
-    const album = await this._albumRepository.getById(album_id);
+    const album = await this._albumRepository.getById(album_id, user.id);
     let savedImageData: IFileData;
     if(file) {
       const pathToAlbumPreview = `images/${user.id}/albums/${album_id}/preview`;
@@ -65,23 +65,23 @@ export class AlbumService {
     );
   }
 
-  async getAll(user: User): Promise<AlbumRoDto[]> {
-    return await this._albumRepository.getAll(user);
+  async getAll(user_id: number): Promise<AlbumRoDto[]> {
+    return await this._albumRepository.getAll(user_id);
   }
 
-  async getAlbumsByUserId(user_id: number): Promise<AlbumRoDto[]> {
-    return await this._albumRepository.getAlbumsByUserId(user_id);
+  // async getAlbumsByUserId(user_id: number): Promise<AlbumRoDto[]> {
+  //   return await this._albumRepository.getAlbumsByUserId(user_id);
+  // }
+
+  async getById(id: number, user_id: number): Promise<AlbumRoDto> {
+    return await this._albumRepository.getById(id, user_id);
   }
 
-  async getById(id: number): Promise<AlbumRoDto> {
-    return await this._albumRepository.getById(id);
-  }
+  // async getUserAlbumById(user_id: number, album_id: number): Promise<AlbumRoDto> {
+  //   return await this._albumRepository.getUserAlbumById(user_id, album_id);
+  // }
 
-  async getUserAlbumById(user_id: number, album_id: number): Promise<Album> {
-    return await this._albumRepository.getUserAlbumById(user_id, album_id);
-  }
-
-  async delete(id: number, user: User): Promise<void> {
+  async delete(id: number, user: Auth): Promise<void> {
     return await this._albumRepository.deleteAlbum(
       id,
       user /*, async (album) => {

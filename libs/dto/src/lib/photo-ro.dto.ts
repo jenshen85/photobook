@@ -1,9 +1,9 @@
 import 'reflect-metadata';
-import { Exclude, Expose, Type } from 'class-transformer';
-import { PhotoUserRoDto } from './photo-user-ro.dto';
-import { PhotoRoI } from '@photobook/data';
-import { PhotoAlbumRoDto } from './photo-album-ro.dto';
-import { UserProfileRODto } from './user-profile-ro.dto';
+import { Exclude, Expose } from 'class-transformer';
+// import { PhotoUserRoDto } from './photo-user-ro.dto';
+import { PhotoAlbumRoI, PhotoRoI, UserProfileRoI, UserRoI } from '@photobook/data';
+// import { PhotoAlbumRoDto } from './photo-album-ro.dto';
+// import { UserProfileRODto } from './user-profile-ro.dto';
 
 @Exclude()
 export class PhotoRoDto implements PhotoRoI {
@@ -12,6 +12,9 @@ export class PhotoRoDto implements PhotoRoI {
 
   @Expose()
   user_id: number;
+
+  @Expose()
+  user_profile_id: number;
 
   @Expose()
   album_id: number;
@@ -37,14 +40,20 @@ export class PhotoRoDto implements PhotoRoI {
   deleted_at: Date;
 
   @Expose()
-  @Type(() => PhotoUserRoDto)
-  user: PhotoUserRoDto;
+  user_avatar?: string;
 
   @Expose()
-  @Type(() => PhotoAlbumRoDto)
-  album: PhotoAlbumRoDto;
+  album_title?: string;
 
-  @Expose()
-  @Type(() => UserProfileRODto)
-  user_profile: UserProfileRODto;
+  // @Expose()
+  // @Type(() => PhotoUserRoDto)
+  // user: UserRoI;
+
+  // @Expose()
+  // @Type(() => PhotoAlbumRoDto)
+  // album: PhotoAlbumRoI;
+
+  // @Expose()
+  // @Type(() => UserProfileRODto)
+  // user_profile: UserProfileRoI;
 }

@@ -1,11 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
-import { User, UserProfile } from '../entities';
+import { Auth, UserProfile } from '../entities';
 import { UserProfileCredentialsDto, UserProfileRODto } from '@photobook/dto';
 
 import { UserProfileRepository } from './user-profile.repository';
 import { FileService, IFileData } from '../file/file.service';
+import { AuthService } from '../auth/auth.service';
 
 export enum ProfileFilesFields {
   avatar = 'avatar',
@@ -27,17 +28,28 @@ export class UserProfileService {
   constructor(
     @InjectRepository(UserProfile)
     private readonly _userProfileRepository: UserProfileRepository,
+    private readonly _authService: AuthService,
     private readonly _fileService: FileService
   ) {}
 
-  async createUserProfile(user: User): Promise<UserProfile> {
-    return await this._userProfileRepository.createProfile(user);
+  async getMe(user: Auth): Promise<UserProfileRODto> {
+    return await this._userProfileRepository.getMe(user);
+  }
+
+  async getUser(user_profile_id: number): Promise<UserProfileRODto> {
+    return await this._userProfileRepository.getUserProfile(user_profile_id);
+  }
+
+  async createUserProfile(user: Auth, userProfileCredentials?: UserProfileCredentialsDto): Promise<UserProfileRODto> {
+    const newUserProfile = await this._userProfileRepository.createProfile(user, userProfileCredentials);
+    await this._authService.setHasProfile(user, newUserProfile.id);
+    return newUserProfile;
   }
 
   async updateProfile(
     files: IProfileFiles,
     userProfileCredentials: UserProfileCredentialsDto,
-    user: User
+    user: Auth
   ): Promise<UserProfileRODto> {
     const profileImages = await this.saveProfileFiles(files, user);
     return await this._userProfileRepository.updateProfile(
@@ -49,7 +61,7 @@ export class UserProfileService {
 
   private async saveProfileFiles(
     files: IProfileFiles,
-    user: User
+    user: Auth
   ): Promise<IProfileFilesData> {
     const profileFilesPath = `images/${user.id}/profile`;
     const avatar = files.avatar ? files.avatar[0] : null;

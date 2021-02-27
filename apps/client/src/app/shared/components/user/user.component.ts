@@ -9,7 +9,7 @@ import { ControlContainer, FormGroupDirective } from '@angular/forms';
 import { transition, trigger, useAnimation } from '@angular/animations';
 import { fadeIn } from 'ng-animate';
 
-import { UserProfileRoI } from '@photobook/data';
+import { SpriteIconEnum, UserProfileRoI } from '@photobook/data';
 import { getUserName } from '../../../shared/utils/utils';
 
 @Component({
@@ -35,16 +35,16 @@ import { getUserName } from '../../../shared/utils/utils';
 export class UserComponentComponent implements OnInit, OnChanges {
   @Input() profile: UserProfileRoI;
   @Input() isEdit: boolean;
-  @Input() username: string;
   @Input() avatarControl: string;
   @Input() firstNameControl: string;
   @Input() lastNameControl: string;
   @Input() descriptionControl: string;
+  userIcon = SpriteIconEnum.user;
   userName = '';
 
   ngOnInit(): void {
     this.userName = getUserName(
-      this.username,
+      this.profile.user.username,
       this.profile.first_name,
       this.profile.last_name
     );
@@ -52,7 +52,7 @@ export class UserComponentComponent implements OnInit, OnChanges {
 
   ngOnChanges(_: SimpleChanges): void {
     this.userName = getUserName(
-      this.username,
+      this.profile.user.username,
       this.profile.first_name,
       this.profile.last_name
     );

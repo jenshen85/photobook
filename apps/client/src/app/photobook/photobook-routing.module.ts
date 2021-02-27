@@ -3,6 +3,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { AlbumPageComponent } from './album-page/album-page.component';
 import { HomePageComponent } from './home-page/home-page.component';
 import { PhotobookComponent } from './photobook.component';
+import { HomePagePhotosComponent } from './home-page/components/home-page-photos/home-page-photos.component';
+import { HomePageAlbumsComponent } from './home-page/components/home-page-albums/home-page-albums.component';
 
 const routes: Routes = [
   {
@@ -14,15 +16,19 @@ const routes: Routes = [
         component: HomePageComponent,
         children: [
           {
-            path: ':id',
-            component: HomePageComponent
+            path: '',
+            component: HomePagePhotosComponent
+          },
+          {
+            path: ':user_profile_id',
+            component: HomePageAlbumsComponent
           }
         ]
       },
-      {
-        path: ':id/:album_id',
-        component: AlbumPageComponent,
-      },
+      // {
+      //   path: ':id/:album_id',
+      //   component: AlbumPageComponent,
+      // },
     ],
   },
 ];

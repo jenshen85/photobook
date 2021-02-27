@@ -1,0 +1,65 @@
+<header
+  class="header"
+  [formGroup]="albumForm"
+  [style.background-image]="album.preview !== null ? 'url(' + album.preview + ')' : 'url(assets/images/default-bg.jpg)'"
+  [ngClass]="isEdit && 'user-edit'"
+  >
+
+  <div class="container header__container">
+    <div class="header__inner">
+
+      <!-- <div class="header-user">
+        <photobook-small-ava [user]="user" [profile]="user.user_profile"></photobook-small-ava>
+        <span class="header-user__name">{{user.user_profile.first_name}}</span>
+      </div> -->
+
+      <div class="header__content">
+        <div class="header__title" *ngIf="!isEdit; else editTitle" [@fadeIn]>{{album.title}}</div>
+        <ng-template #editTitle>
+          <photobook-app-control
+            type="text"
+            formControlName="title"
+            placeholder="Название альбома"
+            [@fadeIn]></photobook-app-control>
+        </ng-template>
+        <div class="header__desc" *ngIf="!isEdit; else editDesc" [@fadeIn]>{{album.description}}</div>
+        <ng-template #editDesc>
+          <photobook-app-control
+            [isTextarea]="true"
+            type="text"
+            formControlName="description"
+            placeholder="Описание альбома"
+            [@fadeIn]></photobook-app-control>
+        </ng-template>
+      </div>
+
+      <div class="header-actions" *ngIf="!isEdit; else albumPreview" [@fade]>
+        <span class="header-actions__inner">
+          <button *ngIf="isAuthUser" type="button" (click)="editHandler()" [icon]="editIcon" photobook-ph-button>Редактировать</button>
+          <a [routerLink]="['/', 'photobook']" [icon]="homeIcon" photobook-ph-button>Домой</a>
+          <a [routerLink]="['/photobook', 'user', user.id]" [icon]="albumIcon" photobook-ph-button>Альбомы</a>
+          <button *ngIf="isAuthUser" type="button" (click)="addPhotoHandler()" [icon]="addIcon" photobook-ph-button>Добавить</button>
+        </span>
+      </div>
+      <ng-template #albumPreview>
+        <photobook-upload-image formControlName="preview" [@fade]>
+          Изменить фон
+        </photobook-upload-image>
+      </ng-template>
+    </div>
+  </div>
+
+  <div class="edit-bar" *ngIf="isEdit" [@fade]>
+    <div class="container">
+      <div class="edit-bar__content">
+        <div class="edit-bar__actions">
+          <button type="button" (click)="editHandler()" class="button btn-white">Отменить</button>
+          <button type="button" (click)="updateProfileHandler()" class="button button-bg-blue">Сохранить</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <photobook-spinner position="absolute" *ngIf="savePending"></photobook-spinner>
+
+  <ng-template dialogRef></ng-template>
+</header>

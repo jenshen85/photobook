@@ -7,9 +7,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { JwtStrategy } from './strategies/jwt.strategy';
-import { UserRepository } from '../user/user.repository';
-import { UserModule } from '../user/user.module';
 import { ConfigEnum } from '../config/typeorm.config';
+import { AuthRepository } from './auth.repository';
 
 @Module({
   imports: [
@@ -25,8 +24,7 @@ import { ConfigEnum } from '../config/typeorm.config';
       }),
       inject: [ConfigService]
     }),
-    TypeOrmModule.forFeature([UserRepository]),
-    UserModule,
+    TypeOrmModule.forFeature([AuthRepository]),
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy],

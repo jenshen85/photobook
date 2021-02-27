@@ -1,15 +1,22 @@
 import { transition, trigger, useAnimation } from '@angular/animations';
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { AlbumRoI, PhotoRoI, SpriteIconEnum, UserProfileCredentialsI, UserRoI } from '@photobook/data';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { fadeIn } from 'ng-animate';
 import { SubSink } from 'subsink';
+
+import {
+  AlbumRoI,
+  PhotoRoI,
+  SpriteIconEnum,
+  UserProfileCredentialsI,
+  UserRoI
+} from '@photobook/data';
+import { Dialog } from '@photobook/ui';
+
 import { AuthService } from '../../auth/auth.service';
-import { Dialog } from '../../shared/components/dialog/dialog';
-// import { DialogService } from '../../shared/components/dialog/dialog.service';
-import { PhotoViewComponent } from '../../shared/components/photo-view/photo-view.component';
-// import { DialogRefDirective } from '../../shared/directives/dialog-ref.directive';
 import { PhotobookService } from '../photobook.service';
+
+import { PhotoViewComponent } from '../../shared/components/photo-view/photo-view.component';
 
 @Component({
   selector: 'photobook-album-page',
@@ -25,9 +32,6 @@ import { PhotobookService } from '../photobook.service';
   ],
 })
 export class AlbumPageComponent implements OnInit {
-  // @ViewChild(DialogRefDirective)
-  // dialogRefDir: DialogRefDirective;
-
   subs = new SubSink();
 
   user: UserRoI;
@@ -51,37 +55,37 @@ export class AlbumPageComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.loadUser();
+    // this.loadUser();
   }
 
-  loadUser(): void {
-    const authUserId = Number(this._authService.getPayload().id);
-    this.pendingLoadUser = true;
-    this.route.paramMap.subscribe((params) => {
-        if(params.has('id')) {
-          const userId = Number(params.get('id'));
-          this.isAuthUser = authUserId === userId;
+  // loadUser(): void {
+  //   const authUserId = Number(this._authService.getPayload().id);
+  //   this.pendingLoadUser = true;
+  //   this.route.paramMap.subscribe((params) => {
+  //       if(params.has('id')) {
+  //         const userId = Number(params.get('id'));
+  //         this.isAuthUser = authUserId === userId;
 
-          this.subs.sink = this._photoService.getUser(userId).subscribe((user) => {
-            this.user = user;
-            this.profile = user.user_profile;
-            this.pendingLoadUser = false;
+  //         this.subs.sink = this._photoService.getUser(userId).subscribe((user) => {
+  //           this.user = user;
+  //           // this.profile = user.user_profile;
+  //           this.pendingLoadUser = false;
 
-            if(params.has('album_id')) {
-              const albumId = Number(params.get('album_id'));
-              this.loadAlbum(userId, albumId);
-            }
-          });
+  //           if(params.has('album_id')) {
+  //             const albumId = Number(params.get('album_id'));
+  //             this.loadAlbum(userId, albumId);
+  //           }
+  //         });
 
-        }
-      },
-      (error) => {
-        this.pendingLoadUser = false;
-        // TODO: error handling
-        console.log(error);
-      }
-    )
-  }
+  //       }
+  //     },
+  //     (error) => {
+  //       this.pendingLoadUser = false;
+  //       // TODO: error handling
+  //       console.log(error);
+  //     }
+  //   )
+  // }
 
   loadAlbum(user_id: number | string, album_id: number | string) {
     this.pendingLoadAlbum = true;

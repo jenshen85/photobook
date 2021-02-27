@@ -3,9 +3,9 @@
     <div class="user__ava">
       <img *ngIf="profile.avatar; else fallbackImg" [src]="profile.avatar" [alt]="userName">
       <ng-template #fallbackImg>
-        <photobook-fallback-image></photobook-fallback-image>
+        <span photobook-app-icon [icon]="userIcon"></span>
       </ng-template>
-      <div class="user__change-photo" *ngIf="isEdit" [@fadeIn]>
+      <div class="user__change-photo" *ngIf="isEdit">
         <photobook-upload-image formControlName="{{avatarControl}}">
           Изменить фото
         </photobook-upload-image>
@@ -14,18 +14,18 @@
 
     <div class="user__info">
       <div class="user__name">
-        <span *ngIf="!isEdit; else editName" [@fadeIn]>{{userName}}</span>
+        <span *ngIf="!isEdit; else editName">{{userName}}</span>
         <ng-template #editName>
-          <span class="user__field" [@fadeIn]>
+          <span class="user__field">
             <input class="user__control" type="text" formControlName="{{firstNameControl}}" placeholder="Имя">
             <input class="user__control" type="text" formControlName="{{lastNameControl}}" placeholder="Фамилия">
           </span>
         </ng-template>
       </div>
       <div class="user__desc">
-        <span *ngIf="!isEdit; else editDesc" [@fadeIn]>{{profile.description}}</span>
+        <span *ngIf="!isEdit; else editDesc">{{profile.description}}</span>
         <ng-template #editDesc>
-          <span class="user__field" [@fadeIn]>
+          <span class="user__field">
             <textarea class="user__control" placeholder="описание" formControlName="{{descriptionControl}}"></textarea>
           </span>
         </ng-template>

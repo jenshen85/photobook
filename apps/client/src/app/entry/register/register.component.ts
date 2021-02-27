@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
-import { UserCredentialsI } from '@photobook/data';
+import { SpriteIconEnum, UserCredentialsI } from '@photobook/data';
+import { Subscription } from 'rxjs';
 import { AuthService } from '../../auth/auth.service';
 
 @Component({
@@ -12,7 +13,13 @@ import { AuthService } from '../../auth/auth.service';
 })
 export class RegisterComponent implements OnInit {
   form: FormGroup;
+  registerSubs: Subscription;
+  userIcon: SpriteIconEnum = SpriteIconEnum.user;
+  envelopeIcon: SpriteIconEnum = SpriteIconEnum.envelope;
+  passwordIcon: SpriteIconEnum = SpriteIconEnum.password;
+
   constructor( private readonly _authService: AuthService) {}
+
   ngOnInit(): void {
     this.form = new FormGroup({
       username: new FormControl(null, [Validators.required]),
@@ -21,10 +28,14 @@ export class RegisterComponent implements OnInit {
     });
   }
 
+  ngOnDestroy() {
+    this.registerSubs && this.registerSubs.unsubscribe();
+  }
+
   submit($event: Event) {
     if(this.form.valid) {
       const data: UserCredentialsI = this.form.value;
-      this._authService.register(data).subscribe(
+      this.registerSubs = this._authService.register(data).subscribe(
         (userdata) => console.log(userdata),
         (error) => {
           // TODO: error handling

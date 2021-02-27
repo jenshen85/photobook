@@ -1,0 +1,89 @@
+@import '../../../sass/mixins.scss';
+@import '../../../sass/variables.scss';
+
+:host {
+  // background-image: url('../../../../assets/images/welcom-bg.png');
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  padding: rem(20) 0;
+  position: relative;
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba($black, 0.1);
+    transition: background 0.3s;
+  }
+
+  &.user-edit {
+    &::before {
+      background-color: rgba($black, 0.8);
+      z-index: 1;
+    }
+  }
+}
+
+// .footer {
+//   $padding: 30;
+
+//   &-container {
+//     display: flex;
+//     align-items: center;
+//     justify-content: space-between;
+//     position: relative;
+//   }
+
+//   &-left {
+//     width: 50%;
+//     padding-right: rem($padding);
+//     text-align: left;
+//     font-size: rem(16);
+//     line-height: lh(20, 16);
+//     color: #fff;
+//     font-weight: 300;
+//   }
+
+//   &-right {
+//     width: 50%;
+//     padding-left: rem($padding);
+//     text-align: right;
+//     font-size: rem(16);
+//     line-height: lh(20, 16);
+//     color: #fff;
+//     font-weight: 300;
+//     opacity: 0.6;
+//   }
+// }
+
+.button-top {
+  $button-top: &;
+  display: block;
+  border: 0;
+  outline: none;
+  cursor: pointer;
+  padding: 0;
+  position: absolute;
+  top: rem(0);
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: transparent;
+  @include custom-outline(#28bbf0);
+  color: #fff;
+  transition: color 0.3s;
+
+  &-ico {
+    width: rem(27);
+    height: rem(21);
+    display: block;
+  }
+
+  &:hover {
+    color: #28bbf0;
+  }
+}

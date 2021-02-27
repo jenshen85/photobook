@@ -1,0 +1,102 @@
+@import './mixins.scss';
+@import './variables.scss';
+
+.button {
+  outline: none;
+  @include panton;
+  color: $blue;
+  font-weight: 700;
+  font-size: rem(14);
+  outline: none;
+  cursor: pointer;
+  display: block;
+  padding: rem(15) rem(20) rem(14);
+  transition: all $tranz;
+  border: 0;
+  border-radius: rem(30);
+  background-color: transparent;
+  @include custom-outline(#28bbf0);
+}
+
+.button-bg-blue {
+  color: #fff;
+  background-color: $blue;
+  border: rem(1) solid $blue;
+
+  &:hover:not(:disabled) {
+    background-color: #fff;
+    color: $blue;
+  }
+
+  &:disabled {
+    border: rem(1) solid #d8cfcf;
+    background: #d8cfcf;
+  }
+}
+
+.button-white {
+  color: $blue;
+  background-color: #fff;
+
+  &:hover:not(:disabled) {
+    background-color: rgba($blue, 0.1);
+  }
+
+  &--more {
+    margin: 0 auto;
+    margin-top: rem(20);
+  }
+
+  &:disabled {
+    border: rem(1) solid #d8cfcf;
+    color: #d8cfcf;
+  }
+}
+
+.button-border {
+  color: $blue;
+  background-color: #fff;
+  border: rem(1) solid $blue;
+
+  &:hover:not(:disabled) {
+    background-color: $blue;
+    color: #fff;
+  }
+
+  &--more {
+    margin: 0 auto;
+    margin-top: rem(20);
+  }
+
+  &:disabled {
+    border: rem(1) solid #d8cfcf;
+    background: #d8cfcf;
+    color: #fff;
+  }
+}
+
+.button-remove {
+  color: #fff;
+  background-color: $red;
+  border: rem(1) solid $red;
+  display: flex;
+  align-items: center;
+
+  &:hover {
+    background-color: #fff;
+    color: $red;
+
+    .icon {
+      fill: $red;
+    }
+  }
+
+  .photobook-icon {
+    width: rem(16);
+    height: rem(19);
+    display: block;
+    margin-right: rem(10);
+    fill: #fff;
+    transition: all $tranz;
+  }
+}

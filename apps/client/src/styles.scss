@@ -34,12 +34,12 @@ html {
   }
 }
 
-input,
-textarea {
-  &:focus {
-    box-shadow: 0 0 rem(2) rem(2) rgba($blue, 0.9);
-  }
-}
+// input,
+// textarea {
+//   &:focus {
+//     box-shadow: 0 0 rem(2) rem(1) rgba($blue, 0.9);
+//   }
+// }
 
 a {
   &:hover {
@@ -55,80 +55,9 @@ a {
   padding: 0 rem($container-padding);
 }
 /*-------------- common --------------*/
-
-.button {
-  outline: none;
-  @include panton;
-  color: $blue;
-  font-weight: 700;
-  font-size: rem(14);
-  outline: none;
-  cursor: pointer;
-  display: block;
-  padding: rem(15) rem(20) rem(14);
-  transition: all $tranz;
-  border: 0;
-  border-radius: rem(30);
-  background-color: transparent;
-  @include custom-outline(#28bbf0);
-}
-
-.button-bg-blue {
-  color: #fff;
-  background-color: $blue;
-  border: rem(1) solid $blue;
-
-  &:hover {
-    background-color: #fff;
-    color: $blue;
-  }
-
-  &:disabled {
-    background: #d8cfcf;
-  }
-}
-
-.button-border {
-  color: $blue;
-  background-color: #fff;
-  border: rem(1) solid $blue;
-
-  &:hover {
-    background-color: $blue;
-    color: #fff;
-  }
-
-  &--more {
-    margin: 0 auto;
-    margin-top: rem(20);
-  }
-}
-
-.button-remove {
-  color: #fff;
-  background-color: $red;
-  border: rem(1) solid $red;
-  display: flex;
-  align-items: center;
-
-  &:hover {
-    background-color: #fff;
-    color: $red;
-
-    .icon {
-      fill: $red;
-    }
-  }
-
-  .photobook-icon {
-    width: rem(16);
-    height: rem(19);
-    display: block;
-    margin-right: rem(10);
-    fill: #fff;
-    transition: all $tranz;
-  }
-}
+@import './sass/_buttons.scss';
+@import './sass/_dialogs.scss';
+@import './sass/modules/_footer.scss';
 
 .big-title {
   @include panton;
@@ -154,14 +83,6 @@ a {
   }
 }
 
-@import './sass/modules/entry.scss';
-.photobook-root {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-}
-
 .header-actions {
   position: absolute;
   top: rem(50);
@@ -183,57 +104,57 @@ a {
   }
 }
 
-photobook-footer,
-photobook-header {
-  flex: 0 0 auto;
-}
+// photobook-footer,
+// photobook-header {
+//   flex: 0 0 auto;
+// }
 
-.photobook-main {
-  flex: 1 0 auto;
-}
+// .photobook-main {
+//   flex: 1 0 auto;
+// }
 
-.photobook-main {
-  position: relative;
+// .photobook-main {
+//   position: relative;
 
-  &-title {
-    @include panton;
-    color: #323232;
-    font-weight: 700;
-    font-size: rem(42);
-    line-height: lh(46, 42);
+//   &-title {
+//     @include panton;
+//     color: #323232;
+//     font-weight: 700;
+//     font-size: rem(42);
+//     line-height: lh(46, 42);
 
-    &-result {
-      @include panton;
-      color: #323232;
-      font-weight: 600;
-      font-size: rem(22);
-      line-height: lh(30, 22);
-      margin-bottom: rem(30);
-    }
-  }
+//     &-result {
+//       @include panton;
+//       color: #323232;
+//       font-weight: 600;
+//       font-size: rem(22);
+//       line-height: lh(30, 22);
+//       margin-bottom: rem(30);
+//     }
+//   }
 
-  &-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba($color: #fff, $alpha: 0.9);
-    z-index: 1;
-  }
-}
+//   &-overlay {
+//     position: absolute;
+//     top: 0;
+//     left: 0;
+//     width: 100%;
+//     height: 100%;
+//     background-color: rgba($color: #fff, $alpha: 0.9);
+//     z-index: 1;
+//   }
+// }
 
-.photobook-section {
-  padding-top: rem(56);
-  padding-bottom: rem(64);
-}
+// .photobook-section {
+//   padding-top: rem(56);
+//   padding-bottom: rem(64);
+// }
 
-.photobook-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: rem(32);
-}
+// .photobook-head {
+//   display: flex;
+//   align-items: center;
+//   justify-content: space-between;
+//   margin-bottom: rem(32);
+// }
 
 .top-bar {
   height: rem(60);
@@ -251,11 +172,6 @@ photobook-header {
   }
 }
 
-.dialog-open .photobook-dialog {
-  overflow-x: hidden;
-  overflow-y: auto;
-}
-
 .photo-view-content {
   padding: rem(32) rem(40) 0;
   width: 100%;
@@ -269,52 +185,6 @@ photobook-header {
     .photobook-icon {
       color: $white;
     }
-  }
-}
-
-.common-dialog-content {
-  width: 100%;
-  max-width: rem(680);
-  margin: 0 auto;
-  border-radius: rem(4);
-  overflow: hidden;
-
-  .dialog-close {
-    top: rem(21);
-    right: rem(22);
-
-    .photobook-icon {
-      color: #a0a09f;
-    }
-  }
-}
-
-.common-dialog-head {
-  padding: rem(24) rem(70) rem(24) rem(24);
-  background-color: #f1f1f1;
-  @include panton;
-  @include fz(21, 21);
-  font-weight: bold;
-  color: $text-color;
-}
-
-.common-dialog-body {
-  background-color: $white;
-  padding: rem(40) rem(20) rem(40) rem(50);
-}
-
-.common-dialog-footer {
-  padding: rem(24);
-  background-color: #f1f1f1;
-  display: flex;
-  align-items: center;
-
-  .button-bg-blue {
-    margin-right: rem(16);
-  }
-
-  .button-remove {
-    margin-left: auto;
   }
 }
 

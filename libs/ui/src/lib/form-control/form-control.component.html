@@ -1,0 +1,18 @@
+<div class="form-control-field">
+  <input
+    class="form-control-input"
+    formControlName="{{inputName}}"
+    [attr.type]="type"
+    (input)="onInputHandler($event)"
+    (change)="onChangeHandler($event)"
+    [attr.placeholder]="dataPlaceholder && !label ? dataPlaceholder : null" #inputRef>
+  <span
+    class="form-control-icon"
+    photobook-app-icon
+    *ngIf="icon"
+    [icon]="icon"></span>
+  <span *ngIf="label" class="form-control-label">
+    <span class="form-control-label__text">{{label}}</span>
+  </span>
+</div>
+<ng-content></ng-content>

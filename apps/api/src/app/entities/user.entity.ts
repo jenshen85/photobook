@@ -2,18 +2,18 @@ import {
   Entity,
   Unique,
   Column,
-  OneToOne,
-  JoinColumn,
-  OneToMany,
+  // OneToOne,
+  // JoinColumn,
+  // OneToMany,
 } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
 
 import { UserRoleEnum } from '@photobook/data';
 
 import { AbstractEntity } from './abstract-entity';
-import { UserProfile } from './user-profile.entity';
-import { Album } from './album.entity';
-import { Photo } from './photo.entity';
+// import { UserProfile } from './user-profile.entity';
+// import { Album } from './album.entity';
+// import { Photo } from './photo.entity';
 
 @Entity()
 @Unique(['email'])
@@ -37,21 +37,27 @@ export class User extends AbstractEntity {
   })
   role: UserRoleEnum;
 
-  // join profile
+  @Column({ type: 'boolean', default: false })
+  has_profile: boolean;
+
   @Column({ nullable: true })
   user_profile_id: number;
 
-  @OneToOne(() => UserProfile, { eager: true, cascade: true })
-  @JoinColumn({ name: 'user_profile_id' })
-  user_profile: UserProfile;
+  // // join profile
+  // @Column({ nullable: true })
+  // user_profile_id: number;
 
-  // join albums
-  @OneToMany(() => Album, (album) => album.user, { eager: true })
-  albums: Album[];
+  // @OneToOne(() => UserProfile, { eager: true, cascade: true })
+  // @JoinColumn({ name: 'user_profile_id' })
+  // user_profile: UserProfile;
 
-  // join photos
-  @OneToMany(() => Photo, (photo) => photo.user)
-  photos: Photo[];
+  // // join albums
+  // @OneToMany(() => Album, (album) => album.user, { eager: true })
+  // albums: Album[];
+
+  // // join photos
+  // @OneToMany(() => Photo, (photo) => photo.user)
+  // photos: Photo[];
 
   async validatePassword(password: string): Promise<boolean> {
     return await bcrypt.compare(password, this.password);

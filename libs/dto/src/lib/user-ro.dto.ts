@@ -1,9 +1,9 @@
 import 'reflect-metadata';
-import { Exclude, Expose, Type } from 'class-transformer';
+import { Exclude, Expose } from 'class-transformer';
 
 import { UserRoleEnum, UserRoI } from '@photobook/data';
-import { UserProfileRODto } from './user-profile-ro.dto';
-import { AlbumRoDto } from './album-ro.dto';
+// import { UserProfileRODto } from './user-profile-ro.dto';
+// import { AlbumRoDto } from './album-ro.dto';
 
 @Exclude()
 export class UserRoDto implements UserRoI {
@@ -33,10 +33,16 @@ export class UserRoDto implements UserRoI {
   role: UserRoleEnum;
 
   @Expose()
-  @Type(() => UserProfileRODto)
-  user_profile: UserProfileRODto;
+  has_profile: boolean;
 
   @Expose()
-  @Type(() => AlbumRoDto)
-  albums: AlbumRoDto[];
+  user_profile_id: number;
+
+  // @Expose()
+  // @Type(() => UserProfileRODto)
+  // user_profile: UserProfileRODto;
+
+  // @Expose()
+  // @Type(() => AlbumRoDto)
+  // albums: AlbumRoDto[];
 }

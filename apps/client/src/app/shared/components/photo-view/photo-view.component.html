@@ -1,29 +1,32 @@
 <div class="photo-view">
   <div class="photo-view__top">
     <button class="photo-view__arrow photo-view__prev">
-      <span photobook-icon [icon]="leftIcon" fill="#fff"></span>
+      <span photobook-app-icon [icon]="leftIcon" fill="#fff"></span>
     </button>
     <div class="photo-view__image">
       <img [src]="photo.image" alt="" (load)="onload($event)">
       <photobook-spinner position="absolute" *ngIf="loadPhoto"></photobook-spinner>
     </div>
     <button class="photo-view__arrow photo-view__next">
-      <span photobook-icon [icon]="rightIcon" fill="#fff"></span>
+      <span photobook-app-icon [icon]="rightIcon" fill="#fff"></span>
     </button>
   </div>
 
   <div class="photo-view__middle">
     <div class="photo-view__user">
-      <photobook-small-ava [user]="photo.user" [profile]="photo.user_profile"></photobook-small-ava>
-      <a class="photo-view__user-name" [routerLink]="['user', photo.user_id]">{{userName}}</a>
+      <photobook-small-ava
+        [routerLink]="['/photobook', 'user', photo.user_profile_id]"
+        [avatar]=""
+        [userName]=""></photobook-small-ava>
+      <a class="photo-view__user-name" [routerLink]="['user', photo.user_profile_id]">{{userName}}</a>
     </div>
 
     <div>likes</div>
   </div>
   <div class="photo-view__bottom">
     <div class="photo-view__info" *ngIf="photo.title || photo.description">
-      <!-- <div class="photo-view__title">{{photo.title}}</div>
-      <div class="photo-view__description">{{photo.description}}</div> -->
+      <div class="photo-view__title">{{photo.title}}</div>
+      <div class="photo-view__description">{{photo.description}}</div>
       <div class="photo-view__title">Lorem ipsum dolor sit amet consectetur adipisicing elit.</div>
       <div class="photo-view__description">Lorem ipsum dolor sit amet <a href="#">#consectetur</a> adipisicing elit. Eaque quasi quisquam eos soluta ex. A ipsam, commodi aut quos est fugit omnis iste, et excepturi ad facilis? Id <a href="#">#vitae</a> porro sequi, rerum sit molestias facilis!</div>
     </div>
@@ -34,7 +37,10 @@
       <div class="comments">
         <div class="comments__row">
           <div class="comments__ava">
-            <photobook-small-ava [user]="authUser" [profile]="authUser.user_profile"></photobook-small-ava>
+            <photobook-small-ava
+              [routerLink]="['/photobook', 'user', authUserProfile.id]"
+              [avatar]=""
+              [userName]=""></photobook-small-ava>
           </div>
           <div class="comments__cont">
             <div class="comments__name">
@@ -51,7 +57,10 @@
 
         <div class="comments__row">
           <div class="comments__ava">
-            <photobook-small-ava [user]="authUser" [profile]="authUser.user_profile"></photobook-small-ava>
+            <photobook-small-ava
+              [routerLink]="['/photobook', 'user', authUserProfile.id]"
+              [avatar]=""
+              [userName]=""></photobook-small-ava>
           </div>
           <div class="comments__cont">
             <div class="comments__name">Виталий Виноградов</div>
@@ -63,24 +72,15 @@
 
         <div class="comments__row">
           <div class="comments__ava">
-            <photobook-small-ava [user]="authUser" [profile]="authUser.user_profile"></photobook-small-ava>
+            <photobook-small-ava
+              [routerLink]="['/photobook', 'user', authUserProfile.id]"
+              [avatar]=""
+              [userName]=""></photobook-small-ava>
           </div>
           <div class="comments__cont">
             <div class="comments__name">Виталий Виноградов</div>
             <div class="comments__text">
               Lorem ipsum dolor sit amet consectetur adipisicing elit. Dicta alias, numquam rem sapiente eaque hic maiores corrupti ullam iste dolores molestiae veritatis dolorem placeat doloremque eius excepturi laboriosam fugit, aliquid mollitia quidem architecto! Doloremque, voluptatum, similique excepturi eius expedita modi qui eaque minima ad quaerat omnis fuga eligendi dolorum molestias harum consectetur aperiam placeat sapiente necessitatibus sunt earum fugiat adipisci dicta. Velit obcaecati ut quibusdam dicta, numquam, id molestiae repellat distinctio sit rem fuga fugit aliquid repellendus ullam iste architecto. Consequuntur provident odio architecto delectus dolorem voluptatem autem hic culpa, sapiente quisquam! Sint, consequatur? Cumque commodi laboriosam excepturi consequuntur ullam.
-            </div>
-          </div>
-        </div>
-
-        <div class="comments__row">
-          <div class="comments__ava">
-            <photobook-small-ava [user]="authUser" [profile]="authUser.user_profile"></photobook-small-ava>
-          </div>
-          <div class="comments__cont">
-            <div class="comments__name">Виталий Виноградов</div>
-            <div class="comments__text">
-              Lorem ipsum dolor sit amet consectetur, adipisicing elit. Similique ratione sapiente odio tempora dolorem sunt amet! Minus ab eos ipsam, voluptatem omnis aliquam. Autem eveniet a adipisci. Esse dolorum optio deserunt expedita eius, laborum inventore dolorem quod beatae assumenda placeat reprehenderit recusandae, quidem dolore suscipit. Neque sed ut obcaecati explicabo?
             </div>
           </div>
         </div>

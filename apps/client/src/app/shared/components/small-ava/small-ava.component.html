@@ -1,9 +1,0 @@
-<a [routerLink]="['/photobook', 'user', user.id]" class="user-small">
-  <img class="user-small__img" *ngIf="profile?.avatar; else fallbackImg" [src]="profile.avatar" [alt]="userName">
-  <ng-template #fallbackImg>
-    <photobook-fallback-image></photobook-fallback-image>
-  </ng-template>
-  <svg class="user-small__ico">
-    <use [attr.xlink:href]="'assets/images/sprite.svg#' + moreIcon"/>
-  </svg>
-</a>

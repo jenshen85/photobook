@@ -33,6 +33,7 @@ export const enum SpriteIconEnum {
   soc_twitter = 'soc_twitter',
   soc_vk = 'soc_vk',
   top = 'top',
+  user = 'user',
 }
 
 export const enum ActionEnum {

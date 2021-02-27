@@ -2,14 +2,12 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@
 import { SubSink } from 'subsink';
 
 import {
-  UserRoI,
   SpriteIconEnum,
-  UserProfileCredentialsI,
+  UserProfileRoI
 } from '@photobook/data';
-import { PhotobookService } from '../photobook.service';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
-import { Observable, Subject } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
 import { fadeAnimations } from '../../shared/utils/animations';
+import { AuthService } from '../../auth/auth.service';
 
 @Component({
   selector: 'photobook-home-page',
@@ -19,22 +17,18 @@ import { fadeAnimations } from '../../shared/utils/animations';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HomePageComponent implements OnInit {
-  isAuthUser: boolean;
+  isAuthUser: boolean = true;
   subs = new SubSink();
-  userSubj: Subject<UserRoI> = new Subject();
-  $user: Observable<UserRoI> = this.userSubj.asObservable();
-  authUser: UserRoI;
-  user: UserRoI;
-  profile: UserProfileCredentialsI;
+  authUserProfile: UserProfileRoI;
+  currentUserProfile: UserProfileRoI;
   addIcon: SpriteIconEnum = SpriteIconEnum.add;
   isAlbums: boolean;
 
   isEdit = false;
-  pendingLoadUser: boolean = true;
+  pending: boolean = true;
 
   constructor(
-    private readonly _photoService: PhotobookService,
-    private readonly _router: Router,
+    private readonly _authService: AuthService,
     private readonly _route: ActivatedRoute,
     private readonly _changeDetectionRef: ChangeDetectorRef,
   ) {}
@@ -42,50 +36,40 @@ export class HomePageComponent implements OnInit {
   ngOnInit(): void {
     this.subs.add(
 
-      this.$user.subscribe((user: UserRoI): void => {
-        this.user = user;
-        this.profile = user.user_profile;
-        this.isAuthUser = this.user.id === this.authUser.id;
-        this._changeDetectionRef.markForCheck();
-      }),
-
-      this._photoService.getAuthUser().subscribe((authUser) => {
-        this.authUser = authUser;
-        this.getUser();
-      }),
-
-      this._getRouteParamsMap().subscribe((params) => {
-        const userId = params.get('id');
-        this.isAlbums = userId ? true : false;
-      }),
-
-      this._router.events.subscribe((event) => {
-        if (event instanceof NavigationEnd) {
-          this.getUser();
+      this._authService.currentUserProfile().subscribe((currentUserProfile): void => {
+        if(currentUserProfile) {
+          this.currentUserProfile = currentUserProfile;
+          this.isAuthUser = currentUserProfile.id === this.authUserProfile.id;
+          this.pending = false;
+          this._changeDetectionRef.markForCheck();
         }
-      })
+      }),
+
+      this._authService.authUserProfile().subscribe((authUserProfile) => {
+        if(authUserProfile) {
+          this.authUserProfile = authUserProfile;
+          this.getUserProfile();
+        }
+      }),
     )
   }
 
-  getUser(): void {
-    this.pendingLoadUser = true;
+  getUserProfile(): void {
+    this.pending = true;
     this.subs.sink = this._getRouteParamsMap().subscribe(
       params => {
-        const userId = params.get('id');
-        this.isAlbums = userId ? true : false;
+        const userProfileId = params.get('user_profile_id');
 
-        if(userId && this.authUser && +userId !== this.authUser.id) {
-          this.subs.sink = this._photoService.getUser(+userId).subscribe(
-            (user) => this.userSubj.next(user),
+        if(userProfileId && +userProfileId !== this.authUserProfile.id) {
+          this.subs.sink = this._authService.getUserProfile(+userProfileId).subscribe(
+            (profile) => this._authService.setCurrentUserProfile(profile),
             (error) => {
               // TODO: error handling
               console.log(error);
-            },
-            () => this.pendingLoadUser = false
+            }
           );
         } else {
-          this.userSubj.next(this.authUser);
-          this.pendingLoadUser = false;
+          this._authService.setCurrentUserProfile(this.authUserProfile);
         }
       }
     )

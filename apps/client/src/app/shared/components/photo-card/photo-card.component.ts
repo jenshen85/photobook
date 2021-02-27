@@ -24,8 +24,6 @@ export class PhotoCardComponent implements OnInit {
   editIcon = SpriteIconEnum.edit;
 
   ngOnInit(): void {
-    this.user = this.photo.user;
-    this.profile = this.photo.user_profile;
     this.userName = getUserName(
       this.user.username,
       this.profile.first_name,

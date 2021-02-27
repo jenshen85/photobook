@@ -1,0 +1,68 @@
+@import '../styles/mixins.scss';
+@import '../styles/variables.scss';
+
+:host {
+  width: rem(60);
+  height: rem(60);
+  display: block;
+}
+
+.user-small {
+  $user: &;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  overflow: hidden;
+  position: relative;
+  display: block;
+
+  &:hover {
+    &::after {
+      opacity: 1;
+    }
+
+    #{$user}__ico {
+      opacity: 1;
+    }
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba($black, 0.8);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  &__img {
+    width: 100%;
+    height: 100%;
+
+    &:not(.photobook-app-icon) {
+      object-fit: cover;
+    }
+
+    // &.photobook-app-icon {
+
+    // }
+  }
+
+
+  &__ico {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: rem(18);
+    height: rem(4);
+    margin-top: rem(-2);
+    margin-left: rem(-9);
+    fill: $white;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+}

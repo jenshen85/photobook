@@ -6,6 +6,7 @@ export interface JwtPayload {
   username: string;
   exp?: number;
   iat?: number;
+  hasProfile: boolean;
 }
 
 export interface UserCredentialsI {
@@ -24,8 +25,10 @@ export interface UserRoI {
   deleted_at: Date;
   is_active: boolean;
   role: UserRoleEnum;
-  user_profile: UserProfileRoI;
-  albums: AlbumRoI[];
+  has_profile: boolean;
+  user_profile_id: number;
+  // user_profile: UserProfileRoI;
+  // albums: AlbumRoI[];
 }
 
 export interface AuthCredentialsI {
@@ -54,6 +57,8 @@ export interface UserProfileRoI {
   created_at: Date;
   updated_at: Date;
   deleted_at: Date;
+  user: UserRoI;
+  albums: AlbumRoI[];
 }
 
 export interface AlbumCredentialsI {
@@ -65,6 +70,7 @@ export interface AlbumCredentialsI {
 export interface AlbumRoI {
   id: number;
   user_id: number;
+  user_profile_id: number;
   title: string;
   description: string;
   preview: string;
@@ -82,6 +88,7 @@ export interface PhotoCredentialsI {
 export interface PhotoRoI {
   id: number;
   user_id: number;
+  user_profile_id: number;
   album_id: number;
   image: string;
   image_name: string;
@@ -90,9 +97,11 @@ export interface PhotoRoI {
   created_at: Date;
   updated_at: Date;
   deleted_at: Date;
-  user: PhotoUserRoI;
-  album: PhotoAlbumRoI;
-  user_profile: UserProfileRoI;
+  user_avatar?: string;
+  album_title?: string;
+  // user: PhotoUserRoI;
+  // album: PhotoAlbumRoI;
+  // user_profile: UserProfileRoI;
 }
 
 export interface PhotoUserRoI {

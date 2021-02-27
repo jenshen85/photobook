@@ -5,21 +5,25 @@ import {
   AlbumCredentialsI,
   AlbumRoI,
   SpriteIconEnum,
-  UserRoI,
   ActionEnum,
+  UserProfileRoI,
 } from '@photobook/data';
+import { DialogRef, DIALOG_DATA } from '@photobook/ui';
 import { fadeIn } from 'ng-animate';
-import { Subscription } from 'rxjs';
 import { SubSink } from 'subsink';
 import { PhotobookService } from '../../../photobook/photobook.service';
 import { checkFileSize, checkFileTypes, getBase64, toFormData } from '../../utils/utils';
-import { DIALOG_DATA } from '../dialog/dialog';
-import { DialogRef } from '../dialog/dialog-ref';
 
-export type addAlbumDataType = {
-  type: ActionEnum,
-  data?: AlbumRoI,
-  album_id: number;
+export type addAlbumOutDataType = {
+  action: ActionEnum,
+  album?: AlbumRoI,
+  album_id?: number;
+}
+
+export type addAlbumInDataType = {
+  album?: AlbumRoI;
+  authUserProfile: UserProfileRoI;
+  action: ActionEnum,
 }
 
 @Component({
@@ -38,24 +42,23 @@ export type addAlbumDataType = {
 })
 export class AddAlbumComponent implements OnInit {
   subs = new SubSink();
-  actionCreate = ActionEnum.create
+  actionCreate = ActionEnum.create;
   removeIcon = SpriteIconEnum.delete;
   form: FormGroup;
   album: AlbumRoI;
-  user: UserRoI;
+  authUserProfile: UserProfileRoI;
   action: ActionEnum;
   imgPreview: string;
-  albumSubs$: Subscription;
 
   constructor(
     private photobookService: PhotobookService,
     private readonly dialogRef: DialogRef<AddAlbumComponent>,
-    @Inject(DIALOG_DATA) private data: any
+    @Inject(DIALOG_DATA) private data: addAlbumInDataType
   ) {}
 
   ngOnInit(): void {
     this.album = this.data.album;
-    this.user = this.data.user;
+    this.authUserProfile = this.data.authUserProfile;
     this.imgPreview = this.album && this.album.preview;
     this.action = this.data.action;
 
@@ -102,10 +105,9 @@ export class AddAlbumComponent implements OnInit {
   createAlbum(data: FormData): void {
     this.subs.sink = this.photobookService.createAlbum(data).subscribe(
       (album) => {
-        const data: addAlbumDataType = {
-          type: ActionEnum.create,
-          data: album,
-          album_id: album.id
+        const data: addAlbumOutDataType = {
+          action: ActionEnum.create,
+          album
         }
         this.dialogRef.close(data);
       },
@@ -118,10 +120,9 @@ export class AddAlbumComponent implements OnInit {
   updateAlbum(data: FormData): void {
     this.subs.sink = this.photobookService.updateAlbum(this.album.id, data).subscribe(
       (album) => {
-        const data: addAlbumDataType = {
-          type: ActionEnum.update,
-          data: album,
-          album_id: album.id
+        const data: addAlbumOutDataType = {
+          action: ActionEnum.update,
+          album,
         }
         this.dialogRef.close(data);
       },
@@ -131,12 +132,12 @@ export class AddAlbumComponent implements OnInit {
     );
   }
 
-  removeAlbum(id: number): void {
-    this.subs.sink = this.photobookService.removeAlbum(id).subscribe(
+  removeAlbum(album_id: number): void {
+    this.subs.sink = this.photobookService.removeAlbum(album_id).subscribe(
       () => {
-        const data: addAlbumDataType = {
-          type: ActionEnum.delete,
-          album_id: id
+        const data: addAlbumOutDataType = {
+          action: ActionEnum.delete,
+          album_id
         }
         this.dialogRef.close(data);
       }

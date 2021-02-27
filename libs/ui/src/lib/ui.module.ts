@@ -7,15 +7,17 @@ import {
   FormsModule,
   ReactiveFormsModule,
 } from '@angular/forms';
-import { MatInputModule } from '@angular/material/input';
-import { MatIconModule } from '@angular/material/icon';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatExpansionModule } from '@angular/material/expansion';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
+import { DialogModule } from './dialog/dialog.module';
+
 import { FadeComponent } from './fade/fade.component';
-import { AppControlComponent } from './app-control/app-control.component';
 import { SpinnerComponent } from './spinner/spinner.component';
+import { FormControlComponent } from './form-control/form-control.component';
+import { AppIconComponent } from './app-icon/app-icon.component';
+import { FormTextareaComponent } from './form-textarea/form-textarea.component';
+import { PhButtonComponent } from './ph-button/ph-button.component';
+import { SmallAvaComponent } from './small-ava/small-ava.component'
 
 @NgModule({
   imports: [
@@ -23,27 +25,33 @@ import { SpinnerComponent } from './spinner/spinner.component';
     MatButtonModule,
     FormsModule,
     ReactiveFormsModule,
-    MatInputModule,
-    MatIconModule,
-    MatFormFieldModule,
-    MatExpansionModule,
     MatProgressSpinnerModule,
+    DialogModule
   ],
   exports: [
     CommonModule,
     FadeComponent,
-    AppControlComponent,
     SpinnerComponent,
     MatButtonModule,
     FormsModule,
     ReactiveFormsModule,
-    MatInputModule,
-    MatIconModule,
-    MatFormFieldModule,
-    MatExpansionModule,
     MatProgressSpinnerModule,
+    DialogModule,
+    FormControlComponent,
+    FormTextareaComponent,
+    AppIconComponent,
+    PhButtonComponent,
+    SmallAvaComponent
   ],
   providers: [FormGroupDirective],
-  declarations: [FadeComponent, AppControlComponent, SpinnerComponent],
+  declarations: [
+    FadeComponent,
+    SpinnerComponent,
+    FormControlComponent,
+    FormTextareaComponent,
+    AppIconComponent,
+    PhButtonComponent,
+    SmallAvaComponent
+  ],
 })
 export class UiModule {}

@@ -1,0 +1,55 @@
+<photobook-fade>
+  <div class="big-title big-title-white">Добро пожаловать</div>
+
+  <div class="entry-description">
+    Заполните профиль
+  </div>
+
+  <div class="entry-form-out">
+    <form [formGroup]="form" (ngSubmit)="submit($event)" class="entry-form">
+
+      <photobook-form-control
+        inputName="first_name"
+        [class]="form.get('first_name').invalid && form.get('first_name').touched ? 'form-control--invalid' : 'form-control--valid'"
+        [className]="'form-control'"
+        [icon]="userIcon"
+        [iconPrefix]="true"
+        [label]="'Имя*'">
+        <span *ngIf="form.get('first_name').invalid && form.get('first_name').touched" class="form-control__error">
+          <small *ngIf="form.get('first_name').errors.required">This field is required</small>
+        </span>
+      </photobook-form-control>
+
+      <photobook-form-control
+        inputName="last_name"
+        [class]="form.get('last_name').invalid && form.get('last_name').touched ? 'form-control--invalid' : 'form-control--valid'"
+        [className]="'form-control'"
+        [icon]="userIcon"
+        [iconPrefix]="true"
+        [label]="'Фамилия*'">
+        <span *ngIf="form.get('last_name').invalid && form.get('last_name').touched" class="form-control__error">
+          <small *ngIf="form.get('last_name').errors.required">This field is required</small>
+        </span>
+      </photobook-form-control>
+
+      <photobook-form-textarea
+        inputName="description"
+        [className]="'form-control'"
+        [label]="'О себе'"
+      >
+      </photobook-form-textarea>
+
+      <div class="entry-form-bottom">
+        <div class="entry-form-actions">
+          <button
+            type="submit"
+            [disabled]="form.invalid && form.touched"
+            class="button button-bg-blue">
+            Сохранить
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</photobook-fade>
+<photobook-spinner *ngIf="pending"></photobook-spinner>

@@ -1,0 +1,20 @@
+<div class="form-control-field">
+  <textarea
+    class="form-control-textarea"
+    formControlName="{{inputName}}"
+    (input)="onInputHandler($event)"
+    (change)="onChangeHandler($event)"
+    [attr.placeholder]="dataPlaceholder && !label ? dataPlaceholder : null"
+    name="" id="" #inputRef></textarea>
+  <!-- <input
+    class="form-control-input"
+    formControlName="{{inputName}}"
+    [attr.type]="type"
+    (input)="onInputHandler($event)"
+    (change)="onChangeHandler($event)"
+    [attr.placeholder]="dataPlaceholder && !label ? dataPlaceholder : null" #inputRef> -->
+  <span *ngIf="label" class="form-control-label">
+    <span class="form-control-label__text">{{label}}</span>
+  </span>
+</div>
+<ng-content></ng-content>

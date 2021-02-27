@@ -1,0 +1,31 @@
+.footer {
+  $padding: 30;
+
+  &-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+  }
+
+  &-left {
+    width: 50%;
+    padding-right: rem($padding);
+    text-align: left;
+    font-size: rem(16);
+    line-height: lh(20, 16);
+    color: #fff;
+    font-weight: 300;
+  }
+
+  &-right {
+    width: 50%;
+    padding-left: rem($padding);
+    text-align: right;
+    font-size: rem(16);
+    line-height: lh(20, 16);
+    color: #fff;
+    font-weight: 300;
+    opacity: 0.6;
+  }
+}

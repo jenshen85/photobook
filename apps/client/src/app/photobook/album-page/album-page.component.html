@@ -1,13 +1,13 @@
 <photobook-spinner *ngIf="pendingLoadUser; else content"></photobook-spinner>
 
 <ng-template #content>
-  <photobook-header-album
+  <!-- <photobook-header-album
     [user]="user"
     [album]="album"
     (onEditHandler)="editHandler(isEdit)"
     [isAuthUser]="isAuthUser"
     *ngIf="!pendingLoadAlbum"
-  ></photobook-header-album>
+  ></photobook-header-album> -->
 
   <div class="top-bar">
     <div class="container top-bar__container">
@@ -48,7 +48,10 @@
     <div class="photobook-main-overlay" *ngIf="isEdit" [@fade]></div>
   </main>
 
-  <photobook-footer [userBg]="album && album.preview ? album.preview : 'assets/images/default-bg.jpg'"></photobook-footer>
+  <footer
+    photobook-footer
+    [userBg]="album && album.preview ? album.preview : 'assets/images/default-bg.jpg'"
+    [isEdit]="isEdit"></footer>
   <!-- <ng-template dialogRef></ng-template> -->
 
   <!-- <div class="top-bar top-bar--fixed">

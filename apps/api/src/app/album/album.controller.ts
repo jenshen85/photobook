@@ -17,7 +17,7 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { memoryStorage } from 'multer';
 
-import { User } from '../entities';
+import { Auth } from '../entities';
 import { AlbumCredentialsDto, AlbumRoDto } from '@photobook/dto';
 
 import { AlbumService } from './album.service';
@@ -36,7 +36,7 @@ export class AlbumController {
   createAlbum(
     @UploadedFile() file: Express.Multer.File,
     @Body(ValidationPipe) albumCredentials: AlbumCredentialsDto,
-    @GetUser() user: User
+    @GetUser() user: Auth
   ): Promise<AlbumRoDto> {
     return this._albumService.createAlbum(file, albumCredentials, user);
   }
@@ -49,36 +49,36 @@ export class AlbumController {
     @Param('id') album_id: number,
     @UploadedFile() file: Express.Multer.File,
     @Body(ValidationPipe) albumCredentials: AlbumCredentialsDto,
-    @GetUser() user: User
+    @GetUser() user: Auth
   ): Promise<AlbumRoDto> {
     console.log(file);
     console.log(album_id);
     return this._albumService.updateAlbum(album_id, file, albumCredentials, user);
   }
 
-  @Get()
-  getAll(@GetUser() user: User): Promise<AlbumRoDto[]> {
-    return this._albumService.getAll(user);
-  }
+  // @Get()
+  // getAll(@GetUser() user: User): Promise<AlbumRoDto[]> {
+  //   return this._albumService.getAll(user.id);
+  // }
 
   @Get('/:user_id')
   getAlbumsByUserId(@Param('user_id', ParseIntPipe) user_id: number): Promise<AlbumRoDto[]> {
-    return this._albumService.getAlbumsByUserId(user_id);
+    return this._albumService.getAll(user_id);
   }
 
   @Get('/:user_id/:album_id')
   getById(
     @Param('user_id', ParseIntPipe) user_id: number,
     @Param('album_id', ParseIntPipe) album_id: number,
-    @GetUser() user: User
+    @GetUser() user: Auth
   ): Promise<AlbumRoDto> {
-    return this._albumService.getUserAlbumById(user_id, album_id);
+    return this._albumService.getById(album_id, user_id);
   }
 
   @Delete('/:album_id')
   delete(
     @Param('album_id', ParseIntPipe) album_id: number,
-    @GetUser() user: User
+    @GetUser() user: Auth
   ): Promise<void> {
     return this._albumService.delete(album_id, user);
   }

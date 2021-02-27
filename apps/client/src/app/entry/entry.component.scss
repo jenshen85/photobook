@@ -20,3 +20,156 @@
   align-items: center;
   justify-content: flex-start;
 }
+
+.photobook-register,
+.photobook-restore,
+.photobook-login {
+  width: 100%;
+}
+
+.entry-description {
+  font-size: rem(16);
+  line-height: 1.5;
+  font-weight: 300;
+  color: $white;
+  text-align: center;
+  width: 100%;
+  max-width: rem(580);
+  margin: 0 auto rem(32);
+}
+
+.entry-form-out {
+  width: 100%;
+  max-width: rem(360);
+  margin: 0 auto;
+  background-color: rgba(#fff, 1);
+  border-radius: rem(16);
+  padding: rem(8) 0 rem(24);
+}
+
+.entry-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.entry-form-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: rem(24) 0 rem(24);
+
+  .button {
+    min-width: rem(130);
+
+    & + .button {
+      margin-left: rem(12);
+    }
+  }
+}
+
+.entry-form-info {
+  font-size: rem(16);
+  line-height: 1;
+  color: rgba(50, 50, 50, 0.8);
+  text-align: center;
+
+  a {
+    font-weight: 700;
+    color: $blue;
+    display: block;
+    font-size: rem(16);
+  }
+}
+
+// .welcome-form-control {
+//   .mat-form-field-wrapper {
+//     padding-bottom: 0;
+//   }
+
+//   &.mat-form-field-appearance-fill .mat-form-field-flex {
+//     background-color: #ffffff;
+//   }
+
+//   .mat-form-field-underline {
+//     bottom: 0;
+//   }
+// }
+
+.entry-form-btn {
+  line-height: rem(68);
+}
+
+photobook-form-control {
+  padding-top: rem(8);
+  padding-bottom: rem(8);
+
+  .form-control-field {
+    height: rem(40);
+  }
+}
+
+.photobook-form-textarea {
+  padding-top: rem(8);
+}
+
+.form-control {
+  border-bottom: rem(2) solid #d8d6d6;
+  position: relative;
+
+  &__error {
+    font-size: rem(12);
+    padding-left: rem(16);
+    position: absolute;
+    bottom: rem(4);
+    left: 0;
+    width: 100%;
+    color: $red;
+  }
+
+  .photobook-app-icon {
+    color: #d8d6d6;
+    transition: color $tranz;
+  }
+
+  &--focused {
+    border-color: $blue;
+
+    .photobook-app-icon {
+      color: $blue;
+    }
+  }
+
+  &--valid {
+    border-color: $blue;
+
+    .photobook-app-icon {
+      color: $blue;
+    }
+  }
+
+  &--invalid {
+    border-color: $red;
+
+    .photobook-app-icon {
+      color: $red;
+    }
+  }
+
+  &-input {
+    @include proxima;
+    font-size: rem(16);
+    line-height: lh(20, 16);
+    color: #332233;
+    font-weight: 300;
+  }
+
+  &-textarea {
+    @include proxima;
+    font-size: rem(16);
+    line-height: lh(20, 16);
+    color: #332233;
+    font-weight: 300;
+    min-height: rem(80);
+  }
+}

@@ -3,72 +3,38 @@
   <div class="entry-form-out">
     <form [formGroup]="form" (ngSubmit)="submit($event)" class="entry-form">
 
-      <photobook-control
-        className="welcome-form-control"
+      <photobook-form-control
         inputName="email"
-        icon="mail"
-        type="email"
-        label="Электронная почта*">
-        <mat-error *ngIf="form.get('email').invalid && form.get('email').touched">
-          <photobook-fade>
-            <small *ngIf="form.get('email').errors.required">This field is required</small>
-            <small *ngIf="form.get('email').errors.email">Email not valid</small>
-          </photobook-fade>
-        </mat-error>
-      </photobook-control>
+        [class]="form.get('email').invalid && form.get('email').touched ? 'form-control--invalid' : 'form-control--valid'"
+        [className]="'form-control'"
+        [icon]="envelopeIcon"
+        [iconPrefix]="true"
+        [label]="'Электронная почта*'"
+        [type]="'email'">
+        <span *ngIf="form.get('email').invalid && form.get('email').touched" class="form-control__error">
+          <small *ngIf="form.get('email').errors.required">This field is required</small>
+          <small *ngIf="form.get('email').errors.email">Email not valid</small>
+        </span>
+      </photobook-form-control>
 
       <div class="entry-form-bottom">
-        <mat-action-row>
+        <div class="entry-form-actions">
           <button
-            [disabled]="form.invalid && form.touched"
             type="submit"
-            mat-raised-button
-            class="entry-form-btn entry-form-btn--blue">
+            [disabled]="form.invalid && form.touched"
+            class="button button-bg-blue">
             Восстановить пароль
           </button>
-          <a mat-button [routerLink]="['/']" class="entry-form-btn" color="link">
+
+          <button
+            type="button"
+            [routerLink]="['/']"
+            class="button button-white">
             Войти
-          </a>
-        </mat-action-row>
+          </button>
+        </div>
       </div>
 
     </form>
   </div>
-  <!-- <div class="welcome">
-    <div class="welcome__form-out">
-      <form class="welcome__form">
-        <div class="welcome__form-field welcome__form-field--border-bottom">
-          <div class="welcome__form-title">Забыли пароль?</div>
-          <div class="welcome__form-description">
-            Ничего страшного, введите свой e-mail, и мы вышлем вам инструкции по востановлению
-            пароля
-          </div>
-        </div>
-  
-        <div class="welcome__form-field welcome__form-field--border-bottom">
-          <label class="welcome__form-label">
-            <svg class="welcome__form-control-ico">
-              <use xlink:href="assets/images/sprite.svg#envelope" />
-            </svg>
-            <input
-              class="welcome__form-control"
-              name="email"
-              type="email"
-              placeholder="Электронная почта"
-            />
-          </label>
-        </div>
-        <div class="welcome__form-field">
-          <button type="submit" class="button button-bg-blue  welcome__form-button">
-            Войти
-          </button>
-        </div>
-        <div class="welcome__form-field">
-          <div class="welcome__form-bottom">
-            Вспомнили пароль? <a [routerLink]="['/login']">Войти</a>
-          </div>
-        </div>
-      </form>
-    </div>
-  </div> -->
 </photobook-fade>

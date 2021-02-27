@@ -7,6 +7,7 @@ import { EntryComponent } from './entry.component';
 import { RegisterComponent } from './register/register.component';
 import { LoginComponent } from './login/login.component';
 import { RestoreComponent } from './restore/restore.component';
+import { ProfileComponent } from './profile/profile.component';
 
 
 const routes: Routes = [
@@ -23,6 +24,10 @@ const routes: Routes = [
         component: RegisterComponent,
       },
       {
+        path: 'profile',
+        component: ProfileComponent,
+      },
+      {
         path: 'restore',
         component: RestoreComponent,
       },
@@ -36,6 +41,7 @@ const routes: Routes = [
     RegisterComponent,
     LoginComponent,
     RestoreComponent,
+    ProfileComponent,
   ],
   imports: [CommonModule, RouterModule.forChild(routes), UiModule],
 })

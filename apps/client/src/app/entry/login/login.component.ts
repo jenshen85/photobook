@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { AuthCredentialsI } from '@photobook/data';
+import { AuthCredentialsI, SpriteIconEnum } from '@photobook/data';
 import { AuthService } from '../../auth/auth.service';
 
 @Component({
@@ -11,7 +11,9 @@ import { AuthService } from '../../auth/auth.service';
 })
 export class LoginComponent implements OnInit {
   form: FormGroup;
-  pendingLogin: boolean;
+  pending: boolean;
+  envelopeIcon: SpriteIconEnum = SpriteIconEnum.envelope;
+  passwordIcon: SpriteIconEnum = SpriteIconEnum.password;
 
   constructor(private readonly _authService: AuthService) {}
   ngOnInit(): void {
@@ -26,15 +28,12 @@ export class LoginComponent implements OnInit {
 
   submit($event: Event) {
     if (this.form.valid) {
-      this.pendingLogin = true;
+      this.pending = true;
       const data: AuthCredentialsI = this.form.value;
       this._authService.login(data).subscribe(
-        (userdata) => {
-          this.pendingLogin = false;
-        },
-        (error) => {
-          // TODO: error handling
-        }
+        (userdata) => {},
+        (error) => { /* TODO: error handling */ },
+        () => this.pending = false
       );
     } else {
       this.form.markAsTouched();

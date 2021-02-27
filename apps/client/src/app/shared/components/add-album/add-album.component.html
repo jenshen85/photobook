@@ -1,7 +1,7 @@
 <div class="common-dialog-content">
   <div class="common-dialog-head">
-    <span *ngIf="action === actionCreate; else edtititle">Добавить альбом</span>
-    <ng-template #edtititle>
+    <span *ngIf="action === actionCreate; else editTitle">Добавить альбом</span>
+    <ng-template #editTitle>
       <span>Редактировать альбом</span>
     </ng-template>
   </div>
@@ -60,7 +60,7 @@
       <button type="button"
         *ngIf="album"
         (click)="removeAlbum(album.id)" class="button button-remove">
-        <span photobook-icon [icon]="removeIcon"></span>
+        <span photobook-app-icon [icon]="removeIcon"></span>
         Удалить
       </button>
     </div>

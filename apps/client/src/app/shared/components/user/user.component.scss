@@ -27,14 +27,14 @@
       object-fit: cover;
     }
 
-    & > svg {
+    .photobook-app-icon {
+      color: $blue;
       position: absolute;
       bottom: 0;
       left: 50%;
       transform: translateX(-50%);
       width: 90%;
       height: 90%;
-      fill: $blue;
     }
   }
 

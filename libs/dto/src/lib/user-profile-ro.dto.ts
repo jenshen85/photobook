@@ -1,5 +1,7 @@
-import { Exclude, Expose } from 'class-transformer';
-import { UserProfileRoI } from '@photobook/data';
+import { Exclude, Expose, Type } from 'class-transformer';
+import { AlbumRoI, UserProfileRoI, UserRoI } from '@photobook/data';
+import { UserRoDto } from './user-ro.dto';
+import { AlbumRoDto } from './album-ro.dto';
 
 @Exclude()
 export class UserProfileRODto implements UserProfileRoI {
@@ -31,4 +33,12 @@ export class UserProfileRODto implements UserProfileRoI {
   updated_at: Date;
 
   deleted_at: Date;
+
+  @Expose()
+  @Type(() => UserRoDto)
+  user: UserRoI;
+
+  @Expose()
+  @Type(() => AlbumRoDto)
+  albums: AlbumRoI[];
 }

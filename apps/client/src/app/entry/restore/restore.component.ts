@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { SpriteIconEnum } from '@photobook/data';
 // import { AuthCredentialsDto } from '@photobook/dto';
 import { AuthService } from '../../auth/auth.service';
 
@@ -10,8 +11,8 @@ import { AuthService } from '../../auth/auth.service';
   host: {'class': 'photobook-restore'}
 })
 export class RestoreComponent implements OnInit {
-
   form: FormGroup;
+  envelopeIcon: SpriteIconEnum = SpriteIconEnum.envelope;
   constructor( private readonly _authService: AuthService) {}
   ngOnInit(): void {
     this.form = new FormGroup({

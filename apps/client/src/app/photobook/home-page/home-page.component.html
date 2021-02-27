@@ -1,11 +1,11 @@
-<photobook-spinner *ngIf="pendingLoadUser; else content"></photobook-spinner>
+<photobook-spinner *ngIf="pending; else content"></photobook-spinner>
 
 <ng-template #content>
   <header
-    [user]="user"
+    [currentUserProfile]="currentUserProfile"
+    [authUserProfile]="authUserProfile"
     [isEdit]="isEdit"
     [isAuthUser]="isAuthUser"
-    [isAlbums]="isAlbums"
     (onEditHandler)="editHandler($event)"
     photobook-header-user>
   </header>
@@ -17,18 +17,22 @@
   </div>
 
   <main class="photobook-main">
-    <photobook-photos
+    <router-outlet></router-outlet>
+    <!-- <photobook-home-page-photos
       *ngIf="!isAlbums; else albumTemplate"
-      [user]="user"
-      [authUser]="authUser"></photobook-photos>
+      [currentUserProfile]="currentUserProfile"
+      [authUserProfile]="authUserProfile"></photobook-home-page-photos>
 
     <ng-template #albumTemplate>
-      <photobook-albums
-        [currentUser]="user"
-        [authUser]="authUser"></photobook-albums>
-    </ng-template>
+      <photobook-home-page-albums
+        [currentUserProfile]="currentUserProfile"
+        [authUserProfile]="authUserProfile"></photobook-home-page-albums>
+    </ng-template> -->
     <div class="photobook-main-overlay" *ngIf="isEdit" [@fadeIn]></div>
   </main>
 
-  <photobook-footer [userBg]="user.user_profile.cover"></photobook-footer>
+  <footer
+    photobook-footer
+    [userBg]="currentUserProfile.cover"
+    [isEdit]="isEdit"></footer>
 </ng-template>

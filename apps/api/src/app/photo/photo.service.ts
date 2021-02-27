@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
-import { Photo, User } from '../entities';
+import { Photo, Auth } from '../entities';
 import { PhotoCredentialsDto, PhotoRoDto } from '@photobook/dto';
 
 import { PhotoRepository } from './photo.repository';
 import { FileService } from '../file/file.service';
-import { AlbumService } from '../album/album.service';
+// import { AlbumService } from '../album/album.service';
 import { generateFileName } from '../shared/utils/edit-file-name';
 
 @Injectable()
@@ -14,7 +14,7 @@ export class PhotoService {
   constructor(
     @InjectRepository(Photo)
     private readonly _photoRepository: PhotoRepository,
-    private readonly _albumService: AlbumService,
+    // private readonly _albumService: AlbumService,
     private readonly _fileService: FileService
   ) {}
 
@@ -33,9 +33,9 @@ export class PhotoService {
   async createPhoto(
     album_id: number,
     files: Express.Multer.File[],
-    user: User
+    user: Auth
   ): Promise<PhotoRoDto[]> {
-    const album = await this._albumService.getUserAlbumById(album_id, user.id);
+    // const album = await this._albumService.getUserAlbumById(album_id, user.id);
     const photos = await Promise.all(
       files.map(async (file) => {
         const imageData = await this._fileService.saveFile(
@@ -45,7 +45,7 @@ export class PhotoService {
         );
         const photo = await this._photoRepository.createPhoto(
           imageData,
-          album,
+          album_id,
           user
         );
         return photo;
@@ -58,12 +58,11 @@ export class PhotoService {
   async updatePhoto(
     photo_id: number,
     photoCredentials: PhotoCredentialsDto,
-    user: User
   ): Promise<PhotoRoDto> {
-    return await this._photoRepository.updatePhoto(photo_id, photoCredentials, user);
+    return await this._photoRepository.updatePhoto(photo_id, photoCredentials);
   }
 
-  async deletePhoto(photo_id: number, user: User): Promise<void> {
-    return await this._photoRepository.deletePhoto(photo_id, user);
+  async deletePhoto(photo_id: number): Promise<void> {
+    return await this._photoRepository.deletePhoto(photo_id);
   }
 }

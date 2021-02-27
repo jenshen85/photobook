@@ -1,0 +1,7 @@
+<span class="user-small">
+  <img class="user-small__img" *ngIf="avatar; else fallbackImg" [src]="avatar" [alt]="userName">
+  <ng-template #fallbackImg>
+    <span class="user-small__img" photobook-app-icon [icon]="userIcon"></span>
+  </ng-template>
+  <span class="user-small__ico" photobook-app-icon [icon]="userIcon"></span>
+</span>

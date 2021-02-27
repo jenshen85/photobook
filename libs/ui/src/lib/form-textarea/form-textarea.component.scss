@@ -1,0 +1,84 @@
+@import '../styles/mixins.scss';
+@import '../styles/variables.scss';
+
+:host {
+  display: block;
+  // &.iconPrefix {
+  //   .form-control-input {
+  //     padding-left: rem(45);
+  //   }
+
+  //   .photobook-app-icon {
+  //     left: rem(16);
+  //   }
+
+  //   .form-control-label {
+  //     padding-left: rem(45);
+  //   }
+  // }
+
+  // &.iconPostfix {
+  //   .form-control-input {
+  //     padding-right: rem(45);
+  //   }
+
+  //   .photobook-app-icon {
+  //     right: rem(16);
+  //   }
+
+  //   .form-control-label {
+  //     padding-right: rem(45);
+  //   }
+  // }
+
+  &.form-control--focused {
+    .form-control-label {
+      transform: translate3d(0, rem(-16), 0);
+
+      &__text {
+        transform: scale(0.7);
+      }
+    }
+  }
+}
+
+.form-control {
+  &-field {
+    position: relative;
+  }
+
+  &-textarea {
+    padding: rem(8) rem(16) 0;
+    width: 100%;
+    max-width: 100%;
+    resize: vertical;
+    height: 100%;
+    outline: none;
+    border: rem(1) solid transparent;
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  &-label {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: flex-start;
+    left: 0;
+    pointer-events: none;
+    font-size: rem(16);
+    line-height: lh(20, 16);
+    padding: rem(8) rem(16) 0;
+    height: 100%;
+    color: #332233;
+    transition: transform 0.3s;
+
+    &__text {
+      transform-origin: left center;
+      transition: transform 0.3s;
+    }
+  }
+}

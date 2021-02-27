@@ -7,49 +7,52 @@
   <div class="entry-form-out">
     <form [formGroup]="form" (ngSubmit)="submit($event)" class="entry-form">
 
-      <photobook-control
-        className="welcome-form-control"
+      <photobook-form-control
         inputName="email"
-        icon="mail"
-        type="email"
-        label="Электронная почта*">
-        <mat-error *ngIf="form.get('email').invalid && form.get('email').touched">
-          <photobook-fade>
-            <small *ngIf="form.get('email').errors.required">This field is required</small>
-            <small *ngIf="form.get('email').errors.email">Email not valid</small>
-          </photobook-fade>
-        </mat-error>
-      </photobook-control>
+        [class]="form.get('email').invalid && form.get('email').touched ? 'form-control--invalid' : 'form-control--valid'"
+        [className]="'form-control'"
+        [icon]="envelopeIcon"
+        [iconPrefix]="true"
+        [label]="'Электронная почта*'"
+        [type]="'email'">
+        <span *ngIf="form.get('email').invalid && form.get('email').touched" class="form-control__error">
+          <small *ngIf="form.get('email').errors.required">This field is required</small>
+          <small *ngIf="form.get('email').errors.email">Email not valid</small>
+        </span>
+      </photobook-form-control>
 
-      <photobook-control
-        className="welcome-form-control"
+      <photobook-form-control
         inputName="password"
-        icon="lock"
-        type="password"
-        label="Пароль*">
-        <mat-error *ngIf="form.get('password').invalid && form.get('password').touched">
-          <photobook-fade>
-            <small *ngIf="form.get('password').errors.required">This field is required</small>
-            <small *ngIf="form.get('password').errors.minlength">
-              Password where short, min length: {{form.get('password').errors.minlength.requiredLength}}
-            </small>
-          </photobook-fade>
-        </mat-error>
-      </photobook-control>
+        [class]="form.get('password').invalid && form.get('password').touched ? 'form-control--invalid' : 'form-control--valid'"
+        [className]="'form-control'"
+        [icon]="passwordIcon"
+        [iconPrefix]="true"
+        [label]="'Пароль*'"
+        [type]="'password'">
+        <span *ngIf="form.get('password').invalid && form.get('password').touched" class="form-control__error">
+          <small *ngIf="form.get('password').errors.required">This field is required</small>
+          <small *ngIf="form.get('password').errors.minlength">
+            Password where short, min length: {{form.get('password').errors.minlength.requiredLength}}
+          </small>
+        </span>
+      </photobook-form-control>
 
       <div class="entry-form-bottom">
-        <mat-action-row>
+        <div class="entry-form-actions">
           <button
-            [disabled]="form.invalid && form.touched"
             type="submit"
-            mat-raised-button
-            class="entry-form-btn entry-form-btn--blue">
+            [disabled]="form.invalid && form.touched"
+            class="button button-bg-blue">
             Войти
           </button>
-          <a mat-button [routerLink]="['/register']" class="entry-form-btn" color="link">
+
+          <button
+            type="button"
+            [routerLink]="['/register']"
+            class="button button-white">
             Зарегистрироваться
-          </a>
-        </mat-action-row>
+          </button>
+        </div>
 
         <div class="entry-form-info">
           <a [routerLink]="['/restore']" class="welcome__form-recovery">
@@ -60,4 +63,4 @@
     </form>
   </div>
 </photobook-fade>
-<photobook-spinner *ngIf="pendingLogin"></photobook-spinner>
+<photobook-spinner *ngIf="pending"></photobook-spinner>
