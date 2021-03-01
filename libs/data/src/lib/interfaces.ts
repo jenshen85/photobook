@@ -99,27 +99,27 @@ export interface PhotoRoI {
   deleted_at: Date;
   user_avatar?: string;
   album_title?: string;
+  album?: AlbumRoI;
+  user_profile?: UserProfileRoI;
   // user: PhotoUserRoI;
-  // album: PhotoAlbumRoI;
-  // user_profile: UserProfileRoI;
 }
 
-export interface PhotoUserRoI {
-  id: number;
-  email: string;
-  username: string;
-  created_at: Date;
-  updated_at: Date;
-  is_active: boolean;
-  role: UserRoleEnum;
-}
+// export interface PhotoUserRoI {
+//   id: number;
+//   email: string;
+//   username: string;
+//   created_at: Date;
+//   updated_at: Date;
+//   is_active: boolean;
+//   role: UserRoleEnum;
+// }
 
-export interface PhotoAlbumRoI {
-  id: number;
-  user_id: number;
-  title: string;
-  description: string;
-  preview: string;
-  created_at: Date;
-  updated_at: Date;
-}
+// export interface PhotoAlbumRoI {
+//   id: number;
+//   user_id: number;
+//   title: string;
+//   description: string;
+//   preview: string;
+//   created_at: Date;
+//   updated_at: Date;
+// }
