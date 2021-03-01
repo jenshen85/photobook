@@ -11,17 +11,6 @@ export class PhotobookService {
     private readonly _http: HttpClient
   ) {}
 
-  createPhoto<T, D>(album_id: number, data: T): Observable<HttpEvent<D>> {
-    return this._http.post<D>(`${PATHS.photo}/${album_id}`, data, {
-      reportProgress: true,
-      observe: 'events',
-    });
-  }
-
-  getPhotos(): Observable<PhotoRoI[]> {
-    return this._http.get<PhotoRoI[]>(PATHS.photo);
-  }
-
   getAllAlbums(): Observable<AlbumRoI[]> {
     return this._http.get<AlbumRoI[]>(PATHS.album);
   }
@@ -44,5 +33,24 @@ export class PhotobookService {
 
   removeAlbum(album_id: number | string): Observable<void> {
     return this._http.delete<void>(PATHS.deleteAlbums(album_id))
+  }
+
+  createPhoto<T, D>(album_id: number, data: T): Observable<HttpEvent<D>> {
+    return this._http.post<D>(`${PATHS.photo}/${album_id}`, data, {
+      reportProgress: true,
+      observe: 'events',
+    });
+  }
+
+  getPhotos(): Observable<PhotoRoI[]> {
+    return this._http.get<PhotoRoI[]>(PATHS.photo);
+  }
+
+  updatePhoto<T, D>(album_id: number, photo_id: number, data: T): Observable<D> {
+    return this._http.patch<D>(`${PATHS.photo}/${album_id}/${photo_id}`, data);
+  }
+
+  removePhoto(album_id: number, photo_id: number): Observable<void> {
+    return this._http.delete<void>(`${PATHS.photo}/${album_id}/${photo_id}`)
   }
 }

@@ -1,0 +1,122 @@
+@import '../../../../../sass/mixins.scss';
+@import '../../../../../sass/variables.scss';
+
+.edti-photo-form {
+  &__field {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: rem(20);
+  }
+
+  &__label {
+    color: $text-color;
+    font-size: rem(16);
+    margin-bottom: rem(16);
+    font-weight: 600;
+  }
+
+  &__error {
+    color: $red;
+    display: inline-block;
+    font-size: rem(12);
+    margin-top: rem(8);
+    font-weight: 500;
+  }
+}
+
+.form-control {
+  width: 100%;
+  background-color: $white;
+  resize: vertical;
+  border-radius: rem(4);
+  font-size: rem(14);
+  font-weight: 300;
+  padding: rem(16);
+  color: $text-color;
+  border: rem(2) solid #d8d6d6;
+  outline: none;
+  @include proxima;
+  transition: border 0.2s;
+
+  &::-webkit-input-placeholder {
+    color: rgba($text-color, 0.6);
+  }
+  &::-moz-placeholder {
+    color: rgba($text-color, 0.6);
+  }
+  &:-ms-input-placeholder {
+    color: rgba($text-color, 0.6);
+  }
+  &:-moz-placeholder {
+    color: rgba($text-color, 0.6);
+  }
+
+  &.error {
+    border: rem(2) solid $red;
+  }
+}
+
+textarea.form-control {
+  min-height: rem(100);
+}
+
+// .add-preview {
+//   display: flex;
+//   align-items: center;
+//   // flex-direction: column;
+
+//   &__photo {
+//     width: rem(50);
+//     height: rem(50);
+//     border-radius: 50%;
+//     margin-right: rem(16);
+//     overflow: hidden;
+//     background-color: #90DFFA;
+//     background-repeat: no-repeat;
+//     background-position: center;
+//     background-size: rem(32);
+//   }
+
+//   &__img {
+//     width: 100%;
+//     height: 100%;
+//     object-fit: cover;
+//   }
+
+//   &__field {
+//     display: flex;
+//     align-items: center;
+//     justify-content: flex-start;
+//   }
+
+//   &__file {
+//     position: relative;
+//     display: block;
+//     cursor: pointer;
+//     color: $blue;
+//     background-color: #fff;
+//     border: rem(1) solid $blue;
+//     font-weight: 700;
+//     font-size: rem(14);
+//     outline: none;
+//     padding: rem(15) rem(20) rem(14);
+//     transition: all $tranz;
+//     border-radius: rem(30);
+//     background-color: transparent;
+//     @include custom-outline(#28bbf0);
+//     margin-right: rem(16);
+
+//     &:hover {
+//       background-color: $blue;
+//       color: #fff;
+//     }
+//   }
+
+//   &__control {
+//     position: absolute;
+//     width: 0;
+//     height: 0;
+//     opacity: 0;
+//     visibility: hidden;
+//   }
+// }

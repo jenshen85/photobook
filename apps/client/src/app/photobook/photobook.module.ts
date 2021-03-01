@@ -16,15 +16,16 @@ import { SearchControlComponent } from '../shared/components/search-control/sear
 import { PhotoCardComponent } from '../shared/components/photo-card/photo-card.component';
 import { PhotoAlbumComponent } from '../shared/components/photo-album/photo-album.component';
 import { PhotoViewComponent } from '../shared/components/photo-view/photo-view.component';
-import { AddAlbumComponent } from '../shared/components/add-album/add-album.component';
+import { AddAlbumComponent } from './home-page/components/add-album/add-album.component';
 import { FileControlComponent } from '../shared/components/file-control/file-control.component';
 import { AppControlComponent } from '../shared/components/app-control/app-control.component';
-import { AddPhotoComponent } from '../shared/components/add-photo/add-photo.component'
+import { AddPhotoComponent } from './album-page/components/add-photo/add-photo.component'
 import { HomePagePhotosComponent } from './home-page/components/home-page-photos/home-page-photos.component';
 import { HomePageAlbumsComponent } from './home-page/components/home-page-albums/home-page-albums.component'
 import { FooterComponent } from './footer/footer.component';
 
-import { DragNDropDirective } from '../shared/directives/drag-n-drop.directive'
+import { DragNDropDirective } from '../shared/directives/drag-n-drop.directive';
+import { EditPhotoComponent } from './album-page/components/edit-photo/edit-photo.component'
 
 @NgModule({
   declarations: [
@@ -46,7 +47,8 @@ import { DragNDropDirective } from '../shared/directives/drag-n-drop.directive'
     HomePagePhotosComponent,
     HomePageAlbumsComponent,
     FooterComponent,
-    DragNDropDirective
+    DragNDropDirective,
+    EditPhotoComponent
   ],
   imports: [
     CommonModule,
