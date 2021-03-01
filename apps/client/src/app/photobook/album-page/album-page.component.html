@@ -5,7 +5,8 @@
     [currentUserProfile]="currentUserProfile"
     [authUserProfile]="authUserProfile"
     [album]="album"
-    (onEditHandler)="editHandler(isEdit)"
+    (onEditHandler)="editHandler($event)"
+    (onAddPhotoHandler)="addPhotoHandler()"
     [isAuthUser]="isAuthUser"
     [isEdit]="isEdit"
     *ngIf="!pendingLoadAlbum"
@@ -39,6 +40,7 @@
             <photobook-photo-card
               [isAuthUser]="isAuthUser"
               [hasInfo]="false"
+              [album]="album"
               *ngFor="let photo of photos" [photo]="photo" [@fadeIn]
               (onPhotoClick)="openPhotoDialog(photo)"
             ></photobook-photo-card>

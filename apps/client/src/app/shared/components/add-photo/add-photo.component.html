@@ -8,35 +8,53 @@
         <div class="files-area-files">
           <div class="files-area-files__inner">
 
-            <div *ngFor="let image of previewImages; let i = index" class="files-area-file">
-              <div class="files-area-file__inner">
-                <img src="{{image}}" alt="">
+            <div class="files-area-file"
+              *ngFor="let image of loadedPreviewImages; let i = index">
+              <div class="files-area-file__inner" [ngClass]="image.maxFileSize ? 'error' : null">
+                <img *ngIf="!image.allowedType" src="{{image.file}}" alt="">
                 <button class="files-area-file__close" (click)="removeImage(i)">
                   <span photobook-app-icon [icon]="closeIcon"></span>
                 </button>
+                <span class="files-area-file__progress" [style.width]="image.progress + '%'"></span>
+                <span class="files-area-file__size"
+                  *ngIf="image.maxFileSize || image.allowedType">
+                  <span *ngIf="image.maxFileSize">{{image.size}}</span>
+                  <span *ngIf="image.allowedType">{{image.type}}</span>
+                </span>
               </div>
             </div>
 
           </div>
         </div>
 
-        <label class="files-area-control" *ngIf="!previewImages.length">
+        <label class="files-area-control" [ngClass]="loadedPreviewImages.length && 'files-area-control--hide'">
           <span photobook-app-icon [icon]="cameraIcon"></span>
-          <input
-            class="files-area-control__input"
-            type="file"
+          <photobook-file-control
             (change)="onFilesDrop($event)"
-            formControlName="files">
-            <!-- multiple -->
+            class="files-area-control__input"
+            formControlName="files"
+            [isMultiple]="true">
+          </photobook-file-control>
           <span class="files-area-control__label">Перетащите фото сюда или <span>выберите файл</span></span>
         </label>
       </div>
+
+      <span *ngIf="invalidateImages || invalidateImagesTypes" class="files-area-error">
+        <small *ngIf="invalidateImages">
+          файл должен быть размером не более {{fileMaxSize}}mb
+        </small>
+        <small *ngIf="invalidateImagesTypes">
+          Выбран неверный формат изображений. (*.jpeg/*.png)
+        </small>
+      </span>
     </div>
 
     <div class="common-dialog-footer">
-      <!-- [disabled]="form.invalid && form.touched" -->
-      <button type="submit"  class="button button-bg-blue">Сохранить</button>
+      <button type="submit"
+        [disabled]="!loadedPreviewImages.length || invalidateImages || invalidateImagesTypes"
+        class="button button-bg-blue">Сохранить</button>
       <button type="button" dialogClose class="button btn-white">Отменить</button>
     </div>
   </form>
+  <photobook-spinner *ngIf="pending"></photobook-spinner>
 </div>

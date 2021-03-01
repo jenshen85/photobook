@@ -14,6 +14,7 @@ import { AuthService } from '../../auth/auth.service';
 import { PhotobookService } from '../photobook.service';
 
 import { openPhotoInDataType, PhotoViewComponent } from '../../shared/components/photo-view/photo-view.component';
+import { AddPhotoComponent, addPhotoDataInType, addPhotoDataOutType } from '../../shared/components/add-photo/add-photo.component';
 import { fadeAnimations } from '../../shared/utils/animations';
 
 @Component({
@@ -32,9 +33,9 @@ export class AlbumPageComponent implements OnInit {
   addIcon: SpriteIconEnum = SpriteIconEnum.add;
 
   isAuthUser: boolean;
+  isEdit: boolean;
   pending: boolean;
   pendingLoadAlbum: boolean = true;
-  isEdit: boolean;
 
   constructor(
     private readonly _authService: AuthService,
@@ -93,9 +94,8 @@ export class AlbumPageComponent implements OnInit {
     this.pendingLoadAlbum = true;
     this.subs.sink = this._photoService.getUserAlbumById(userProfileId, albumId).subscribe(
       (album) => {
-        // console.log(album);
         this.album = album;
-        // this.photos = album.photos;
+        this.photos = album.photos;
         this.pendingLoadAlbum = false;
       },
       (error) => {
@@ -105,12 +105,30 @@ export class AlbumPageComponent implements OnInit {
     );
   }
 
+  addPhotoHandler() {
+    const data: addPhotoDataInType = {
+      authUserProfile: this.authUserProfile,
+      album: this.album
+    }
+
+    const dialogRef = this.dialog.open(AddPhotoComponent, {
+      data,
+      isScrolled: true,
+      scrolledOverlayPosition: 'center',
+      dialogContainerClass: ['add-photo-container']
+    });
+
+    dialogRef.afterClosed().subscribe((data: addPhotoDataOutType) => {
+      this.photos = [...this.photos, ...data]
+    });
+  }
+
   openPhotoDialog(photo: PhotoRoI): void {
     const data: openPhotoInDataType = {
       photo, authUserProfile: this.authUserProfile
     };
 
-    this.dialog.open(PhotoViewComponent, {
+    const dialogRef = this.dialog.open(PhotoViewComponent, {
       data,
       isScrolled: true,
       scrolledOverlayPosition: 'top',
@@ -119,7 +137,7 @@ export class AlbumPageComponent implements OnInit {
   }
 
   editHandler(isEdit: boolean) {
-    this.isEdit = !this.isEdit;
+    this.isEdit = isEdit;
   }
 
   private _getRouteParamsMap() {

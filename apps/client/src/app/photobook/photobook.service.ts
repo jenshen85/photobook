@@ -1,8 +1,7 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpEvent } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { AlbumRoI, PhotoRoI, UserProfileRoI, UserRoI } from '@photobook/data';
-import { Observable, Subject } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { AlbumRoI, PhotoRoI } from '@photobook/data';
+import { Observable } from 'rxjs';
 
 import { PATHS } from '../shared/utils/api';
 
@@ -12,8 +11,15 @@ export class PhotobookService {
     private readonly _http: HttpClient
   ) {}
 
+  createPhoto<T, D>(album_id: number, data: T): Observable<HttpEvent<D>> {
+    return this._http.post<D>(`${PATHS.photo}/${album_id}`, data, {
+      reportProgress: true,
+      observe: 'events',
+    });
+  }
+
   getPhotos(): Observable<PhotoRoI[]> {
-    return this._http.get<PhotoRoI[]>(PATHS.getAllPhoto);
+    return this._http.get<PhotoRoI[]>(PATHS.photo);
   }
 
   getAllAlbums(): Observable<AlbumRoI[]> {

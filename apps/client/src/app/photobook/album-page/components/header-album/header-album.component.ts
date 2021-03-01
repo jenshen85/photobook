@@ -6,7 +6,7 @@ import { fadeIn } from 'ng-animate';
 import { AlbumRoI, SpriteIconEnum, UserProfileRoI } from '@photobook/data';
 import { Dialog } from '@photobook/ui';
 
-import { AddPhotoComponent } from '../../../../shared/components/add-photo/add-photo.component';
+import { AddPhotoComponent, addPhotoDataInType } from '../../../../shared/components/add-photo/add-photo.component';
 import { getUserName } from 'apps/client/src/app/shared/utils/utils';
 
 @Component({
@@ -43,6 +43,7 @@ export class HeaderAlbumComponent implements OnInit {
   albumForm: FormGroup;
 
   @Output() onEditHandler: EventEmitter<boolean> = new EventEmitter()
+  @Output() onAddPhotoHandler: EventEmitter<boolean> = new EventEmitter()
 
   editIcon: SpriteIconEnum = SpriteIconEnum.edit;
   albumIcon: SpriteIconEnum = SpriteIconEnum.album;
@@ -64,28 +65,27 @@ export class HeaderAlbumComponent implements OnInit {
     });
   }
 
-  editHandler(isEdit: boolean) {
-    this.onEditHandler.emit(isEdit);
-  }
+  // editHandler(isEdit: boolean) {
+  //   this.onEditHandler.emit(isEdit);
+  // }
 
   updateProfileHandler() {
     console.log(this.albumForm);
   }
 
-  addPhotoHandler() {
-    const dialogRef = this.dialog.open(AddPhotoComponent, {
-      data: {
-        user: this.authUserProfile
-      },
-      isScrolled: true,
-      scrolledOverlayPosition: 'center',
-      dialogContainerClass: ['add-photo-container']
-    });
+  // addPhotoHandler() {
+  //   const data: addPhotoDataInType = {
+  //     authUserProfile: this.authUserProfile,
+  //     album: this.album
+  //   }
 
-    dialogRef.afterClosed().subscribe((data: any) => {
-      console.log(data);
-    })
-  }
+  //   this.dialog.open(AddPhotoComponent, {
+  //     data,
+  //     isScrolled: true,
+  //     scrolledOverlayPosition: 'center',
+  //     dialogContainerClass: ['add-photo-container']
+  //   });
+  // }
 
   get getName() {
     return getUserName(

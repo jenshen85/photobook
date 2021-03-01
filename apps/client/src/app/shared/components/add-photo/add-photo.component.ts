@@ -1,7 +1,45 @@
-import { Component, OnInit } from '@angular/core';
+import { HttpEvent, HttpEventType, HttpResponse } from '@angular/common/http';
+import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { SpriteIconEnum } from '@photobook/data';
-import { checkFileSize, checkFileTypes, getBase64 } from '../../utils/utils';
+import { AlbumRoI, PhotoRoI, SpriteIconEnum, UserProfileRoI } from '@photobook/data';
+import { DialogRef, DIALOG_DATA } from '@photobook/ui';
+import { from, fromEvent, pipe, Subscription } from 'rxjs';
+import { filter, map, mergeMap, scan, tap } from 'rxjs/operators';
+import { PhotobookService } from '../../../photobook/photobook.service';
+import { bytesToSize, checkFileSize, checkFileTypes, getBase64 } from '../../utils/utils';
+
+const IMAGE_TYPES = ['image/png', 'image/jpeg'];
+
+export type addPhotoDataInType = {
+  authUserProfile: UserProfileRoI;
+  album: AlbumRoI;
+}
+
+export type addPhotoDataOutType = PhotoRoI[];
+
+export function uploadProgress<T>(cb: ( progress: number ) => void ) {
+  return tap(
+    ( event: HttpEvent<T> ) => {
+      if ( event.type === HttpEventType.UploadProgress ) {
+        cb(Math.round((100 * event.loaded) / event.total));
+      }
+      // if( event.type === HttpEventType.Response ) {
+      //   console.log(event.type, 'finished OK request: ' + id);
+      // }
+      return event;
+    },
+    (err) => {
+      console.log("finished ERROR request")
+    }
+  );
+}
+
+export function toResponseBody<T>() {
+  return pipe(
+    filter(( event: HttpEvent<T> ) => event.type === HttpEventType.Response),
+    map(( res: HttpResponse<T> ) => res.body)
+  );
+}
 
 @Component({
   selector: 'div[photobook-add-photo]',
@@ -10,30 +48,93 @@ import { checkFileSize, checkFileTypes, getBase64 } from '../../utils/utils';
   host: { class: 'common-dialog photobook-add-photo' }
 })
 export class AddPhotoComponent implements OnInit {
-  form: FormGroup;
+  private _fileSize = 7.5;
   cameraIcon = SpriteIconEnum.cam;
   closeIcon = SpriteIconEnum.close;
 
-  previewImages: string[] = [];
-  images: File[] = [];
+  loadedPreviewImages: Array<{
+    file: string,
+    progress: number,
+    maxFileSize: boolean,
+    size: string,
+    type: string,
+    allowedType: boolean }> = [];
+  loadedImages: File[] = [];
+  images$: Subscription;
+  form: FormGroup;
+  pending: boolean = false;
 
-  constructor() { }
+  constructor(
+    private readonly _photoBookService: PhotobookService,
+    private readonly dialogRef: DialogRef<AddPhotoComponent>,
+    @Inject(DIALOG_DATA) private data: addPhotoDataInType
+  ) { }
 
   ngOnInit(): void {
     this.form = new FormGroup({
-      files: new FormControl(null, [
-        checkFileSize(7.5),
-        checkFileTypes(['image/png', 'image/jpeg']),
-      ])
-    })
+        files: new FormControl(null, [
+          checkFileSize(this._fileSize),
+          checkFileTypes(['image/png', 'image/jpeg']),
+        ]),
+      },
+      { updateOn: 'change' }
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.images$ && this.images$.unsubscribe();
   }
 
   submitHandler() {
+    if(this.loadedImages.length) {
+      this.pending = true;
 
+      this.images$ = from(this.loadedImages).pipe(
+        mergeMap((img, i) => {
+          const data = new FormData();
+          data.append('photo', img);
+
+          return this._photoBookService.createPhoto<FormData, PhotoRoI>(this.data.album.id, data).pipe(
+            uploadProgress((p) => {
+              this.loadedPreviewImages[i].progress = p;
+            }),
+            toResponseBody()
+          )
+        }),
+        scan((acc: PhotoRoI[], curr: PhotoRoI) => [...acc, curr], []),
+        filter(imgs => imgs.length === this.loadedImages.length),
+      ).subscribe((data): void => {
+        this.loadedImages.length = 0;
+        this.loadedPreviewImages.length = 0;
+        this.pending = false;
+        this.dialogRef.close(data);
+      });
+    }
   }
+
+  // submitHandler() {
+  //   if(this.images.length) {
+  //     this.images$ = from(this.images).pipe(
+  //       concatMap((img) => {
+  //         const data = new FormData();
+  //         data.append('photo', img);
+
+  //         console.log('start request');
+
+  //         return this._photoBookService.createPhoto(this.data.album.id, data).pipe(
+  //           uploadProgress((p) => console.log(p)),
+  //           toResponseBody()
+  //         )
+  //       })
+  //     ).subscribe((data) => {
+  //       console.log(data);
+  //     });
+  //   }
+  // }
 
   onFilesDrop($event) {
     let files: File[];
+
     if($event instanceof FileList) {
       files = Array.from($event as FileList);
     } else if($event.target && $event.target.files instanceof FileList) {
@@ -41,19 +142,66 @@ export class AddPhotoComponent implements OnInit {
     }
 
     if(files && files.length) {
-      files.forEach((file, i) => {
-        this.images.push(file);
-        const index = this.images.indexOf(file);
+      this.pending = true;
 
-        getBase64(file).then((imgBase64) => {
-          typeof imgBase64 === 'string' && (this.previewImages[index] = imgBase64);
-        });
+      from(files).pipe(
+        mergeMap((file) => {
+          this.loadedImages.push(file);
+          const index = this.loadedImages.indexOf(file);
+          const reader = new FileReader();
+          reader.readAsDataURL(file);
+
+          return fromEvent(reader, 'load').pipe(map(e => {
+            if(typeof reader.result === 'string') {
+              this.loadedPreviewImages.splice(index, 0, {
+                file: reader.result,
+                progress: 0,
+                maxFileSize: file.size > this._fileSize * 1000000,
+                size: bytesToSize(file.size),
+                type: `*.${file.name.split('.')[file.name.split('.').length - 1]}`,
+                allowedType: !IMAGE_TYPES.includes(file.type)
+              });
+            }
+
+            return reader.result;
+          }));
+        }),
+        scan((acc, curr) => [...acc, curr], []),
+        filter(imgs => imgs.length === files.length)
+      ).subscribe(data => {
+        this.pending = false;
+        this.form.get('files').setValue(null);
       });
+
+      // files.forEach((file, i) => {
+      //   this.loadedImages.push(file);
+      //   const index = this.loadedImages.indexOf(file);
+      //   getBase64(file).then((imgBase64) => {
+      //     typeof imgBase64 === 'string' && (this.loadedPreviewImages[index] = {
+      //       file: imgBase64,
+      //       progress: 0,
+      //       maxFileSize: file.size > 7.5 * 1000000,
+      //       size: bytesToSize(file.size)
+      //     });
+      //   });
+      // });
     }
   }
 
+  get fileMaxSize(): number {
+    return this._fileSize;
+  }
+
+  get invalidateImages(): boolean {
+    return !!this.loadedPreviewImages.filter(image => image.maxFileSize).length;
+  }
+
+  get invalidateImagesTypes(): boolean {
+    return !!this.loadedImages.filter(image => !IMAGE_TYPES.includes(image.type)).length;
+  }
+
   removeImage(i: number) {
-    this.images.splice(i, 1);
-    this.previewImages.splice(i, 1);
+    this.loadedImages.splice(i, 1);
+    this.loadedPreviewImages.splice(i, 1);
   }
 }
