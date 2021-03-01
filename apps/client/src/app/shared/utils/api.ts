@@ -6,7 +6,7 @@ export const PATHS = {
   profile: `${API_PATH}/profile`,
   // profileMe: `${API_PATH}/profile/me`,
   // getUserById: (user_id: number | string) => `${API_PATH}/profile/${user_id}`,
-  getAllPhoto: `${API_PATH}/photo`,
+  photo: `${API_PATH}/photo`,
   album: `${API_PATH}/album`,
   updateAlbums: (album_id: number | string) => `${API_PATH}/album/${album_id}`,
   deleteAlbums: (album_id: number | string) => `${API_PATH}/album/${album_id}`,

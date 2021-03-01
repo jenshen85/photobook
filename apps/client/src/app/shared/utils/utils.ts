@@ -29,31 +29,35 @@ function getExt(fileName: string): string {
 export function checkFileTypes(types: string[]) {
   return function (control: FormControl) {
     const files: FileList | File = control.value;
-    const results = [];
-
-    if(files instanceof FileList) {
-      for (let file in files) {
-        if(typeof files[file] === 'object') {
-          const checkResult: boolean = !types.includes(files[file].type);
-          results.push(checkResult);
-        }
-      }
-    } else if(files instanceof File) {
-      const checkResult: boolean = !types.includes(files.type);
-      results.push(checkResult);
-    }
-
-    if ( results.includes(true) ) {
-      return {
-        requiredFileType: true
-      };
-    }
-
-    return null;
+    return checkFileTypesHandler(types, files);
   };
 }
 
-function bytesToSize(bytes: number): string {
+export function checkFileTypesHandler(types: string[], files: FileList | File) {
+  const results = [];
+
+  if(files instanceof FileList) {
+    for (let file in files) {
+      if(typeof files[file] === 'object') {
+        const checkResult: boolean = !types.includes(files[file].type);
+        results.push(checkResult);
+      }
+    }
+  } else if(files instanceof File) {
+    const checkResult: boolean = !types.includes(files.type);
+    results.push(checkResult);
+  }
+
+  if ( results.includes(true) ) {
+    return {
+      requiredFileType: true
+    };
+  }
+
+  return null;
+}
+
+export function bytesToSize(bytes: number): string {
   const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
   if (bytes == 0) return '0 Byte';
   const i = Math.floor(Math.log(bytes) / Math.log(1024));
@@ -63,24 +67,28 @@ function bytesToSize(bytes: number): string {
 export function checkFileSize(size: number) {
   return function(control: FormControl) {
     const files: FileList = control.value;
-    const results = [];
-
-    for (let file in files) {
-      if(typeof files[file] === 'object') {
-        const fileSize = files[file].size;
-        const checkResult: boolean = fileSize > size * 1000000;
-        results.push(checkResult);
-      }
-    }
-
-    if ( results.includes(true) ) {
-      return {
-        maxFileSize: true
-      };
-    }
-
-    return null;
+    return checkFileSizeHandler(size, files);
   }
+}
+
+export function checkFileSizeHandler(size: number, files: FileList) {
+  const results = [];
+
+  for (let file in files) {
+    if(typeof files[file] === 'object') {
+      const fileSize = files[file].size;
+      const checkResult: boolean = fileSize > size * 1000000;
+      results.push(checkResult);
+    }
+  }
+
+  if ( results.includes(true) ) {
+    return {
+      maxFileSize: true
+    };
+  }
+
+  return null;
 }
 
 export function getBase64(file: File): Promise<string | ArrayBuffer> {
