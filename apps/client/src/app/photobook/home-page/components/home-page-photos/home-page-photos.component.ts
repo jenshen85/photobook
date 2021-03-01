@@ -68,6 +68,7 @@ export class HomePagePhotosComponent implements OnInit {
     this._dialog.open(PhotoViewComponent, {
       data: openPhotoData,
       isScrolled: true,
+      autoFocus: false,
       scrolledOverlayPosition: 'top',
       dialogContainerClass: 'photo-view-content'
     });

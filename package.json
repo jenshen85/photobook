@@ -7,7 +7,7 @@
     "postinstall": "node ./decorate-angular-cli.js && ngcc --properties es2015 browser module main --first-only --create-ivy-entry-points",
     "nx": "nx",
     "start": "ng serve api",
-    "client:dev": "ng serve client --configuration=development",
+    "client:dev": "ng serve client --configuration=development --live-reload false",
     "serve:build": "nx build api --configuration=production",
     "start:all": "concurrently \"npm run client:dev\" \"npm run start\"",
     "build": "ng build",

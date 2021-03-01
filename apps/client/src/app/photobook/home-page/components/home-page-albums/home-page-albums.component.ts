@@ -11,7 +11,7 @@ import {
   AddAlbumComponent,
   addAlbumOutDataType,
   addAlbumInDataType
-} from '../../../../shared/components/add-album/add-album.component';
+} from '../add-album/add-album.component';
 import { fadeAnimations } from '../../../../shared/utils/animations';
 
 @Component({

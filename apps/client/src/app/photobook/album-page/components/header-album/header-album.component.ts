@@ -6,7 +6,6 @@ import { fadeIn } from 'ng-animate';
 import { AlbumRoI, SpriteIconEnum, UserProfileRoI } from '@photobook/data';
 import { Dialog } from '@photobook/ui';
 
-import { AddPhotoComponent, addPhotoDataInType } from '../../../../shared/components/add-photo/add-photo.component';
 import { getUserName } from 'apps/client/src/app/shared/utils/utils';
 
 @Component({
