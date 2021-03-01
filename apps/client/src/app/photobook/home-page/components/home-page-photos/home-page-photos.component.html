@@ -8,9 +8,11 @@
       <photobook-spinner position="absolute" *ngIf="pendingLoadPhotos; else photosTmp"></photobook-spinner>
       <ng-template #photosTmp>
         <photobook-photo-card
-          *ngFor="let photo of photos" [photo]="photo" [@fadeIn]
+          *ngFor="let photo of photos" [photo]="photo"
+          [album_title]="photo.album.title"
+          [userProfile]="photo.user_profile"
           (onPhotoClick)="openPhotoDialog(photo)"
-        ></photobook-photo-card>
+          [@fadeIn]></photobook-photo-card>
       </ng-template>
     </div>
 

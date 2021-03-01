@@ -1,5 +1,4 @@
 <div class="photo-card">
-
   <div class="photo-card__top">
     <a href="#" class="photo-card__img" (click)="onPhotoClickHandler($event, photo)">
       <img [src]="photo.image" [alt]="photo.title">
@@ -23,7 +22,7 @@
     <div class="photo-card__info">
       <a photobook-small-ava
         [routerLink]="['/photobook', photo.user_profile_id]"
-        [avatar]=""
+        [avatar]="userProfile.avatar"
         [userName]="userName"></a>
 
       <div *ngIf="photo.title"
@@ -46,13 +45,13 @@
   </div>
 
   <div class="photo-card__bottom">
-    <button *ngIf="!hasInfo && isAuthUser" class="photo-card__edit">
+    <button *ngIf="!hasInfo && isAuthUser" (click)="onEditClick.emit(photo)" class="photo-card__edit">
       <span photobook-app-icon [icon]="editIcon"></span>
     </button>
 
     <a [routerLink]="['/', 'photobook', photo.user_profile_id, photo.album_id]" class="photo-card__album">
       <span class="photo-card__album-ico" photobook-app-icon [icon]="albumIcon"></span>
-      {{photo.album_title}}
+      {{album_title}}
     </a>
   </div>
 </div>

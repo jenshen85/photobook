@@ -88,6 +88,11 @@
     padding-left: rem(64);
     min-height: rem(48);
     justify-content: center;
+
+    .photobook-small-ava {
+      background-color: $blue;
+      color: $white;
+    }
   }
 
   &__photo {
@@ -164,7 +169,7 @@
     background: none;
     cursor: pointer;
 
-    .photobook-icon {
+    .photobook-app-icon {
       width: 100%;
       height: 100%;
       color: #d6d6d6;

@@ -40,8 +40,9 @@
             <photobook-photo-card
               [isAuthUser]="isAuthUser"
               [hasInfo]="false"
-              [album]="album"
               *ngFor="let photo of photos" [photo]="photo" [@fadeIn]
+              [userProfile]="currentUserProfile"
+              [album_title]="album.title"
               (onPhotoClick)="openPhotoDialog($event)"
               (onEditClick)="openEditPhotoDilaog(photo)"
             ></photobook-photo-card>
