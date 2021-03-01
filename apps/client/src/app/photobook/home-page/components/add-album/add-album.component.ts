@@ -11,8 +11,8 @@ import {
 import { DialogRef, DIALOG_DATA } from '@photobook/ui';
 import { fadeIn } from 'ng-animate';
 import { SubSink } from 'subsink';
-import { PhotobookService } from '../../../photobook/photobook.service';
-import { checkFileSize, checkFileTypes, getBase64, toFormData } from '../../utils/utils';
+import { PhotobookService } from '../../../photobook.service';
+import { checkFileSize, checkFileTypes, getBase64, toFormData } from '../../../../shared/utils/utils';
 
 export type addAlbumOutDataType = {
   action: ActionEnum,
