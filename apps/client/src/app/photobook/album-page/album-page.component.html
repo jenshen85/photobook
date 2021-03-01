@@ -42,7 +42,8 @@
               [hasInfo]="false"
               [album]="album"
               *ngFor="let photo of photos" [photo]="photo" [@fadeIn]
-              (onPhotoClick)="openPhotoDialog(photo)"
+              (onPhotoClick)="openPhotoDialog($event)"
+              (onEditClick)="openEditPhotoDilaog(photo)"
             ></photobook-photo-card>
           </ng-template>
         </div>

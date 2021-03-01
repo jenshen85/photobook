@@ -14,8 +14,9 @@ import { AuthService } from '../../auth/auth.service';
 import { PhotobookService } from '../photobook.service';
 
 import { openPhotoInDataType, PhotoViewComponent } from '../../shared/components/photo-view/photo-view.component';
-import { AddPhotoComponent, addPhotoDataInType, addPhotoDataOutType } from '../../shared/components/add-photo/add-photo.component';
+import { AddPhotoComponent, addPhotoDataInType, addPhotoDataOutType } from './components/add-photo/add-photo.component';
 import { fadeAnimations } from '../../shared/utils/animations';
+import { EditPhotoComponent } from './components/edit-photo/edit-photo.component';
 
 @Component({
   selector: 'photobook-album-page',
@@ -114,12 +115,15 @@ export class AlbumPageComponent implements OnInit {
     const dialogRef = this.dialog.open(AddPhotoComponent, {
       data,
       isScrolled: true,
+      autoFocus: false,
       scrolledOverlayPosition: 'center',
       dialogContainerClass: ['add-photo-container']
     });
 
     dialogRef.afterClosed().subscribe((data: addPhotoDataOutType) => {
-      this.photos = [...this.photos, ...data]
+      if(data) {
+        this.photos = [...this.photos, ...data]
+      }
     });
   }
 
@@ -131,8 +135,27 @@ export class AlbumPageComponent implements OnInit {
     const dialogRef = this.dialog.open(PhotoViewComponent, {
       data,
       isScrolled: true,
+      autoFocus: false,
       scrolledOverlayPosition: 'top',
       dialogContainerClass: ['photo-view-container']
+    });
+  }
+
+  openEditPhotoDilaog(photo: PhotoRoI): void {
+    const dialogRef = this.dialog.open(EditPhotoComponent, {
+      data: {
+        photo,
+        authUserProfile: this.authUserProfile
+      },
+      isScrolled: true,
+      autoFocus: false,
+      scrolledOverlayPosition: 'center',
+      dialogContainerClass: ['photo-view-container']
+    });
+
+    dialogRef.afterClosed().subscribe((photo) => {
+      const index = this.photos.findIndex(album => album.id === photo.id);
+      this.photos = [ ...this.photos.slice(0, index), photo, ...this.photos.slice(index + 1)]
     });
   }
 
