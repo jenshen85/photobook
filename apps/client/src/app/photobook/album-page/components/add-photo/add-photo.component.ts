@@ -5,8 +5,8 @@ import { AlbumRoI, PhotoRoI, SpriteIconEnum, UserProfileRoI } from '@photobook/d
 import { DialogRef, DIALOG_DATA } from '@photobook/ui';
 import { from, fromEvent, pipe, Subscription } from 'rxjs';
 import { filter, map, mergeMap, scan, tap } from 'rxjs/operators';
-import { PhotobookService } from '../../../photobook/photobook.service';
-import { bytesToSize, checkFileSize, checkFileTypes, getBase64 } from '../../utils/utils';
+import { PhotobookService } from '../../../photobook.service';
+import { bytesToSize, checkFileSize, checkFileTypes } from '../../../../shared/utils/utils';
 
 const IMAGE_TYPES = ['image/png', 'image/jpeg'];
 
@@ -23,9 +23,7 @@ export function uploadProgress<T>(cb: ( progress: number ) => void ) {
       if ( event.type === HttpEventType.UploadProgress ) {
         cb(Math.round((100 * event.loaded) / event.total));
       }
-      // if( event.type === HttpEventType.Response ) {
-      //   console.log(event.type, 'finished OK request: ' + id);
-      // }
+
       return event;
     },
     (err) => {
@@ -112,26 +110,6 @@ export class AddPhotoComponent implements OnInit {
     }
   }
 
-  // submitHandler() {
-  //   if(this.images.length) {
-  //     this.images$ = from(this.images).pipe(
-  //       concatMap((img) => {
-  //         const data = new FormData();
-  //         data.append('photo', img);
-
-  //         console.log('start request');
-
-  //         return this._photoBookService.createPhoto(this.data.album.id, data).pipe(
-  //           uploadProgress((p) => console.log(p)),
-  //           toResponseBody()
-  //         )
-  //       })
-  //     ).subscribe((data) => {
-  //       console.log(data);
-  //     });
-  //   }
-  // }
-
   onFilesDrop($event) {
     let files: File[];
 
@@ -172,19 +150,6 @@ export class AddPhotoComponent implements OnInit {
         this.pending = false;
         this.form.get('files').setValue(null);
       });
-
-      // files.forEach((file, i) => {
-      //   this.loadedImages.push(file);
-      //   const index = this.loadedImages.indexOf(file);
-      //   getBase64(file).then((imgBase64) => {
-      //     typeof imgBase64 === 'string' && (this.loadedPreviewImages[index] = {
-      //       file: imgBase64,
-      //       progress: 0,
-      //       maxFileSize: file.size > 7.5 * 1000000,
-      //       size: bytesToSize(file.size)
-      //     });
-      //   });
-      // });
     }
   }
 
