@@ -1,8 +1,8 @@
-import { Component, ElementRef, HostListener, Input, OnInit } from '@angular/core';
+import { Component, ElementRef, HostListener, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
-  selector: 'input[photobook-file-control]',
+  selector: 'photobook-file-control',
   templateUrl: './file-control.component.html',
   styleUrls: ['./file-control.component.scss'],
   host: {
@@ -21,17 +21,19 @@ export class FileControlComponent implements ControlValueAccessor {
   onChange: Function;
   onTouched: Function;
   private files: FileList | File;
-  @Input() isMultiple: boolean = false;
+  @Input() isMultiple?: boolean;
+  @ViewChild('control', { static: true }) control: ElementRef;
   @HostListener('change', ['$event.target.files']) emitFiles(event: FileList) {
     const data = this.isMultiple ? event : event.item(0);
     this.onChange(data);
     this.files = data;
   }
 
-  constructor(private host: ElementRef<HTMLInputElement>) { }
+  constructor(private host: ElementRef<HTMLInputElement>, private render: Renderer2) { }
 
   writeValue(value: null): void {
     this.host.nativeElement.value = '';
+    this.control.nativeElement.value = '';
     this.files = null;
   }
 
