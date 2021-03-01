@@ -22,6 +22,11 @@ export class AlbumRepository extends Repository<Album> {
       .leftJoinAndSelect('album.user_profile', 'user_profile')
       .where('album.user_profile_id = :user_profile_id', { user_profile_id })
       .andWhere('album.id = :album_id', { album_id })
+      .leftJoinAndSelect('album.photos', 'photo')
+      // .from((subQuery) => {
+      //   return subQuery
+      //     .innerJoinAndSelect('photos', 'photo')
+      // }, 'photo')
       .getOne();
 
     if (!album) {

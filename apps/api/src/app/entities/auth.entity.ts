@@ -5,6 +5,8 @@ import {
   OneToOne,
   JoinColumn,
   OneToMany,
+  PrimaryGeneratedColumn,
+  Generated,
 } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
 
@@ -18,6 +20,11 @@ import { UserProfile } from './user-profile.entity';
 @Entity()
 @Unique(['email'])
 export class Auth extends AbstractEntity {
+
+  @Column()
+  @Generated("uuid")
+  path_id: string;
+
   @Column()
   email: string;
 

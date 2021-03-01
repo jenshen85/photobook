@@ -11,8 +11,9 @@ import {
   UploadedFiles,
   Param,
   ParseIntPipe,
+  UploadedFile,
 } from '@nestjs/common';
-import { FilesInterceptor } from '@nestjs/platform-express';
+import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 
 import { Auth, Photo } from '../entities';
 import { PhotoCredentialsDto, PhotoRoDto } from '@photobook/dto';
@@ -38,22 +39,32 @@ export class PhotoController {
     return this._photoService.getAllAlbumPhoto(album_id);
   }
 
-  @Get('/:photo_id')
+  @Get(':photo_id')
   getOne(@Param('photo_id', ParseIntPipe) photo_id: number): Promise<PhotoRoDto> {
     return this._photoService.getOne(photo_id);
   }
 
-  @Post('/:album_id')
-  @UseInterceptors(FilesInterceptor('photos'))
+  @Post(':album_id')
+  @UseInterceptors(FileInterceptor('photo'))
   create(
+    @Param('album_id', ParseIntPipe) album_id: number,
+    @UploadedFile() photo: Express.Multer.File,
+    @GetUser() user: Auth
+  ): Promise<PhotoRoDto> {
+    return this._photoService.createPhoto(album_id, photo, user);
+  }
+
+  @Post('photos/:album_id')
+  @UseInterceptors(FilesInterceptor('photos'))
+  createPhotos(
     @Param('album_id', ParseIntPipe) album_id: number,
     @UploadedFiles() photos: Express.Multer.File[],
     @GetUser() user: Auth
   ): Promise<PhotoRoDto[]> {
-    return this._photoService.createPhoto(album_id, photos, user);
+    return this._photoService.createPhotos(album_id, photos, user);
   }
 
-  @Patch('/:photo_id')
+  @Patch(':photo_id')
   update(
     @Param('photo_id', ParseIntPipe) photo_id: number,
     @Body(ValidationPipe) photoCredentials: PhotoCredentialsDto,
@@ -61,7 +72,7 @@ export class PhotoController {
     return this._photoService.updatePhoto(photo_id, photoCredentials);
   }
 
-  @Delete('/:photo_id')
+  @Delete(':photo_id')
   delete(
     @Param('photo_id', ParseIntPipe) photo_id: number
   ): Promise<void> {

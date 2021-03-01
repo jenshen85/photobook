@@ -32,15 +32,34 @@ export class PhotoService {
 
   async createPhoto(
     album_id: number,
+    file: Express.Multer.File,
+    user: Auth
+  ): Promise<PhotoRoDto> {
+    const imageData = await this._fileService.saveFile(
+      file,
+      `images/${user.path_id}/albums/${album_id}/photos`,
+      generateFileName(file)
+    );
+
+    const photo = await this._photoRepository.createPhoto(
+      imageData,
+      album_id,
+      user
+    );
+
+    return photo;
+  }
+
+  async createPhotos(
+    album_id: number,
     files: Express.Multer.File[],
     user: Auth
   ): Promise<PhotoRoDto[]> {
-    // const album = await this._albumService.getUserAlbumById(album_id, user.id);
     const photos = await Promise.all(
       files.map(async (file) => {
         const imageData = await this._fileService.saveFile(
           file,
-          `images/${user.id}/albums/${album_id}/photos`,
+          `images/${user.path_id}/albums/${album_id}/photos`,
           generateFileName(file)
         );
         const photo = await this._photoRepository.createPhoto(

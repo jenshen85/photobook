@@ -35,7 +35,7 @@ export class AlbumService {
 
     let savedImageData: IFileData;
     if(file) {
-      const pathToAlbumPreview = `images/${user.id}/albums/${album.id}/preview`;
+      const pathToAlbumPreview = `images/${user.path_id}/albums/${album.id}/preview`;
       savedImageData = await this._fileService.saveFile(
         file,
         pathToAlbumPreview,

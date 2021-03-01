@@ -63,7 +63,7 @@ export class UserProfileService {
     files: IProfileFiles,
     user: Auth
   ): Promise<IProfileFilesData> {
-    const profileFilesPath = `images/${user.id}/profile`;
+    const profileFilesPath = `images/${user.path_id}/profile`;
     const avatar = files.avatar ? files.avatar[0] : null;
     const cover = files.cover ? files.cover[0] : null;
     let avatarData: IFileData, coverData: IFileData;

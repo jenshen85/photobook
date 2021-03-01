@@ -15,7 +15,10 @@ import { IFileData } from '../file/file.service';
 export class PhotoRepository extends Repository<Photo> {
 
   async getAll(): Promise<PhotoRoDto[]> {
-    const photos = await this.find();
+    const photos = await this.createQueryBuilder('photo')
+      .leftJoinAndSelect('photo.album', 'album')
+      .leftJoinAndSelect('photo.user_profile', 'user_profile')
+      .getMany()
     // const photos = await this.find({relations: ['user'], take: 10, skip: 10});
     return photos.map((photo) => plainToClass(PhotoRoDto, photo));
   }
@@ -64,7 +67,9 @@ export class PhotoRepository extends Repository<Photo> {
       await photo.save();
       return plainToClass(PhotoRoDto, photo);
     } catch (error) {
+      console.log(error);
       if (error.code === '23505') {
+        
         throw new ConflictException(`Photo with name "${imageData.fileName}" already exists`);
       } else {
         throw new InternalServerErrorException(error);

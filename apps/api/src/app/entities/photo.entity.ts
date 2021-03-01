@@ -1,7 +1,8 @@
-import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, Column, ManyToOne, JoinColumn, OneToOne } from 'typeorm';
 import { Album } from './album.entity';
 // import { Auth } from './auth.entity';
 import { AbstractEntity } from './abstract-entity';
+import { UserProfile } from './user-profile.entity';
 // import { UserProfile } from './user-profile.entity';
 
 @Entity()
@@ -40,10 +41,10 @@ export class Photo extends AbstractEntity {
   @JoinColumn({ name: 'album_id' })
   album: Album;
 
-  // @ManyToOne(() => UserProfile, (profile) => profile.photos, {
-  //   onDelete: 'CASCADE',
-  //   eager: false,
-  // })
-  // @JoinColumn({ name: 'user_profile_id' })
-  // user_profile: UserProfile;
+  @ManyToOne(() => UserProfile, (user_profile) => user_profile.photos, {
+    onDelete: 'CASCADE',
+    eager: false,
+  })
+  @JoinColumn({ name: 'user_profile_id' })
+  user_profile: UserProfile;
 }
