@@ -41,6 +41,7 @@ export class HomePageAlbumsComponent implements OnInit {
       this._authService.authUserProfile().subscribe((authUserProfile) => {
         if(authUserProfile) {
           this.authUserProfile = authUserProfile;
+          this._changeDetectionRef.markForCheck();
         }
       }),
 

@@ -11,7 +11,7 @@ import { PhotobookService } from '../../../photobook.service';
   selector: 'photobook-home-page-photos',
   templateUrl: './home-page-photos.component.html',
   styleUrls: ['./home-page-photos.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  // changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [ fadeAnimations.fadeIn() ],
 })
 export class HomePagePhotosComponent implements OnInit {
@@ -20,6 +20,10 @@ export class HomePagePhotosComponent implements OnInit {
   currentUserProfile: UserProfileRoI;
   pendingLoadPhotos = false;
   photos: PhotoRoI[] = [];
+
+  private _take: number = 9;
+  private _skip: number = 0;
+  loadMore = true;
 
   constructor (
     private readonly _authService: AuthService,
@@ -32,9 +36,11 @@ export class HomePagePhotosComponent implements OnInit {
     this.subs.add(
       this._authService.authUserProfile().subscribe((authUserProfile) => {
         this.authUserProfile = authUserProfile;
+        this._changeDetectionRef.markForCheck();
       }),
       this._authService.currentUserProfile().subscribe((currentUserProfile) => {
         this.currentUserProfile = currentUserProfile;
+        this._changeDetectionRef.markForCheck();
       })
     );
 
@@ -47,8 +53,18 @@ export class HomePagePhotosComponent implements OnInit {
 
   getPhotos() {
     this.pendingLoadPhotos = true;
-    this.subs.sink = this._photoService.getPhotos().subscribe(
-      (photos) => this.photos = photos,
+    this.subs.sink = this._photoService.getPhotos({
+      take: this._take.toString(),
+      skip: this._skip.toString()
+    }).subscribe(
+      (photos) => {
+        if(photos.length) {
+          photos.forEach(photo => this.photos.push(photo));
+          this._skip = this._skip + this._take;
+        } else {
+          this.loadMore = false;
+        }
+      },
       (error) => {
         // TODO: error handling
         console.log(error);
@@ -65,6 +81,7 @@ export class HomePagePhotosComponent implements OnInit {
       authUserProfile: this.authUserProfile,
       photo
     }
+
     this._dialog.open(PhotoViewComponent, {
       data: openPhotoData,
       isScrolled: true,
@@ -74,5 +91,7 @@ export class HomePagePhotosComponent implements OnInit {
     });
   }
 
-  loadMoreHandler() {}
+  loadMoreHandler() {
+    this.getPhotos();
+  }
 }

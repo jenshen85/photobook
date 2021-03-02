@@ -42,8 +42,12 @@ export class PhotobookService {
     });
   }
 
-  getPhotos(): Observable<PhotoRoI[]> {
-    return this._http.get<PhotoRoI[]>(PATHS.photo);
+  getPhotos({ take='9', skip='0' }: { take?: string, skip?: string }): Observable<PhotoRoI[]> {
+    return this._http.get<PhotoRoI[]>(PATHS.photo, {
+      params: {
+        take, skip
+      }
+    });
   }
 
   updatePhoto<T, D>(album_id: number, photo_id: number, data: T): Observable<D> {

@@ -5,19 +5,21 @@
     </div>
 
     <div class="photo-cards">
-      <photobook-spinner position="absolute" *ngIf="pendingLoadPhotos; else photosTmp"></photobook-spinner>
-      <ng-template #photosTmp>
-        <photobook-photo-card
-          *ngFor="let photo of photos" [photo]="photo"
-          [album_title]="photo.album.title"
-          [userProfile]="photo.user_profile"
-          (onPhotoClick)="openPhotoDialog(photo)"
-          [@fadeIn]></photobook-photo-card>
-      </ng-template>
+      <photobook-photo-card
+        *ngFor="let photo of photos" [photo]="photo"
+        [album_title]="photo.album.title"
+        [userProfile]="photo.user_profile"
+        (onPhotoClick)="openPhotoDialog(photo)"
+        [@fadeIn]></photobook-photo-card>
+      <photobook-spinner position="absolute" *ngIf="pendingLoadPhotos"></photobook-spinner>
     </div>
 
     <div class="photos-actions">
-      <button (click)="loadMoreHandler()" type="button" class="button button-border">Показать еще</button>
+      <button
+        *ngIf="loadMore"
+        (click)="loadMoreHandler()"
+        type="button"
+        class="button button-border">Показать еще</button>
     </div>
   </div>
 </section>
