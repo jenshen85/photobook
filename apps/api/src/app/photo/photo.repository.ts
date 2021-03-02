@@ -10,46 +10,53 @@ import { Photo, Auth, Album } from '../entities';
 import { PhotoCredentialsDto, PhotoRoDto } from '@photobook/dto';
 
 import { IFileData } from '../file/file.service';
+import { GetPhotosQueryDto } from './dto/get-photo-query.dto';
 
 @EntityRepository(Photo)
 export class PhotoRepository extends Repository<Photo> {
 
-  async getAll(): Promise<PhotoRoDto[]> {
+  async getAll({take = 0 , skip = 0}: GetPhotosQueryDto): Promise<PhotoRoDto[]> {
     const photos = await this.createQueryBuilder('photo')
       .leftJoinAndSelect('photo.album', 'album')
       .leftJoinAndSelect('photo.user_profile', 'user_profile')
+      .take(take)
+      .skip(skip)
       .getMany()
-    // const photos = await this.find({relations: ['user'], take: 10, skip: 10});
+
     return photos.map((photo) => plainToClass(PhotoRoDto, photo));
   }
 
   async getAllAlbumPhoto(album_id: number): Promise<PhotoRoDto[]> {
-    const photos = await this.find({ where: { album_id } });
+    const photos = await this.createQueryBuilder('photo')
+      .leftJoinAndSelect('photo.album', 'album')
+      .leftJoinAndSelect('photo.user_profile', 'user_profile')
+      .where({ album_id })
+      .getMany();
     return photos.map((photo) => plainToClass(PhotoRoDto, photo));
   }
 
   async getOne(photo_id: number): Promise<PhotoRoDto> {
-    const photo = await this._getById(photo_id);
+    const photo = await this.createQueryBuilder('photo')
+      .leftJoinAndSelect('photo.album', 'album')
+      .leftJoinAndSelect('photo.user_profile', 'user_profile')
+      .where({ id: photo_id })
+      .getOne();
+
+    if (!photo) {
+      throw new NotFoundException(`Photo with ID ${photo_id} not found`);
+    }
+
     return plainToClass(PhotoRoDto, photo);
   }
 
   private async _getById(id: number) {
-    const photo = this.findOne(id, {relations: ['user']});
+    const photo = this.findOne(id, {relations: ['user_profile']});
     if (!photo) {
       throw new NotFoundException(`Photo with ID ${id} not found`);
     }
 
     return photo;
   }
-
-  // private async _getUserPhotoById(id: number, user: User) {
-  //   const photo = this.findOne({ where: { id, user_id: user.id } });
-  //   if (!photo) {
-  //     throw new NotFoundException(`Photo with ID ${id} not found`);
-  //   }
-
-  //   return photo;
-  // }
 
   async createPhoto(
     imageData: IFileData,
@@ -69,7 +76,6 @@ export class PhotoRepository extends Repository<Photo> {
     } catch (error) {
       console.log(error);
       if (error.code === '23505') {
-        
         throw new ConflictException(`Photo with name "${imageData.fileName}" already exists`);
       } else {
         throw new InternalServerErrorException(error);
@@ -78,11 +84,17 @@ export class PhotoRepository extends Repository<Photo> {
   }
 
   async updatePhoto(
+    album_id: number,
     photo_id: number,
     photoCredentials: PhotoCredentialsDto
   ): Promise<PhotoRoDto> {
     const { title, description } = photoCredentials;
-    const photo = await this._getById(photo_id);
+    const photo = await this.findOne({where: { id: photo_id, album_id }});
+
+    if (!photo) {
+      throw new NotFoundException(`Photo with ID ${photo_id} not found`);
+    }
+
     photo.title = title;
     photo.description = description;
 
@@ -94,8 +106,13 @@ export class PhotoRepository extends Repository<Photo> {
     }
   }
 
-  async deletePhoto(photo_id: number): Promise<void> {
-    const photo = await this._getById(photo_id);
+  async deletePhoto(album_id: number, photo_id: number): Promise<void> {
+    const photo = await this.findOne({where: { id: photo_id, album_id }});
+
+    if (!photo) {
+      throw new NotFoundException(`Photo with ID ${photo_id} not found`);
+    }
+
     photo.deleted_at = new Date();
 
     try {

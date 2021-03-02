@@ -8,6 +8,7 @@ import { PhotoRepository } from './photo.repository';
 import { FileService } from '../file/file.service';
 // import { AlbumService } from '../album/album.service';
 import { generateFileName } from '../shared/utils/edit-file-name';
+import { GetPhotosQueryDto } from './dto/get-photo-query.dto';
 
 @Injectable()
 export class PhotoService {
@@ -18,8 +19,8 @@ export class PhotoService {
     private readonly _fileService: FileService
   ) {}
 
-  async getAll(): Promise<PhotoRoDto[]> {
-    return this._photoRepository.getAll();
+  async getAll(getPhotosQuery: GetPhotosQueryDto): Promise<PhotoRoDto[]> {
+    return this._photoRepository.getAll(getPhotosQuery);
   }
 
   async getAllAlbumPhoto(album_id: number): Promise<PhotoRoDto[]> {
@@ -75,13 +76,14 @@ export class PhotoService {
   }
 
   async updatePhoto(
+    album_id: number,
     photo_id: number,
     photoCredentials: PhotoCredentialsDto,
   ): Promise<PhotoRoDto> {
-    return await this._photoRepository.updatePhoto(photo_id, photoCredentials);
+    return await this._photoRepository.updatePhoto(album_id, photo_id, photoCredentials);
   }
 
-  async deletePhoto(photo_id: number): Promise<void> {
-    return await this._photoRepository.deletePhoto(photo_id);
+  async deletePhoto(album_id: number, photo_id: number): Promise<void> {
+    return await this._photoRepository.deletePhoto(album_id, photo_id);
   }
 }

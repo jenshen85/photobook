@@ -12,15 +12,17 @@ import {
   Param,
   ParseIntPipe,
   UploadedFile,
+  Query,
 } from '@nestjs/common';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 
-import { Auth, Photo } from '../entities';
+import { Auth } from '../entities';
 import { PhotoCredentialsDto, PhotoRoDto } from '@photobook/dto';
 
 import { PhotoService } from './photo.service';
 import { JwtAuthGuard } from '../shared/guards/jwt-auth.guard';
 import { GetUser } from '../shared/decorators/get-user.decorator';
+import { GetPhotosQueryDto } from './dto/get-photo-query.dto';
 
 @Controller('photo')
 @UseGuards(JwtAuthGuard)
@@ -28,8 +30,10 @@ export class PhotoController {
   constructor(private readonly _photoService: PhotoService) {}
 
   @Get()
-  getAll(): Promise<PhotoRoDto[]> {
-    return this._photoService.getAll();
+  getAll(
+    @Query(ValidationPipe) getPhotosQuery: GetPhotosQueryDto,
+  ): Promise<PhotoRoDto[]> {
+    return this._photoService.getAll(getPhotosQuery);
   }
 
   @Get('album/:album_id')
@@ -64,18 +68,20 @@ export class PhotoController {
     return this._photoService.createPhotos(album_id, photos, user);
   }
 
-  @Patch(':photo_id')
+  @Patch(':album_id/:photo_id')
   update(
+    @Param('album_id', ParseIntPipe) album_id: number,
     @Param('photo_id', ParseIntPipe) photo_id: number,
     @Body(ValidationPipe) photoCredentials: PhotoCredentialsDto,
   ): Promise<PhotoRoDto> {
-    return this._photoService.updatePhoto(photo_id, photoCredentials);
+    return this._photoService.updatePhoto(album_id, photo_id, photoCredentials);
   }
 
-  @Delete(':photo_id')
+  @Delete(':album_id/:photo_id')
   delete(
-    @Param('photo_id', ParseIntPipe) photo_id: number
+    @Param('album_id', ParseIntPipe) album_id: number,
+    @Param('photo_id', ParseIntPipe) photo_id: number,
   ): Promise<void> {
-    return this._photoService.deletePhoto(photo_id);
+    return this._photoService.deletePhoto(album_id, photo_id);
   }
 }
