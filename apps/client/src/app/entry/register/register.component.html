@@ -44,47 +44,6 @@
         </span>
       </photobook-form-control>
 
-      <!-- <photobook-control
-        className="welcome-form-control"
-        inputName="username"
-        icon="person"
-        label="Имя*">
-        <mat-error>
-          <photobook-fade *ngIf="form.get('username').invalid && form.get('username').touched">
-            <small *ngIf="form.get('username').errors.required">This field is required</small>
-          </photobook-fade>
-        </mat-error>
-      </photobook-control> -->
-
-      <!-- <photobook-control
-        className="welcome-form-control"
-        inputName="email"
-        icon="mail"
-        type="email"
-        label="Электронная почта*">
-        <mat-error *ngIf="form.get('email').invalid && form.get('email').touched">
-          <photobook-fade>
-            <small *ngIf="form.get('email').errors.required">This field is required</small>
-            <small *ngIf="form.get('email').errors.email">Email not valid</small>
-          </photobook-fade>
-        </mat-error>
-      </photobook-control>
-      <photobook-control
-        className="welcome-form-control"
-        inputName="password"
-        icon="lock"
-        type="password"
-        label="Пароль*">
-        <mat-error *ngIf="form.get('password').invalid && form.get('password').touched">
-          <photobook-fade>
-            <small *ngIf="form.get('password').errors.required">This field is required</small>
-            <small *ngIf="form.get('password').errors.minlength">
-              Password where short, min length: {{form.get('password').errors.minlength.requiredLength}}
-            </small>
-          </photobook-fade>
-        </mat-error>
-      </photobook-control> -->
-
       <div class="entry-form-bottom">
         <div class="entry-form-actions">
           <button
@@ -101,19 +60,6 @@
             Войти
           </button>
         </div>
-        <!-- <mat-action-row>
-          <button
-            [disabled]="form.invalid && form.touched"
-            type="submit"
-            mat-raised-button
-            class="entry-form-btn entry-form-btn--blue">
-            Зарегистрироваться
-          </button>
-          <a [routerLink]="['/']" mat-button
-            class="entry-form-btn">
-            Войти
-          </a>
-        </mat-action-row> -->
       </div>
     </form>
   </div>
