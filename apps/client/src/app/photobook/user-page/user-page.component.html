@@ -1,0 +1,49 @@
+<photobook-spinner *ngIf="pending; else content"></photobook-spinner>
+
+<ng-template #content>
+  <header
+    [currentUserProfile]="currentUserProfile"
+    [authUserProfile]="authUserProfile"
+    [isEdit]="isEdit"
+    [isAlbums]="true"
+    [isAuthUser]="isAuth"
+    (onEditHandler)="editHandler($event)"
+    photobook-header-user>
+  </header>
+
+  <div class="top-bar">
+    <div class="container top-bar__container">
+      <photobook-search-control placeholder="Исследовать мир"></photobook-search-control>
+    </div>
+  </div>
+
+  <main class="photobook-main">
+    <section class="photobook-section albums">
+      <div class="container">
+        <div class="photobook-head">
+          <h2 class="photobook-main-title">Мои альбомы</h2>
+          <button *ngIf="currentUserProfile.id === authUserProfile.id" type="button" (click)="addAlbum()" [icon]="addIcon" photobook-ph-button>Добавить</button>
+        </div>
+
+        <div class="photo-albums">
+          <photbook-photo-album
+            *ngFor="let album of albums"
+            [album]="album"
+            (editClick)="addAlbum(album)"
+            [editable]="currentUserProfile.id === authUserProfile.id"
+            [@fadeIn]
+            ></photbook-photo-album>
+        </div>
+      </div>
+    </section>
+    <photobook-spinner *ngIf="pending"></photobook-spinner>
+
+    <div class="photobook-main-overlay" *ngIf="isEdit" [@fadeIn]></div>
+  </main>
+
+  <footer
+    photobook-footer
+    [userBg]="currentUserProfile.cover"
+    [isEdit]="isEdit"></footer>
+
+</ng-template>
