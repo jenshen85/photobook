@@ -115,6 +115,10 @@ export class AuthService {
     this._currentUserProfileSubj.next(user);
   }
 
+  public setAuthUserProfile(user: UserProfileRoI) {
+    this._authUserProfileSubj.next(user);
+  }
+
   isAuthenticated(): boolean {
     const token = tokenGetter();
     return token && !this._jwtHelper.isTokenExpired(token);
