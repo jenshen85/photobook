@@ -32,7 +32,7 @@ export class PhotobookComponent implements OnInit {
   getMe(): void {
     this.pending = true;
     this.subs.sink = this._authService.getMeProfile().subscribe(
-      (me) => console.log,
+      console.log,
       (error) => {
         // TODO: error handling
         console.log(error);

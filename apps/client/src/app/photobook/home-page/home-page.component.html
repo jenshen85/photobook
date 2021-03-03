@@ -5,7 +5,7 @@
     [currentUserProfile]="currentUserProfile"
     [authUserProfile]="authUserProfile"
     [isEdit]="isEdit"
-    [isAuthUser]="isAuthUser"
+    [isAuthUser]="isAuth"
     (onEditHandler)="editHandler($event)"
     photobook-header-user>
   </header>
@@ -17,17 +17,32 @@
   </div>
 
   <main class="photobook-main">
-    <router-outlet></router-outlet>
-    <!-- <photobook-home-page-photos
-      *ngIf="!isAlbums; else albumTemplate"
-      [currentUserProfile]="currentUserProfile"
-      [authUserProfile]="authUserProfile"></photobook-home-page-photos>
+    <section class="photobook-section photos">
+      <div class="container">
+        <div class="photobook-head">
+          <h2 class="photobook-main-title">Новое в мире</h2>
+        </div>
 
-    <ng-template #albumTemplate>
-      <photobook-home-page-albums
-        [currentUserProfile]="currentUserProfile"
-        [authUserProfile]="authUserProfile"></photobook-home-page-albums>
-    </ng-template> -->
+        <div class="photo-cards">
+          <photobook-photo-card
+            *ngFor="let photo of photos" [photo]="photo"
+            [album_title]="photo.album.title"
+            [userProfile]="photo.user_profile"
+            (onPhotoClick)="openPhotoDialog(photo)"
+            [@fadeIn]></photobook-photo-card>
+          <photobook-spinner position="absolute" *ngIf="pendingLoadPhotos"></photobook-spinner>
+        </div>
+
+        <div class="photos-actions">
+          <button
+            *ngIf="loadMore"
+            (click)="loadMoreHandler()"
+            type="button"
+            class="button button-border">Показать еще</button>
+        </div>
+      </div>
+    </section>
+
     <div class="photobook-main-overlay" *ngIf="isEdit" [@fadeIn]></div>
   </main>
 
@@ -35,4 +50,5 @@
     photobook-footer
     [userBg]="currentUserProfile.cover"
     [isEdit]="isEdit"></footer>
+
 </ng-template>

@@ -2,19 +2,23 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@
 import { SubSink } from 'subsink';
 
 import {
+  PhotoRoI,
   SpriteIconEnum,
   UserProfileRoI
 } from '@photobook/data';
 import { ActivatedRoute } from '@angular/router';
 import { fadeAnimations } from '../../shared/utils/animations';
 import { AuthService } from '../../auth/auth.service';
+import { PhotobookService } from '../photobook.service';
+import { openPhotoInDataType, PhotoViewComponent } from '../../shared/components/photo-view/photo-view.component';
+import { Dialog } from '@photobook/ui';
 
 @Component({
   selector: 'photobook-home-page',
   templateUrl: './home-page.component.html',
   styleUrls: ['./home-page.component.scss'],
   animations: [ fadeAnimations.fadeIn() ],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  // changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HomePageComponent implements OnInit {
   isAuthUser: boolean = true;
@@ -26,10 +30,17 @@ export class HomePageComponent implements OnInit {
 
   isEdit = false;
   pending: boolean = true;
+  pendingLoadPhotos = false;
+  photos: PhotoRoI[] = [];
+
+  private _take: number = 9;
+  private _skip: number = 0;
+  loadMore = true;
 
   constructor(
     private readonly _authService: AuthService,
-    private readonly _route: ActivatedRoute,
+    private readonly _photoService: PhotobookService,
+    private readonly _dialog: Dialog,
     private readonly _changeDetectionRef: ChangeDetectorRef,
   ) {}
 
@@ -38,40 +49,16 @@ export class HomePageComponent implements OnInit {
       this._authService.authUserProfile().subscribe((authUserProfile) => {
         if(authUserProfile) {
           this.authUserProfile = authUserProfile;
-          this.getUserProfile();
-        }
-      }),
-
-      this._authService.currentUserProfile().subscribe((currentUserProfile): void => {
-        if(currentUserProfile) {
-          this.currentUserProfile = currentUserProfile;
-          this.isAuthUser = currentUserProfile.id === this.authUserProfile.id;
+          this.currentUserProfile = authUserProfile;
           this.pending = false;
-          this._changeDetectionRef.markForCheck();
+          this.getPhotos();
         }
       })
     )
   }
 
-  getUserProfile(): void {
-    this.pending = true;
-    this.subs.sink = this._getRouteParamsMap().subscribe(
-      params => {
-        const userProfileId = params.get('user_profile_id');
-
-        if(userProfileId && +userProfileId !== this.authUserProfile.id) {
-          this.subs.sink = this._authService.getUserProfile(+userProfileId).subscribe(
-            (profile) => this._authService.setCurrentUserProfile(profile),
-            (error) => {
-              // TODO: error handling
-              console.log(error);
-            }
-          );
-        } else {
-          this._authService.setCurrentUserProfile(this.authUserProfile);
-        }
-      }
-    )
+  get isAuth(): boolean {
+    return this.currentUserProfile.id === this.authUserProfile.id;
   }
 
   ngOnDestroy(): void {
@@ -82,11 +69,47 @@ export class HomePageComponent implements OnInit {
     this.isEdit = isEdit;
   }
 
-  private _getRouteParamsMap() {
-    if(this._route.firstChild) {
-      return this._route.firstChild.paramMap;
+  getPhotos() {
+    this.pendingLoadPhotos = true;
+    this.subs.sink = this._photoService.getPhotos({
+      take: this._take.toString(),
+      skip: this._skip.toString()
+    }).subscribe(
+      (photos) => {
+        if(photos.length) {
+          photos.forEach(photo => this.photos.push(photo));
+          this._skip = this._skip + this._take;
+        } else {
+          this.loadMore = false;
+        }
+      },
+      (error) => {
+        // TODO: error handling
+        console.log(error);
+      },
+      () => {
+        this.pendingLoadPhotos = false;
+        this._changeDetectionRef.markForCheck();
+      }
+    );
+  }
+
+  openPhotoDialog(photo: PhotoRoI): void {
+    const openPhotoData: openPhotoInDataType = {
+      authUserProfile: this.authUserProfile,
+      photo
     }
 
-    return this._route.paramMap;
+    this._dialog.open(PhotoViewComponent, {
+      data: openPhotoData,
+      isScrolled: true,
+      autoFocus: false,
+      scrolledOverlayPosition: 'top',
+      dialogContainerClass: 'photo-view-content'
+    });
+  }
+
+  loadMoreHandler() {
+    this.getPhotos();
   }
 }
