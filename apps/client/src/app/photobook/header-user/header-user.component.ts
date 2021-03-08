@@ -1,6 +1,5 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { SpriteIconEnum, UserProfileCredentialsI, UserProfileRoI } from '@photobook/data';
 import { SubSink } from 'subsink';
 import { AuthService } from '../../auth/auth.service';
@@ -22,7 +21,6 @@ export class HeaderUserComponent implements OnInit {
   subs = new SubSink();
 
   @Input() isAlbums?: boolean;
-  @Input() isAuthUser?: boolean;
   @Input() authUserProfile: UserProfileRoI;
   @Input() currentUserProfile: UserProfileRoI;
   @Input() isEdit: boolean;
@@ -39,41 +37,9 @@ export class HeaderUserComponent implements OnInit {
 
   constructor(
     private readonly _authService: AuthService,
-    private readonly _route: ActivatedRoute,
-    private readonly _router: Router,
-    private readonly _changeDetectionRef: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
-    this.subs.add(
-      // this._router.events.subscribe(event => {
-      //   if(event instanceof NavigationEnd) {
-      //     const profileId = this._route.firstChild.snapshot.paramMap.get('user_profile_id')
-      //     this.isAlbums = profileId && profileId.toString() ? true : false;
-
-      //     // if(!this.isAlbums) {
-      //     //   console.log('1');
-      //     //   // this._authService.setCurrentUserProfile(this.authUserProfile);
-      //     // } else {
-      //     //   console.log('2');
-      //     //   // this._authService.setCurrentUserProfile(this.currentUserProfile);
-      //     // }
-      //     // this.getUserProfile();
-      //   }
-      // }),
-
-      // this._route.firstChild.paramMap.subscribe((params) => {
-      //   const profileId = params.get('user_profile_id');
-
-      //   if(profileId) {
-      //     this.isAlbums = true;
-      //     // this._changeDetectionRef.markForCheck();
-      //   }
-
-      //   // this.getUserProfile();
-      // })
-    );
-
     this.profileForm = new FormGroup({
       first_name: new FormControl(this.authUserProfile.first_name, [
         Validators.required,
@@ -102,6 +68,18 @@ export class HeaderUserComponent implements OnInit {
     this._authService.logout();
   }
 
+  get isAuth(): boolean {
+    return this.currentUserProfile.id === this.authUserProfile.id;
+  }
+
+  get user(): UserProfileRoI {
+    if(this.authUserProfile.id === this.currentUserProfile.id) {
+      return this.authUserProfile;
+    }
+
+    return this.currentUserProfile;
+  }
+
   updateProfileHandler() {
     const data = toFormData<UserProfileCredentialsI>(this.profileForm.value);
     this.pending = true;
@@ -113,11 +91,11 @@ export class HeaderUserComponent implements OnInit {
           last_name: profile.last_name,
           description: profile.description,
         });
-        this._authService.setAuthUserProfile(profile);
       },
       (error) => {
         // TODO: error handling
-        console.log(error)
+        console.log(error);
+        this.pending = false;
       },
       () => {
         this.pending = false;
@@ -125,12 +103,4 @@ export class HeaderUserComponent implements OnInit {
       }
     );
   }
-
-  // private _getRouteParamsMap() {
-  //   if(this._route.firstChild) {
-  //     return this._route.firstChild.paramMap;
-  //   }
-
-  //   return this._route.paramMap;
-  // }
 }

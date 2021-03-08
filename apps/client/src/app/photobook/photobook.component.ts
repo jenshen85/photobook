@@ -11,33 +11,22 @@ import { AuthService } from '../auth/auth.service';
 })
 export class PhotobookComponent implements OnInit {
   subs = new SubSink();
-  pending = false;
 
   constructor(
     private readonly _authService: AuthService,
   ) {}
 
   ngOnInit(): void {
-    this.subs.sink = this._authService.authUserProfile().subscribe((authUserProfile) => {
-      if(!authUserProfile) {
-        this.getMe();
+    this.subs.sink = this._authService.getMeProfile().subscribe(
+      (_) => {},
+      (error) => {
+        // TODO: error handling
+        console.log(error);
       }
-    });
+    );
   }
 
   ngOnDestroy(): void {
     this.subs.unsubscribe();
-  }
-
-  getMe(): void {
-    this.pending = true;
-    this.subs.sink = this._authService.getMeProfile().subscribe(
-      console.log,
-      (error) => {
-        // TODO: error handling
-        console.log(error);
-      },
-      () => this.pending = false
-    );
   }
 }
