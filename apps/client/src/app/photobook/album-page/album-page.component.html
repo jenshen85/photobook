@@ -7,7 +7,7 @@
     [album]="album"
     (onEditHandler)="editHandler($event)"
     (onAddPhotoHandler)="addPhotoHandler()"
-    [isAuthUser]="isAuthUser"
+    [isAuthUser]="isAuth"
     [isEdit]="isEdit"
     *ngIf="!pendingLoadAlbum"
   ></header>
@@ -38,11 +38,10 @@
           <photobook-spinner position="absolute" *ngIf="pendingLoadAlbum; else photosTmp"></photobook-spinner>
           <ng-template #photosTmp>
             <photobook-photo-card
-              [isAuthUser]="isAuthUser"
+              [isAuthUser]="isAuth"
               [hasInfo]="false"
               *ngFor="let photo of photos" [photo]="photo" [@fadeIn]
               [userProfile]="currentUserProfile"
-              [album_title]="album.title"
               (onPhotoClick)="openPhotoDialog($event)"
               (onEditClick)="openEditPhotoDilaog(photo)"
             ></photobook-photo-card>

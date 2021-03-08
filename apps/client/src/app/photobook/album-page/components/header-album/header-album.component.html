@@ -33,7 +33,7 @@
       </ng-template>
     </div>
 
-    <div class="header-actions" *ngIf="!isEdit; else albumPreview" [@fade]>
+    <div class="header-actions" *ngIf="!isEdit; else albumPreview" [@fadeIn]>
       <span class="header-actions__inner">
         <button *ngIf="isAuthUser" type="button" (click)="onEditHandler.emit(true)" [icon]="editIcon" photobook-ph-button>Редактировать</button>
         <a [routerLink]="['/', 'photobook']" [icon]="homeIcon" photobook-ph-button>Домой</a>
@@ -42,14 +42,14 @@
       </span>
     </div>
     <ng-template #albumPreview>
-      <photobook-upload-image formControlName="preview" [@fade]>
+      <photobook-upload-image formControlName="preview" [@fadeIn]>
         Изменить фон
       </photobook-upload-image>
     </ng-template>
   </div>
 </div>
 
-<div class="edit-bar" *ngIf="isEdit" [@fade]>
+<div class="edit-bar" *ngIf="isEdit" [@fadeIn]>
   <div class="container">
     <div class="edit-bar__content">
       <div class="edit-bar__actions">

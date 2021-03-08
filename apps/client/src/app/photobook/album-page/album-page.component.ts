@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { SubSink } from 'subsink';
 
 import {
+  ActionEnum,
   AlbumRoI,
   PhotoRoI,
   SpriteIconEnum,
@@ -16,7 +17,12 @@ import { PhotobookService } from '../photobook.service';
 import { openPhotoInDataType, PhotoViewComponent } from '../../shared/components/photo-view/photo-view.component';
 import { AddPhotoComponent, addPhotoDataInType, addPhotoDataOutType } from './components/add-photo/add-photo.component';
 import { fadeAnimations } from '../../shared/utils/animations';
-import { EditPhotoComponent } from './components/edit-photo/edit-photo.component';
+import {
+  EditPhotoComponent,
+  editPhotoInDataType,
+  editPhotoOutDataType,
+  deletePhotoOutDataType
+} from './components/edit-photo/edit-photo.component';
 
 @Component({
   selector: 'photobook-album-page',
@@ -29,43 +35,38 @@ export class AlbumPageComponent implements OnInit {
 
   authUserProfile: UserProfileRoI;
   currentUserProfile: UserProfileRoI;
+
   album: AlbumRoI;
   photos: PhotoRoI[] = [];
+
   addIcon: SpriteIconEnum = SpriteIconEnum.add;
 
-  isAuthUser: boolean;
   isEdit: boolean;
   pending: boolean;
-  pendingLoadAlbum: boolean = true;
+  pendingLoadAlbum = true;
 
   constructor(
     private readonly _authService: AuthService,
     private readonly _photoService: PhotobookService,
     private readonly dialog: Dialog,
-    // private readonly router: Router,
     private readonly _route: ActivatedRoute,
-    private readonly _changeDetectionRef: ChangeDetectorRef,
+    // private readonly router: Router,
+    // private readonly _changeDetectionRef: ChangeDetectorRef,
   ) { }
 
   ngOnInit(): void {
-    this.subs.add(
-      this._authService.authUserProfile().subscribe((authUserProfile) => {
-        if(authUserProfile) {
-          this.authUserProfile = authUserProfile;
-          this.getUserProfile();
-        }
-      }),
+    this.subs.sink = this._authService.authUserProfile().subscribe((authUserProfile) => {
+      if(authUserProfile) {
+        this.authUserProfile = authUserProfile;
+        // this.getUserProfile();
+      }
+    })
+    this.getUserProfile();
+    this.loadAlbum();
+  }
 
-      this._authService.currentUserProfile().subscribe((currentUserProfile): void => {
-        if(currentUserProfile) {
-          this.currentUserProfile = currentUserProfile;
-          this.isAuthUser = currentUserProfile.id === this.authUserProfile.id;
-          this.pending = false;
-          this.loadAlbum();
-          this._changeDetectionRef.markForCheck();
-        }
-      })
-    );
+  get isAuth(): boolean {
+    return this.currentUserProfile?.id === this.authUserProfile?.id;
   }
 
   ngOnDestroy(): void {
@@ -76,17 +77,17 @@ export class AlbumPageComponent implements OnInit {
     this.pending = true;
     const userProfileId = this._route.snapshot.paramMap.get('user_profile_id');
 
-    if(userProfileId && +userProfileId !== this.authUserProfile.id) {
-      this.subs.sink = this._authService.getUserProfile(+userProfileId).subscribe(
-        (profile) => this._authService.setCurrentUserProfile(profile),
-        (error) => {
-          // TODO: error handling
-          console.log(error);
-        }
-      );
-    } else {
-      this._authService.setCurrentUserProfile(this.authUserProfile);
-    }
+    this.subs.sink = this._authService.getUserProfile(+userProfileId).subscribe(
+      (profile) => {
+        this.currentUserProfile = profile;
+        this.pending = false;
+      },
+      (error) => {
+        // TODO: error handling
+        console.log(error);
+        this.pending = false;
+      }
+    );
   }
 
   loadAlbum() {
@@ -122,14 +123,16 @@ export class AlbumPageComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((data: addPhotoDataOutType) => {
       if(data) {
-        this.photos = [...this.photos, ...data]
+        data.forEach(photo => this.photos.push(photo));
       }
     });
   }
 
-  openPhotoDialog(photo: PhotoRoI): void {
+  openPhotoDialog({photo, userProfile}): void {
     const data: openPhotoInDataType = {
-      photo, authUserProfile: this.authUserProfile
+      photo,
+      authUserProfile: this.authUserProfile,
+      photoUserProfile: userProfile
     };
 
     const dialogRef = this.dialog.open(PhotoViewComponent, {
@@ -142,32 +145,32 @@ export class AlbumPageComponent implements OnInit {
   }
 
   openEditPhotoDilaog(photo: PhotoRoI): void {
+    const data: editPhotoInDataType = {
+      photo,
+      authUserProfile: this.authUserProfile
+    }
     const dialogRef = this.dialog.open(EditPhotoComponent, {
-      data: {
-        photo,
-        authUserProfile: this.authUserProfile
-      },
+      data,
       isScrolled: true,
       autoFocus: false,
       scrolledOverlayPosition: 'center',
       dialogContainerClass: ['photo-view-container']
     });
 
-    dialogRef.afterClosed().subscribe((photo) => {
-      const index = this.photos.findIndex(album => album.id === photo.id);
-      this.photos = [ ...this.photos.slice(0, index), photo, ...this.photos.slice(index + 1)]
+    dialogRef.afterClosed().subscribe((data: editPhotoOutDataType | deletePhotoOutDataType) => {
+      if(data.action === ActionEnum.update) {
+        if(data.photo) {
+          const index = this.photos.findIndex(photo => photo.id === data.photo.id);
+          this.photos = [ ...this.photos.slice(0, index), data.photo, ...this.photos.slice(index + 1)];
+        }
+      } else if(data.action === ActionEnum.delete) {
+        const index = this.photos.findIndex(photo => photo.id === data.photo_id);
+        this.photos.splice(index, 1);
+      }
     });
   }
 
   editHandler(isEdit: boolean) {
     this.isEdit = isEdit;
-  }
-
-  private _getRouteParamsMap() {
-    if(this._route.firstChild) {
-      return this._route.firstChild.paramMap;
-    }
-
-    return this._route.paramMap;
   }
 }

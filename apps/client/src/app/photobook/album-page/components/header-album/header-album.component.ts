@@ -1,12 +1,13 @@
-import { transition, trigger, useAnimation } from '@angular/animations';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { fadeIn } from 'ng-animate';
 
-import { AlbumRoI, SpriteIconEnum, UserProfileRoI } from '@photobook/data';
+import { AlbumRoI, PhotoCredentialsI, SpriteIconEnum, UserProfileRoI } from '@photobook/data';
 import { Dialog } from '@photobook/ui';
 
-import { getUserName } from 'apps/client/src/app/shared/utils/utils';
+import { toFormData, userName } from 'apps/client/src/app/shared/utils/utils';
+import { SubSink } from 'subsink';
+import { PhotobookService } from '../../../photobook.service';
+import { fadeAnimations } from 'apps/client/src/app/shared/utils/animations';
 
 @Component({
   selector: 'header[photobook-header-album]',
@@ -17,22 +18,10 @@ import { getUserName } from 'apps/client/src/app/shared/utils/utils';
     '[class]': 'isEdit ? "user-edit" : ""',
     '[style.backgroundImage]': 'album.preview ? "url(" + album.preview + ")" : "url(assets/images/default-bg.jpg)"'
   },
-  animations: [
-    trigger('fade', [
-      transition(
-        'void => *',
-        useAnimation(fadeIn, { params: { timing: 0.3 } })
-      ),
-    ]),
-    trigger('fadeIn', [
-      transition(
-        'void => *',
-        useAnimation(fadeIn, { params: { timing: 0.3 } })
-      ),
-    ]),
-  ],
+  animations: [ fadeAnimations.fadeIn(), fadeAnimations.fadeOut() ],
 })
 export class HeaderAlbumComponent implements OnInit {
+  subs = new SubSink();
   @Input() isAuthUser?: boolean;
   @Input() authUserProfile: UserProfileRoI;
   @Input() currentUserProfile: UserProfileRoI;
@@ -49,7 +38,10 @@ export class HeaderAlbumComponent implements OnInit {
   homeIcon: SpriteIconEnum = SpriteIconEnum.home;
   addIcon: SpriteIconEnum = SpriteIconEnum.add;
 
-  constructor(private readonly dialog: Dialog) {}
+  constructor(
+    private readonly dialog: Dialog,
+    private readonly _photoService: PhotobookService,
+  ) {}
 
   ngOnInit(): void {
     this.albumForm = new FormGroup({
@@ -64,33 +56,31 @@ export class HeaderAlbumComponent implements OnInit {
     });
   }
 
-  // editHandler(isEdit: boolean) {
-  //   this.onEditHandler.emit(isEdit);
-  // }
-
   updateProfileHandler() {
-    console.log(this.albumForm);
+    const data = toFormData<PhotoCredentialsI>(this.albumForm.value);
+    this.savePending = true;
+    this.subs.sink = this._photoService.updateAlbum(this.album.id, data).subscribe(
+      (album: AlbumRoI) => {
+        this.album = album;
+        this.albumForm.patchValue({
+          title: album.title,
+          description: album.description
+        });
+        this.savePending = false;
+        this.onEditHandler.emit(false);
+      },
+      (error) => {
+        // TODO: error handling
+        console.log(error);
+        this.savePending = false;
+      }
+    );
   }
 
-  // addPhotoHandler() {
-  //   const data: addPhotoDataInType = {
-  //     authUserProfile: this.authUserProfile,
-  //     album: this.album
-  //   }
-
-  //   this.dialog.open(AddPhotoComponent, {
-  //     data,
-  //     isScrolled: true,
-  //     scrolledOverlayPosition: 'center',
-  //     dialogContainerClass: ['add-photo-container']
-  //   });
-  // }
-
   get getName() {
-    return getUserName(
-      this.currentUserProfile.user.username,
-      this.currentUserProfile.first_name,
-      this.currentUserProfile.last_name
-    );
+    return userName({
+      first_name: this.currentUserProfile.first_name,
+      last_name: this.currentUserProfile.last_name
+    });
   }
 }

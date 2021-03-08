@@ -1,9 +1,8 @@
 import { Component, OnInit, ChangeDetectionStrategy, Inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { PhotoRoI, SpriteIconEnum, UserProfileRoI } from '@photobook/data';
+import { ActionEnum, PhotoRoI, SpriteIconEnum, UserProfileRoI } from '@photobook/data';
 import { PhotoCredentialsDto } from '@photobook/dto';
 import { DialogRef, DIALOG_DATA } from '@photobook/ui';
-import { toFormData } from 'apps/client/src/app/shared/utils/utils';
 import { SubSink } from 'subsink';
 import { PhotobookService } from '../../../photobook.service';
 
@@ -11,7 +10,16 @@ export type editPhotoInDataType = {
   photo: PhotoRoI,
   authUserProfile: UserProfileRoI
 }
-export type editPhotoOutDataType = PhotoRoI
+
+export type editPhotoOutDataType = {
+  photo: PhotoRoI,
+  action: ActionEnum.update
+}
+
+export type deletePhotoOutDataType = {
+  photo_id: number,
+  action: ActionEnum.delete
+}
 
 @Component({
   selector: 'photobook-edit-photo',
@@ -34,15 +42,12 @@ export class EditPhotoComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    console.log(this.data);
-    
     this.photo = this.data.photo;
     this.authUserProfile = this.data.authUserProfile;
 
     this.form = new FormGroup(
       {
         title: new FormControl(this.photo ? this.photo.title : null, [
-          // Validators.required,
           Validators.maxLength(20),
         ]),
         description: new FormControl(
@@ -56,29 +61,32 @@ export class EditPhotoComponent implements OnInit {
 
   submitHandler() {
     if (this.form.valid) {
-      console.log(this.form.valid);
-
-      const data: FormData = toFormData<PhotoCredentialsDto>(this.form.value);
+      const data: PhotoCredentialsDto = this.form.value;
       this.pending = true;
-      this.subs.sink = this._photoBookService.updatePhoto(
-        this.photo.album_id, this.photo.id, data).subscribe(
-        (photo) => {
-          this.pending = false;
-          this.dialogRef.close(photo);
-        },
-        (error) => {
-          this.pending = false;
-          console.log(error);
-        }
-      );
+      this.subs.sink = this._photoBookService.updatePhoto<PhotoCredentialsDto, PhotoRoI>(this.photo.album_id, this.photo.id, data)
+        .subscribe(
+          (photo) => {
+            this.pending = false;
+            const data: editPhotoOutDataType = {
+              photo,
+              action: ActionEnum.update
+            };
+            this.dialogRef.close(data);
+          },
+          (error) => {
+            this.pending = false;
+            console.log(error);
+          }
+        );
     }
   }
 
   removeAlbum(album_id: number, photo_id: number): void {
     this.subs.sink = this._photoBookService.removePhoto(album_id, photo_id).subscribe(
       () => {
-        const data = {
-          album_id
+        const data: deletePhotoOutDataType = {
+          photo_id,
+          action: ActionEnum.delete
         }
         this.dialogRef.close(data);
       }
