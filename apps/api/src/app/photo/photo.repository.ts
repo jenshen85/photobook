@@ -17,32 +17,38 @@ export class PhotoRepository extends Repository<Photo> {
 
   async getAll({take = 0 , skip = 0}: GetPhotosQueryDto): Promise<PhotoRoDto[]> {
     const photos = await this.createQueryBuilder('photo')
-      .leftJoinAndSelect('photo.album', 'album')
-      .leftJoinAndSelect('photo.user_profile', 'user_profile')
+      .where('photo.deleted_at IS NULL')
+      .leftJoinAndSelect('photo.album', 'album', 'album.deleted_at IS NULL')
+      .leftJoinAndSelect('photo.user_profile', 'user_profile', 'user_profile.deleted_at IS NULL')
       .take(take)
       .skip(skip)
-      .getMany()
+      .getMany();
 
-    return photos.map((photo) => plainToClass(PhotoRoDto, photo));
+    const resultPhotos = photos.filter((photo) => photo.album && photo.user_profile);
+    return resultPhotos.map((photo) => plainToClass(PhotoRoDto, photo));
   }
 
   async getAllAlbumPhoto(album_id: number): Promise<PhotoRoDto[]> {
     const photos = await this.createQueryBuilder('photo')
-      .leftJoinAndSelect('photo.album', 'album')
-      .leftJoinAndSelect('photo.user_profile', 'user_profile')
+      .where('photo.deleted_at IS NULL')
+      .leftJoinAndSelect('photo.album', 'album', 'album.deleted_at IS NULL')
+      .leftJoinAndSelect('photo.user_profile', 'user_profile', 'user_profile.deleted_at IS NULL')
       .where({ album_id })
       .getMany();
-    return photos.map((photo) => plainToClass(PhotoRoDto, photo));
+
+    const resultPhotos = photos.filter((photo) => photo.album && photo.user_profile);
+    return resultPhotos.map((photo) => plainToClass(PhotoRoDto, photo));
   }
 
   async getOne(photo_id: number): Promise<PhotoRoDto> {
     const photo = await this.createQueryBuilder('photo')
-      .leftJoinAndSelect('photo.album', 'album')
-      .leftJoinAndSelect('photo.user_profile', 'user_profile')
+      .where('photo.deleted_at IS NULL')
+      .leftJoinAndSelect('photo.album', 'album', 'album.deleted_at IS NULL')
+      .leftJoinAndSelect('photo.user_profile', 'user_profile', 'user_profile.deleted_at IS NULL')
       .where({ id: photo_id })
       .getOne();
 
-    if (!photo) {
+    if (!photo || (!photo.album && !photo.user_profile)) {
       throw new NotFoundException(`Photo with ID ${photo_id} not found`);
     }
 

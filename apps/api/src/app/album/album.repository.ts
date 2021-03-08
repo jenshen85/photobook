@@ -19,14 +19,11 @@ export class AlbumRepository extends Repository<Album> {
 
   async getById(user_profile_id: number, album_id: number): Promise<AlbumRoDto> {
     const album = await this.createQueryBuilder('album')
-      .leftJoinAndSelect('album.user_profile', 'user_profile')
+      .where('album.deleted_at IS NULL')
+      .leftJoinAndSelect('album.user_profile', 'user_profile', 'user_profile.deleted_at IS NULL')
       .where('album.user_profile_id = :user_profile_id', { user_profile_id })
       .andWhere('album.id = :album_id', { album_id })
-      .leftJoinAndSelect('album.photos', 'photo')
-      // .from((subQuery) => {
-      //   return subQuery
-      //     .innerJoinAndSelect('photos', 'photo')
-      // }, 'photo')
+      .leftJoinAndSelect('album.photos', 'photo', 'photo.deleted_at IS NULL')
       .getOne();
 
     if (!album) {
@@ -35,18 +32,6 @@ export class AlbumRepository extends Repository<Album> {
 
     return plainToClass(AlbumRoDto, album);
   }
-
-  // async getUserAlbumById(user_id: number, album_id: number): Promise<AlbumRoDto> {
-  //   const found = await this.findOne({
-  //     where: { id: album_id, user_id: user_id },
-  //   });
-
-  //   if (!found) {
-  //     throw new NotFoundException(`Album with ID ${album_id} not found`);
-  //   }
-
-  //   return plainToClass(AlbumRoDto, found);
-  // }
 
   async getWithDeleted(): Promise<Album[]> {
     const found = await this.find({ withDeleted: true });

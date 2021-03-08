@@ -15,6 +15,7 @@ export class UserProfileRepository extends Repository<UserProfile> {
 
   async getMe(user: Auth): Promise<UserProfileRODto> {
     const meProfile = await this.createQueryBuilder('user_profile')
+      .where('user_profile.deleted_at IS NULL')
       .leftJoinAndSelect('user_profile.user', 'user')
       .where('user_profile.user_id = :user_id', { user_id: user.id })
       .getOne();
@@ -28,11 +29,6 @@ export class UserProfileRepository extends Repository<UserProfile> {
 
   async getUserProfile(user_profile_id: number): Promise<UserProfileRODto> {
     const profile = await this.findOne({where: {id: user_profile_id}, relations: ['user']});
-    // const user = await this.createQueryBuilder('user_profile')
-    //   .leftJoinAndSelect('user_profile.user', 'user', 'user_profile.user_id = :user_id',
-    //     { user_id: user_profile_id, })
-    //   // .where('user_profile.user_id = :user_id', { user_id: user.id })
-    //   .getOne();
 
     if (!profile) {
       throw new NotFoundException('Profile does not exists');
