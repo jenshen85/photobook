@@ -1,6 +1,6 @@
 <div class="user" *ngIf="profile">
   <div class="user__inner">
-    <div class="user__ava">
+    <div class="user__ava" *ngIf="profile">
       <img *ngIf="profile.avatar; else fallbackImg" [src]="profile.avatar" [alt]="userName">
       <ng-template #fallbackImg>
         <span photobook-app-icon [icon]="userIcon"></span>
@@ -31,5 +31,13 @@
         </ng-template>
       </div>
     </div>
+  </div>
+</div>
+
+<div class="user-fallback" *ngIf="!profile">
+  <div class="user-fallback__ava"></div>
+  <div class="user-fallback__content">
+    <div class="user-fallback__content-row"></div>
+    <div class="user-fallback__content-row"></div>
   </div>
 </div>

@@ -3,13 +3,13 @@ import { PhotoRoI, SpriteIconEnum, UserProfileRoI } from '@photobook/data';
 import { DialogRef, DIALOG_DATA } from '@photobook/ui';
 
 import { PhotobookService } from '../../../photobook/photobook.service';
+import { userName } from '../../utils/utils';
 // import { getUserName } from '../../utils/utils';
-// import { DIALOG_DATA } from '../dialog/dialog';
-// import { DialogRef } from '../dialog/dialog-ref';
 
 export type openPhotoInDataType = {
   photo: PhotoRoI;
   authUserProfile: UserProfileRoI;
+  photoUserProfile: UserProfileRoI;
 }
 
 @Component({
@@ -21,12 +21,12 @@ export type openPhotoInDataType = {
 export class PhotoViewComponent implements OnInit {
   photo: PhotoRoI;
   authUserProfile: UserProfileRoI;
+  photoUserProfile: UserProfileRoI;
   loadPhoto: boolean;
   moreIcon = SpriteIconEnum.more;
   leftIcon = SpriteIconEnum.arrow_left;
   rightIcon = SpriteIconEnum.arrow_right;
-  userName: string;
-  authUserName: string;
+  comments = [];
 
   constructor(
     private photobookService: PhotobookService,
@@ -37,12 +37,27 @@ export class PhotoViewComponent implements OnInit {
   ngOnInit(): void {
     this.photo = this.data.photo;
     this.authUserProfile = this.data.authUserProfile;
-    // this.userName = getUserName(this.photo.user.username, this.photo.user_profile.first_name, this.photo.user_profile.last_name)
-    // this.authUserName = getUserName(this.authUser.username, this.authUser.user_profile.first_name, this.authUser.user_profile.last_name)
+    this.photoUserProfile = this.data.photoUserProfile;
     this.loadPhoto = true;
+  }
+
+  get userName(): string {
+    return userName({ first_name: this.photoUserProfile.first_name, last_name: this.photoUserProfile.last_name});
+  }
+
+  get authUserName(): string {
+    return userName({ first_name: this.authUserProfile.first_name, last_name: this.authUserProfile.last_name});
+  }
+
+  get photoDate(): Date {
+    return this.photo.created_at;
   }
 
   onload(_: Event) {
     this.loadPhoto = false;
+  }
+
+  closeDialog() {
+    this.dialogRef.close()
   }
 }

@@ -21,16 +21,21 @@
     position: absolute;
     top: 0;
     cursor: pointer;
+    outline: none;
 
     &:hover {
       background: rgba($white, 0.1);
 
-      .photobook-icon {
+      .photobook-app-icon {
         opacity: 1;
       }
     }
 
-    .photobook-icon {
+    &:active {
+      background: rgba($white, 0.3);
+    }
+
+    .photobook-app-icon {
       opacity: 0.8;
       transition: opacity 0.2s;
       color: $white;
@@ -57,10 +62,12 @@
     align-items: center;
 
     &-name {
+      display: block;
       font-size: rem(16);
       font-weight: 700;
       color: $text-color;
       transition: color 0.2s;
+      margin-bottom: rem(8);
 
       &:hover {
         color: $blue;
@@ -68,8 +75,16 @@
     }
 
     .photobook-small-ava {
+      background-color: $blue;
+      color: $white;
       margin-right: rem(16);
     }
+  }
+
+  &__date {
+    font-size: rem(12);
+    font-weight: 400;
+    color: #c5c5c5;
   }
 
   &__info {
@@ -130,6 +145,11 @@
 
   &__ava {
     width: rem(74);
+
+    .photobook-small-ava {
+      background-color: $blue;
+      color: $white;
+    }
   }
 
   &__cont {

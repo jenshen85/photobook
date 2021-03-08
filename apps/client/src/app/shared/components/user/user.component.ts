@@ -6,25 +6,17 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import { ControlContainer, FormGroupDirective } from '@angular/forms';
-import { transition, trigger, useAnimation } from '@angular/animations';
-import { fadeIn } from 'ng-animate';
 
 import { SpriteIconEnum, UserProfileRoI } from '@photobook/data';
-import { getUserName } from '../../../shared/utils/utils';
+import { userName } from '../../../shared/utils/utils';
+import { fadeAnimations } from '../../utils/animations';
 
 @Component({
   selector: 'photobook-user',
   templateUrl: './user.component.html',
   styleUrls: ['./user.component.scss'],
   host: { class: 'photobook-user' },
-  animations: [
-    trigger('fadeIn', [
-      transition(
-        'void => *',
-        useAnimation(fadeIn, { params: { timing: 0.3 } })
-      ),
-    ]),
-  ],
+  animations: [ fadeAnimations.fadeIn() ],
   viewProviders: [
     {
       provide: ControlContainer,
@@ -40,21 +32,15 @@ export class UserComponentComponent implements OnInit, OnChanges {
   @Input() lastNameControl: string;
   @Input() descriptionControl: string;
   userIcon = SpriteIconEnum.user;
-  userName = '';
 
-  ngOnInit(): void {
-    this.userName = getUserName(
-      this.profile.user.username,
-      this.profile.first_name,
-      this.profile.last_name
-    );
+  ngOnInit(): void {}
+
+  get userName() {
+    return userName({
+      first_name: this.profile.first_name,
+      last_name: this.profile.last_name
+    });
   }
 
-  ngOnChanges(_: SimpleChanges): void {
-    this.userName = getUserName(
-      this.profile.user.username,
-      this.profile.first_name,
-      this.profile.last_name
-    );
-  }
+  ngOnChanges(_: SimpleChanges): void {}
 }
