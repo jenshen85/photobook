@@ -127,13 +127,13 @@ export class OverflowScrollStrategy implements ScrollStrategy {
       this._previousScrollPosition = this._viewportRuler.getViewportScrollPosition();
 
       // Cache the previous inline styles in case the user had set them.
-      this._previousHTMLStyles.left = root.style.left || '';
-      this._previousHTMLStyles.top = root.style.top || '';
+      // this._previousHTMLStyles.left = root.style.left || '';
+      // this._previousHTMLStyles.top = root.style.top || '';
 
       // Note: we're using the `html` node, instead of the `body`, because the `body` may
       // have the user agent margin, whereas the `html` is guaranteed not to have one.
-      root.style.left = coerceCssPixelValue(-this._previousScrollPosition.left);
-      root.style.top = coerceCssPixelValue(-this._previousScrollPosition.top);
+      // root.style.left = coerceCssPixelValue(-this._previousScrollPosition.left);
+      // root.style.top = coerceCssPixelValue(-this._previousScrollPosition.top);
       root.style.paddingRight = coerceCssPixelValue(this._getScrollbarWidth());
       root.classList.add('cdk-global-overflowblock');
       this._isEnabled = true;
@@ -151,8 +151,8 @@ export class OverflowScrollStrategy implements ScrollStrategy {
 
       this._isEnabled = false;
 
-      htmlStyle.left = this._previousHTMLStyles.left;
-      htmlStyle.top = this._previousHTMLStyles.top;
+      // htmlStyle.left = this._previousHTMLStyles.left;
+      // htmlStyle.top = this._previousHTMLStyles.top;
       htmlStyle.paddingRight = '';
       html.classList.remove('cdk-global-overflowblock');
 
