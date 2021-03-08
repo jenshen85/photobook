@@ -6,7 +6,6 @@ import {
   SpriteIconEnum,
   UserProfileRoI
 } from '@photobook/data';
-import { ActivatedRoute } from '@angular/router';
 import { fadeAnimations } from '../../shared/utils/animations';
 import { AuthService } from '../../auth/auth.service';
 import { PhotobookService } from '../photobook.service';
@@ -21,20 +20,22 @@ import { Dialog } from '@photobook/ui';
   // changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HomePageComponent implements OnInit {
-  isAuthUser: boolean = true;
-  isAlbums: boolean;
   subs = new SubSink();
-  authUserProfile: UserProfileRoI;
-  currentUserProfile: UserProfileRoI;
-  addIcon: SpriteIconEnum = SpriteIconEnum.add;
 
   isEdit = false;
-  pending: boolean = true;
+
+  authUserProfile: UserProfileRoI;
+  currentUserProfile: UserProfileRoI;
+
+  addIcon: SpriteIconEnum = SpriteIconEnum.add;
+
+  pending = true;
   pendingLoadPhotos = false;
+
   photos: PhotoRoI[] = [];
 
-  private _take: number = 9;
-  private _skip: number = 0;
+  private _take = 9;
+  private _skip = 0;
   loadMore = true;
 
   constructor(
@@ -45,24 +46,28 @@ export class HomePageComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.subs.add(
-      this._authService.authUserProfile().subscribe((authUserProfile) => {
-        if(authUserProfile) {
-          this.authUserProfile = authUserProfile;
-          this.currentUserProfile = authUserProfile;
-          this.pending = false;
-          this.getPhotos();
-        }
-      })
-    )
-  }
+    this.subs.sink = this._authService.authUserProfile().subscribe((authUserProfile) => {
+      if(authUserProfile) {
+        this.authUserProfile = authUserProfile;
+        this.currentUserProfile = authUserProfile;
+        this.pending = false;
+        this._changeDetectionRef.markForCheck();
+      }
+    });
 
-  get isAuth(): boolean {
-    return this.currentUserProfile.id === this.authUserProfile.id;
+    this.getPhotos();
   }
 
   ngOnDestroy(): void {
     this.subs.unsubscribe();
+  }
+
+  get user(): UserProfileRoI {
+    if(this.authUserProfile.id === this.currentUserProfile.id) {
+      return this.authUserProfile;
+    }
+
+    return this.currentUserProfile;
   }
 
   editHandler(isEdit: boolean) {
@@ -79,6 +84,10 @@ export class HomePageComponent implements OnInit {
         if(photos.length) {
           photos.forEach(photo => this.photos.push(photo));
           this._skip = this._skip + this._take;
+
+          if(photos.length < this._take) {
+            this.loadMore = false;
+          }
         } else {
           this.loadMore = false;
         }
@@ -89,16 +98,16 @@ export class HomePageComponent implements OnInit {
       },
       () => {
         this.pendingLoadPhotos = false;
-        this._changeDetectionRef.markForCheck();
       }
     );
   }
 
-  openPhotoDialog(photo: PhotoRoI): void {
+  openPhotoDialog({ photo, userProfile }): void {
     const openPhotoData: openPhotoInDataType = {
       authUserProfile: this.authUserProfile,
+      photoUserProfile: userProfile,
       photo
-    }
+    };
 
     this._dialog.open(PhotoViewComponent, {
       data: openPhotoData,
@@ -107,9 +116,5 @@ export class HomePageComponent implements OnInit {
       scrolledOverlayPosition: 'top',
       dialogContainerClass: 'photo-view-content'
     });
-  }
-
-  loadMoreHandler() {
-    this.getPhotos();
   }
 }

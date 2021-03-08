@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { SubSink } from 'subsink';
 
@@ -20,10 +20,15 @@ import { fadeAnimations } from '../../shared/utils/animations';
 })
 export class UserPageComponent implements OnInit {
   subs = new SubSink();
+
   authUserProfile: UserProfileRoI;
   currentUserProfile: UserProfileRoI;
+
   isEdit = false;
+
   pending = true;
+  pendingAlbums = true;
+
   albums: AlbumRoI[];
   addIcon: SpriteIconEnum = SpriteIconEnum.add;
 
@@ -31,55 +36,49 @@ export class UserPageComponent implements OnInit {
     private readonly _authService: AuthService,
     private readonly _photoService: PhotobookService,
     private readonly _dialog: Dialog,
-    // private readonly _changeDetectionRef: ChangeDetectorRef,
     private readonly _route: ActivatedRoute,
   ) { }
 
   ngOnInit(): void {
-    this.subs.add(
-      this._authService.authUserProfile().subscribe((authUserProfile) => {
-        if(authUserProfile) {
-          this.authUserProfile = authUserProfile;
-          this.getUserProfile();
-        }
-      }),
+    this.subs.sink = this._authService.authUserProfile().subscribe((authUserProfile) => {
+      if(authUserProfile) {
+        this.authUserProfile = authUserProfile;
+      }
+    });
 
-      this._authService.currentUserProfile().subscribe((currentUserProfile) => {
-        if(currentUserProfile) {
-          this.currentUserProfile = currentUserProfile;
-          this.getAlbums();
-        }
-      })
-    );
-  }
-
-  get isAuth(): boolean {
-    return this.currentUserProfile.id === this.authUserProfile.id;
+    this.getUserProfile();
+    this.getAlbums();
   }
 
   ngOnDestroy(): void {
     this.subs.unsubscribe();
   }
 
-  getUserProfile(): void {
-    this.pending = true;
-    this.subs.sink = this._route.paramMap.subscribe(
-      params => {
-        const userProfileId = params.get('user_profile_id');
+  get user(): UserProfileRoI {
+    if(this.authUserProfile.id === this.currentUserProfile.id) {
+      return this.authUserProfile;
+    }
 
-        if(userProfileId && +userProfileId !== this.authUserProfile.id) {
-          this.subs.sink = this._authService.getUserProfile(+userProfileId).subscribe(
-            (profile) => this._authService.setCurrentUserProfile(profile),
-            (error) => {
-              // TODO: error handling
-              console.log(error);
-            }
-          );
-        } else {
-          this._authService.setCurrentUserProfile(this.authUserProfile);
+    return this.currentUserProfile;
+  }
+
+  getUserProfile(): void {
+    this.subs.sink = this._route.paramMap.subscribe((params) => {
+      const userProfileId = params.get('user_profile_id');
+
+      this.pending = true;
+      this.subs.sink = this._authService.getUserProfile(userProfileId).subscribe({
+        next: (currentUserProfile) => {
+          this.currentUserProfile = currentUserProfile;
+          this.pending = false;
+        },
+        error: (error) => {
+          // TODO: error handling
+          console.log(error);
+          this.pending = false;
         }
-      }
-    )
+      });
+    });
   }
 
   editHandler(isEdit: boolean) {
@@ -87,20 +86,26 @@ export class UserPageComponent implements OnInit {
   }
 
   getAlbums() {
-    this.pending = true;
-    this.subs.sink = this._photoService.getAllAlbumsByUserId(this.currentUserProfile.id).subscribe(
-      (albums) => {
-        this.albums = albums.sort((a, b) => Number(new Date(a.created_at)) - Number(new Date(b.created_at)));
-      },
-      (error) => {
-        // TODO: error handling
-        console.log(error);
-      },
-      () => {
-        this.pending = false;
-        // this._changeDetectionRef.markForCheck();
-      }
-    )
+    this.subs.sink = this._route.paramMap.subscribe( (params) => {
+      const userProfileId = params.get('user_profile_id');
+
+      this.pendingAlbums = true;
+      this.subs.sink = this._photoService.getAllAlbumsByUserId(userProfileId).subscribe(
+        (albums) => {
+          this.albums = albums.sort(
+            (a, b) => Number(new Date(a.created_at)) - Number(new Date(b.created_at))
+          );
+        },
+        (error) => {
+          // TODO: error handling
+          console.log(error);
+          this.pendingAlbums = false;
+        },
+        () => {
+          this.pendingAlbums = false;
+        }
+      )
+    });
   }
 
   addAlbum(album?: AlbumRoI) {
@@ -126,7 +131,6 @@ export class UserPageComponent implements OnInit {
         const index = this.albums.findIndex(album => album.id === data.album_id);
         this.albums.splice(index, 1);
       }
-      // this._changeDetectionRef.markForCheck();
     })
   }
 }

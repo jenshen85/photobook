@@ -13,6 +13,7 @@ import { fadeIn } from 'ng-animate';
 import { SubSink } from 'subsink';
 import { PhotobookService } from '../../../photobook.service';
 import { checkFileSize, checkFileTypes, getBase64, toFormData } from '../../../../shared/utils/utils';
+import { fadeAnimations } from 'apps/client/src/app/shared/utils/animations';
 
 export type addAlbumOutDataType = {
   action: ActionEnum,
@@ -31,14 +32,7 @@ export type addAlbumInDataType = {
   templateUrl: './add-album.component.html',
   styleUrls: ['./add-album.component.scss'],
   host: { class: 'common-dialog photobook-add-album' },
-  animations: [
-    trigger('fade', [
-      transition(
-        'void => *',
-        useAnimation(fadeIn, { params: { timing: 0.3 } })
-      ),
-    ]),
-  ],
+  animations: [ fadeAnimations.fadeIn() ],
 })
 export class AddAlbumComponent implements OnInit {
   subs = new SubSink();

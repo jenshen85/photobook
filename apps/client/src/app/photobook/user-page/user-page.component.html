@@ -2,11 +2,10 @@
 
 <ng-template #content>
   <header
-    [currentUserProfile]="currentUserProfile"
+    [currentUserProfile]="user"
     [authUserProfile]="authUserProfile"
     [isEdit]="isEdit"
     [isAlbums]="true"
-    [isAuthUser]="isAuth"
     (onEditHandler)="editHandler($event)"
     photobook-header-user>
   </header>
@@ -36,14 +35,14 @@
         </div>
       </div>
     </section>
-    <photobook-spinner *ngIf="pending"></photobook-spinner>
+    <photobook-spinner *ngIf="pendingAlbums"></photobook-spinner>
 
     <div class="photobook-main-overlay" *ngIf="isEdit" [@fadeIn]></div>
   </main>
 
   <footer
     photobook-footer
-    [userBg]="currentUserProfile.cover"
+    [userBg]="user.cover"
     [isEdit]="isEdit"></footer>
 
 </ng-template>

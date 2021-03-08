@@ -11,7 +11,7 @@
         <span class="add-album-form__label">Название</span>
         <input [ngClass]="form.get('title').invalid && form.get('title').touched && 'error'"
           class="form-control" type="text" placeholder="Название" formControlName="title">
-        <span class="add-album-form__error" *ngIf="form.get('title').invalid && form.get('title').touched" [@fade]>
+        <span class="add-album-form__error" *ngIf="form.get('title').invalid && form.get('title').touched" [@fadeIn]>
           <small *ngIf="form.get('title').errors.required">Поле должно быть заполнено</small>
           <small *ngIf="form.get('title').errors.maxlength">
             Превышена максимальная длина описания ({{form.get('title').errors.maxlength.requiredLength}} символов)
@@ -23,7 +23,7 @@
         <span class="add-album-form__label">Описание</span>
         <textarea [ngClass]="form.get('description').invalid && form.get('description').touched && 'error'"
           class="form-control" formControlName="description" placeholder="Описание"></textarea>
-        <span class="add-album-form__error" *ngIf="form.get('description').invalid && form.get('description').touched" [@fade]>
+        <span class="add-album-form__error" *ngIf="form.get('description').invalid && form.get('description').touched" [@fadeIn]>
           <small *ngIf="form.get('description').errors.maxlength">
             Превышена максимальная длина описания ({{form.get('description').errors.maxlength.requiredLength}} символов)
           </small>
@@ -55,7 +55,7 @@
             </label>
           </div>
         </div>
-        <span class="add-preview__error" *ngIf="form.get('preview').invalid" [@fade]>
+        <span class="add-preview__error" *ngIf="form.get('preview').invalid" [@fadeIn]>
           <small *ngIf="form.get('preview').errors.maxFileSize">(файл должен быть размером не более 5mb)</small>
           <small *ngIf="form.get('preview').errors.requiredFileType">неверное расширение файла, только png, jpg, jpeg</small>
         </span>

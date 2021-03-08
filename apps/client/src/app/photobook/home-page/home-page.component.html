@@ -2,10 +2,9 @@
 
 <ng-template #content>
   <header
-    [currentUserProfile]="currentUserProfile"
+    [currentUserProfile]="user"
     [authUserProfile]="authUserProfile"
     [isEdit]="isEdit"
-    [isAuthUser]="isAuth"
     (onEditHandler)="editHandler($event)"
     photobook-header-user>
   </header>
@@ -26,9 +25,9 @@
         <div class="photo-cards">
           <photobook-photo-card
             *ngFor="let photo of photos" [photo]="photo"
-            [album_title]="photo.album.title"
+            [albumTitle]="photo.album.title"
             [userProfile]="photo.user_profile"
-            (onPhotoClick)="openPhotoDialog(photo)"
+            (onPhotoClick)="openPhotoDialog($event)"
             [@fadeIn]></photobook-photo-card>
           <photobook-spinner position="absolute" *ngIf="pendingLoadPhotos"></photobook-spinner>
         </div>
@@ -36,7 +35,7 @@
         <div class="photos-actions">
           <button
             *ngIf="loadMore"
-            (click)="loadMoreHandler()"
+            (click)="getPhotos()"
             type="button"
             class="button button-border">Показать еще</button>
         </div>
@@ -48,7 +47,7 @@
 
   <footer
     photobook-footer
-    [userBg]="currentUserProfile.cover"
+    [userBg]="user.cover"
     [isEdit]="isEdit"></footer>
 
 </ng-template>
