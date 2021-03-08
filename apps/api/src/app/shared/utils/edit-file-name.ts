@@ -12,3 +12,7 @@ export function editFileName(
 export function generateFileName(file: Express.Multer.File): string {
   return `${Date.now()}_${path.parse(file.originalname).name}`;
 }
+
+export function generateFileNameFromStr(originalname: string): string {
+  return `${Date.now()}_${path.parse(originalname).name}`;
+}

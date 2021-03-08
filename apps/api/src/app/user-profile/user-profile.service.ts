@@ -7,6 +7,7 @@ import { UserProfileCredentialsDto, UserProfileRODto } from '@photobook/dto';
 import { UserProfileRepository } from './user-profile.repository';
 import { FileService, IFileData } from '../file/file.service';
 import { AuthService } from '../auth/auth.service';
+import { generateFileNameFromStr } from '../shared/utils/edit-file-name';
 
 export enum ProfileFilesFields {
   avatar = 'avatar',
@@ -51,6 +52,16 @@ export class UserProfileService {
     userProfileCredentials: UserProfileCredentialsDto,
     user: Auth
   ): Promise<UserProfileRODto> {
+    const profile = await this._userProfileRepository.getUserProfile(user.user_profile_id);
+
+    if(files.avatar && profile.avatar) {
+      await this._fileService.deleteFile(profile.avatar);
+    }
+
+    if(files.cover && profile.cover) {
+      await this._fileService.deleteFile(profile.cover);
+    }
+
     const profileImages = await this.saveProfileFiles(files, user);
     return await this._userProfileRepository.updateProfile(
       userProfileCredentials,
@@ -72,7 +83,8 @@ export class UserProfileService {
       avatarData = await this._fileService.saveFile(
         avatar,
         profileFilesPath,
-        avatar.fieldname
+        generateFileNameFromStr('avatar')
+        // avatar.fieldname
       );
     }
 
@@ -80,7 +92,8 @@ export class UserProfileService {
       coverData = await this._fileService.saveFile(
         cover,
         profileFilesPath,
-        cover.fieldname
+        generateFileNameFromStr('cover')
+        // cover.fieldname
       );
     }
 

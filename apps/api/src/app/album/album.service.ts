@@ -6,6 +6,7 @@ import { Auth, Album } from '../entities';
 
 import { AlbumRepository } from './album.repository';
 import { FileService, IFileData } from '../file/file.service';
+import { generateFileNameFromStr } from '../shared/utils/edit-file-name';
 
 @Injectable()
 export class AlbumService {
@@ -35,13 +36,14 @@ export class AlbumService {
 
     let savedImageData: IFileData;
     if(file) {
-      const pathToAlbumPreview = `images/${user.path_id}/albums/${album.id}/preview`;
+      const pathToAlbumPreview = `images/${user.path_id}/albums/${album.id}`;
       savedImageData = await this._fileService.saveFile(
         file,
         pathToAlbumPreview,
-        'preview'
+        generateFileNameFromStr('preview')
       );
     }
+
     return await this._albumRepository.updateAlbum(
       album.id,
       { ...albumCredentials, preview: savedImageData && savedImageData.imageUrl },
@@ -55,15 +57,15 @@ export class AlbumService {
     albumCredentials: AlbumCredentialsDto,
     user: Auth
   ): Promise<AlbumRoDto> {
-    const album = await this._albumRepository.getById(album_id, user.id);
+    const album = await this._albumRepository.getById(user.user_profile_id, album_id);
     let savedImageData: IFileData;
     if(file) {
-      const pathToAlbumPreview = `images/${user.id}/albums/${album_id}/preview`;
+      const pathToAlbumPreview = `images/${user.path_id}/albums/${album_id}`;
       album.preview && await this._fileService.deleteFile(album.preview);
       savedImageData = await this._fileService.saveFile(
         file,
         pathToAlbumPreview,
-        'preview'
+        generateFileNameFromStr('preview')
       );
     }
     return this._albumRepository.updateAlbum(

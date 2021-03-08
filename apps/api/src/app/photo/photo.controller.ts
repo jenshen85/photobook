@@ -72,7 +72,7 @@ export class PhotoController {
   update(
     @Param('album_id', ParseIntPipe) album_id: number,
     @Param('photo_id', ParseIntPipe) photo_id: number,
-    @Body(ValidationPipe) photoCredentials: PhotoCredentialsDto,
+    @Body() photoCredentials: PhotoCredentialsDto,
   ): Promise<PhotoRoDto> {
     return this._photoService.updatePhoto(album_id, photo_id, photoCredentials);
   }
