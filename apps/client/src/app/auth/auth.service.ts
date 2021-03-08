@@ -54,7 +54,7 @@ export class AuthService {
     return this._http.post<AuthRoDto>(PATHS.signin, authCredential).pipe(
       tap((token) => {
         tokenSetter(token.accessToken);
-        console.log(this.getPayload().hasProfile);
+
         if(this.getPayload().hasProfile) {
           this._router.navigate(['photobook']);
         } else {

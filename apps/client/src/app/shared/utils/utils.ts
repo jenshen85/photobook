@@ -18,6 +18,10 @@ export function getUserName(username: string, first_name: string, last_name: str
   return username;
 }
 
+export function userName(profile: {first_name: string, last_name: string}): string {
+  return `${profile.first_name}${profile.last_name ? ` ${profile.last_name}` : ''}`;
+}
+
 export function getScrollbarWidth() {
   return window.innerWidth - document.documentElement.clientWidth;
 }

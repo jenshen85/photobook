@@ -28,11 +28,11 @@ export class PhotobookService {
   }
 
   updateAlbum(album_id: number | string, data: FormData): Observable<AlbumRoI> {
-    return this._http.patch<AlbumRoI>(PATHS.updateAlbums(album_id), data);
+    return this._http.patch<AlbumRoI>(`${PATHS.album}/${album_id}`, data);
   }
 
   removeAlbum(album_id: number | string): Observable<void> {
-    return this._http.delete<void>(PATHS.deleteAlbums(album_id))
+    return this._http.delete<void>(`${PATHS.album}/${album_id}`)
   }
 
   createPhoto<T, D>(album_id: number, data: T): Observable<HttpEvent<D>> {
