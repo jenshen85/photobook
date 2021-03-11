@@ -34,10 +34,16 @@ export const enum SpriteIconEnum {
   soc_vk = 'soc_vk',
   top = 'top',
   user = 'user',
+  send = 'send',
 }
 
 export const enum ActionEnum {
   create = 'create',
   update = 'update',
   delete = 'delete'
+}
+
+export enum LikeEnum {
+  liked,
+  unliked
 }

@@ -3,6 +3,7 @@ import { AbstractEntity } from './abstract-entity';
 import { Album } from './album.entity';
 import { Auth } from './auth.entity';
 import { Photo } from './photo.entity';
+import { Comment } from './comment.entity';
 // import { Photo } from './photo.entity';
 // import { User } from './user.entity';
 
@@ -42,9 +43,15 @@ export class UserProfile extends AbstractEntity {
   albums: Album[];
 
   // join photos
-  @ManyToOne(
+  @OneToMany(
     () => Photo, (photo) => photo.user_profile,
     { onDelete: 'CASCADE', eager: true }
   )
   photos: Photo[];
+
+  @OneToMany(
+    () => Comment, (comment) => comment.user_profile,
+    { onDelete: 'CASCADE', eager: true }
+  )
+  comments: Comment[];
 }

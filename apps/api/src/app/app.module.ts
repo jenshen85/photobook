@@ -6,11 +6,12 @@ import { ServeStaticModule } from '@nestjs/serve-static'
 
 import { typeOrmConfig } from './config/typeorm.config';
 import { AuthModule } from './auth/auth.module';
-// import { UserModule } from './user/user.module';
 import { UserProfileModule } from './user-profile/user-profile.module';
 import { AlbumModule } from './album/album.module';
 import { PhotoModule } from './photo/photo.module';
 import { FileModule } from './file/file.module';
+import { CommentModule } from './comment/comment.module';
+import { LikeModule } from './like/like.module';
 
 const environment = process.env.NODE_ENV || 'development';
 // console.log('======' + environment + '======');
@@ -32,11 +33,12 @@ const environment = process.env.NODE_ENV || 'development';
       inject: [ConfigService],
     }),
     AuthModule,
-    // UserModule,
     UserProfileModule,
     AlbumModule,
     PhotoModule,
     FileModule,
+    CommentModule,
+    LikeModule
   ],
   controllers: [],
   providers: [],

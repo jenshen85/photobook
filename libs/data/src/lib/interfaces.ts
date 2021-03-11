@@ -1,4 +1,4 @@
-import { UserRoleEnum } from './enums';
+import { UserRoleEnum, LikeEnum } from './enums';
 
 export interface JwtPayload {
   id: number;
@@ -27,8 +27,6 @@ export interface UserRoI {
   role: UserRoleEnum;
   has_profile: boolean;
   user_profile_id: number;
-  // user_profile: UserProfileRoI;
-  // albums: AlbumRoI[];
 }
 
 export interface AuthCredentialsI {
@@ -101,25 +99,36 @@ export interface PhotoRoI {
   album_title?: string;
   album?: AlbumRoI;
   user_profile?: UserProfileRoI;
-  // user: PhotoUserRoI;
+  likes?: LikeRoI[];
+  comments?: CommentRoI[];
 }
 
-// export interface PhotoUserRoI {
-//   id: number;
-//   email: string;
-//   username: string;
-//   created_at: Date;
-//   updated_at: Date;
-//   is_active: boolean;
-//   role: UserRoleEnum;
-// }
+export interface CommentCredentialsI {
+  text: string;
+}
 
-// export interface PhotoAlbumRoI {
-//   id: number;
-//   user_id: number;
-//   title: string;
-//   description: string;
-//   preview: string;
-//   created_at: Date;
-//   updated_at: Date;
-// }
+export interface CommentRoI {
+  id: number;
+  text: string;
+  photo_id: number;
+  created_at: Date;
+  updated_at: Date;
+  deleted_at: Date;
+  user_profile_id: number;
+  user_profile?: UserProfileRoI;
+}
+
+export interface LikeCredentialsI {
+  status: LikeEnum;
+}
+
+export interface LikeRoI {
+  id: number;
+  photo_id: number;
+  status: LikeEnum;
+  created_at: Date;
+  updated_at: Date;
+  deleted_at: Date;
+  user_profile_id: number;
+  user_profile?: UserProfileRoI;
+}

@@ -28,6 +28,7 @@ export abstract class AbstractEntity extends BaseEntity {
     name: 'deleted_at',
     type: 'timestamp with time zone',
     nullable: true,
+    select: false,
   })
   deleted_at: Date;
 }

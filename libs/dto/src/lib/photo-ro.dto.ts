@@ -1,12 +1,10 @@
 import 'reflect-metadata';
 import { Exclude, Expose, Type } from 'class-transformer';
-// import { PhotoUserRoDto } from './photo-user-ro.dto';
-import { AlbumRoI, PhotoRoI, UserProfileRoI, UserRoI } from '@photobook/data';
-// import { PhotoAlbumRoDto } from './photo-album-ro.dto';
+import { AlbumRoI, CommentRoI, LikeRoI, PhotoRoI, UserProfileRoI } from '@photobook/data';
 import { AlbumRoDto } from './album-ro.dto';
 import { UserProfileRODto } from './user-profile-ro.dto';
-// import { PhotoAlbumRoDto } from './photo-album-ro.dto';
-// import { UserProfileRODto } from './user-profile-ro.dto';
+import { LikeRoDto } from './like-ro.dto';
+import { CommentRoDto } from './comment-ro.dto';
 
 @Exclude()
 export class PhotoRoDto implements PhotoRoI {
@@ -48,10 +46,6 @@ export class PhotoRoDto implements PhotoRoI {
   @Expose()
   album_title?: string;
 
-  // @Expose()
-  // @Type(() => PhotoUserRoDto)
-  // user: UserRoI;
-
   @Expose()
   @Type(() => AlbumRoDto)
   album: AlbumRoI;
@@ -59,4 +53,12 @@ export class PhotoRoDto implements PhotoRoI {
   @Expose()
   @Type(() => UserProfileRODto)
   user_profile: UserProfileRoI;
+
+  @Expose()
+  @Type(() => LikeRoDto)
+  likes: LikeRoI[];
+
+  @Expose()
+  @Type(() => CommentRoDto)
+  comments: CommentRoI[];
 }

@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { plainToClass } from 'class-transformer';
 
-import { Photo, Auth, Album } from '../entities';
+import { Photo, Auth } from '../entities';
 import { PhotoCredentialsDto, PhotoRoDto } from '@photobook/dto';
 
 import { IFileData } from '../file/file.service';
@@ -18,8 +18,11 @@ export class PhotoRepository extends Repository<Photo> {
   async getAll({take = 0 , skip = 0}: GetPhotosQueryDto): Promise<PhotoRoDto[]> {
     const photos = await this.createQueryBuilder('photo')
       .where('photo.deleted_at IS NULL')
+      .orderBy('photo.created_at', 'DESC')
       .leftJoinAndSelect('photo.album', 'album', 'album.deleted_at IS NULL')
       .leftJoinAndSelect('photo.user_profile', 'user_profile', 'user_profile.deleted_at IS NULL')
+      .leftJoinAndSelect('photo.comments', 'comment', 'comment.deleted_at IS NULL')
+      .leftJoinAndSelect('photo.likes', 'like')
       .take(take)
       .skip(skip)
       .getMany();
@@ -33,6 +36,8 @@ export class PhotoRepository extends Repository<Photo> {
       .where('photo.deleted_at IS NULL')
       .leftJoinAndSelect('photo.album', 'album', 'album.deleted_at IS NULL')
       .leftJoinAndSelect('photo.user_profile', 'user_profile', 'user_profile.deleted_at IS NULL')
+      .leftJoinAndSelect('photo.comments', 'comment', 'comment.deleted_at IS NULL')
+      .leftJoinAndSelect('photo.likes', 'like')
       .where({ album_id })
       .getMany();
 
@@ -45,6 +50,8 @@ export class PhotoRepository extends Repository<Photo> {
       .where('photo.deleted_at IS NULL')
       .leftJoinAndSelect('photo.album', 'album', 'album.deleted_at IS NULL')
       .leftJoinAndSelect('photo.user_profile', 'user_profile', 'user_profile.deleted_at IS NULL')
+      .leftJoinAndSelect('photo.comments', 'comment', 'comment.deleted_at IS NULL')
+      .leftJoinAndSelect('photo.likes', 'like')
       .where({ id: photo_id })
       .getOne();
 
