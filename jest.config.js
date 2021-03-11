@@ -5,5 +5,6 @@ module.exports = {
     '<rootDir>/libs/dto',
     '<rootDir>/libs/ui',
     '<rootDir>/libs/data',
+    '<rootDir>/apps/admin',
   ],
 };
