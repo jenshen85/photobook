@@ -53,9 +53,12 @@
             <div class="comments__name">
               {{authUserName}}
             </div>
-            <form class="comment-form">
+            <form [formGroup]="form" (ngSubmit)="createComment()" class="comment-form">
               <label class="comment-form__field">
-                <textarea class="comment-form__control"></textarea>
+                <textarea
+                  formControlName='text'
+                  class="comment-form__control"
+                  placeholder="Оставьте отзыв" #commentControl></textarea>
               </label>
               <button type="submit" class="button button-border">Комментировать</button>
             </form>
@@ -63,21 +66,51 @@
         </div>
 
 
-        <div *ngFor="let comment of comments" class="comments__row">
+        <div class="comments__row"
+          *ngFor="let comment of comments; let i = index"
+          (mouseover)="activeActions = i" (mouseleave)="activeActions = null"
+          [@fadeIn]>
           <div class="comments__ava">
             <a photobook-small-ava
-              [routerLink]="['/photobook', 'user', authUserProfile.id]"
-              [avatar]=""
-              [userName]=""></a>
+              [routerLink]="['/photobook', 'user', comment.user_profile_id]"
+              [avatar]="comment.user_profile.avatar"
+              [userName]="userNameCalc(comment.user_profile.first_name, comment.user_profile.last_name)"
+              ></a>
           </div>
           <div class="comments__cont">
-            <div class="comments__name">Виталий Виноградов</div>
+            <div class="comments__name">{{userNameCalc(comment.user_profile.first_name, comment.user_profile.last_name)}}</div>
+            <div class="comments__date">
+              добавлен {{ comment.created_at| date: 'd.MM.YYYY'}}
+            </div>
+
             <div class="comments__text">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo magni a dolorum soluta neque velit, repellendus quasi enim! Cumque repudiandae, corporis eos error dignissimos perferendis perspiciatis natus labore eveniet quae cum voluptate nostrum provident neque!
+              <input class="comments__control" type="text" autoFocus
+                *ngIf="editComment === i; else commentText" [(ngModel)]="comment.text">
+              <ng-template #commentText>
+                {{comment.text}}
+              </ng-template>
+
+              <div class="comments__actions"
+                *ngIf="(comment.user_profile_id === authUserProfile.id && activeActions === i) || editComment === i"
+                [@fadeIn]>
+                <button *ngIf="editComment === i" (click)="updateComment(comment)" class="comments__btn comments__btn--edit" title="обновить">
+                  <span photobook-app-icon [icon]="sendIcon"></span>
+                </button>
+                <button *ngIf="editComment === i" (click)="onEditClick(null)" class="comments__btn comments__btn--edit" title="отменить">
+                  <span photobook-app-icon [icon]="closeIcon"></span>
+                </button>
+                <button *ngIf="editComment !== i" (click)="onEditClick(i)" class="comments__btn comments__btn--edit" title="редактировать">
+                  <span photobook-app-icon [icon]="editIcon"></span>
+                </button>
+                <button (click)="removeComment(comment.id)" class="comments__btn comments__btn--delete" title="удалить">
+                  <span photobook-app-icon [icon]="removeIcon"></span>
+                </button>
+              </div>
             </div>
           </div>
         </div>
 
+        <photobook-spinner position="absolute" *ngIf="pendingComments"></photobook-spinner>
       </div>
 
     </div>

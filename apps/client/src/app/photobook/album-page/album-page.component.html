@@ -16,15 +16,15 @@
     <div class="container top-bar__container">
       <div class="photo-stat">
         <div class="photo-stat__item">
-          {{ photos.length }} Фотографий
+          {{ photosLength }} Фотографий
         </div>
 
         <div class="photo-stat__item">
-          12 Лайков
+          {{ likesLength }} Лайков
         </div>
 
         <div class="photo-stat__item">
-          4 Комментария
+          {{ commentsLength }} Комментария
         </div>
       </div>
     </div>
@@ -35,7 +35,7 @@
     <section class="photobook-section photos">
       <div class="container">
         <div class="photo-cards">
-          <photobook-spinner position="absolute" *ngIf="pendingLoadAlbum; else photosTmp"></photobook-spinner>
+          <photobook-spinner position="absolute" *ngIf="pendingLoadPhotos; else photosTmp"></photobook-spinner>
           <ng-template #photosTmp>
             <photobook-photo-card
               [isAuthUser]="isAuth"
@@ -43,8 +43,7 @@
               *ngFor="let photo of photos" [photo]="photo" [@fadeIn]
               [userProfile]="currentUserProfile"
               (onPhotoClick)="openPhotoDialog($event)"
-              (onEditClick)="openEditPhotoDilaog(photo)"
-            ></photobook-photo-card>
+              (onEditClick)="openEditPhotoDilaog($event)"></photobook-photo-card>
           </ng-template>
         </div>
       </div>

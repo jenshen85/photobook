@@ -44,39 +44,55 @@ export class AlbumPageComponent implements OnInit {
   isEdit: boolean;
   pending: boolean;
   pendingLoadAlbum = true;
+  pendingLoadPhotos = true;
 
   constructor(
     private readonly _authService: AuthService,
     private readonly _photoService: PhotobookService,
     private readonly dialog: Dialog,
     private readonly _route: ActivatedRoute,
-    // private readonly router: Router,
     // private readonly _changeDetectionRef: ChangeDetectorRef,
   ) { }
 
   ngOnInit(): void {
+    const userProfileId = +this._route.snapshot.paramMap.get('user_profile_id');
+    const albumId = +this._route.snapshot.paramMap.get('album_id');
+
     this.subs.sink = this._authService.authUserProfile().subscribe((authUserProfile) => {
       if(authUserProfile) {
         this.authUserProfile = authUserProfile;
-        // this.getUserProfile();
       }
     })
-    this.getUserProfile();
-    this.loadAlbum();
+
+    this.getUserProfile(userProfileId);
+    this.loadAlbum(userProfileId, albumId);
+    this.loadPhotos(albumId);
   }
 
   get isAuth(): boolean {
     return this.currentUserProfile?.id === this.authUserProfile?.id;
   }
 
+  get photosLength(): number {
+    return this.photos.length;
+  }
+
+  get commentsLength(): number {
+    return this.photos.map((photo) => photo.comments)
+      .reduce((acc, comment) => acc + comment.length, 0);
+  }
+
+  get likesLength(): number {
+    return this.photos.map((photo) => photo.likes)
+      .reduce((acc, like) => acc + like.length, 0);
+  }
+
   ngOnDestroy(): void {
     this.subs.unsubscribe();
   }
 
-  getUserProfile(): void {
+  getUserProfile(userProfileId: number): void {
     this.pending = true;
-    const userProfileId = this._route.snapshot.paramMap.get('user_profile_id');
-
     this.subs.sink = this._authService.getUserProfile(+userProfileId).subscribe(
       (profile) => {
         this.currentUserProfile = profile;
@@ -90,19 +106,30 @@ export class AlbumPageComponent implements OnInit {
     );
   }
 
-  loadAlbum() {
-    const userProfileId = +this._route.snapshot.paramMap.get('user_profile_id');
-    const albumId = +this._route.snapshot.paramMap.get('album_id');
+  loadAlbum(userProfileId: number, albumId: number) {
     this.pendingLoadAlbum = true;
     this.subs.sink = this._photoService.getUserAlbumById(userProfileId, albumId).subscribe(
       (album) => {
         this.album = album;
-        this.photos = album.photos;
         this.pendingLoadAlbum = false;
       },
       (error) => {
         // TODO: error handling
         this.pendingLoadAlbum = false;
+      }
+    );
+  }
+
+  loadPhotos(albumId: number) {
+    this.pendingLoadPhotos = true;
+    this.subs.sink = this._photoService.getAllAlbumPhotos(albumId).subscribe(
+      (photos) => {
+        this.photos = photos;
+        this.pendingLoadPhotos = false;
+      },
+      (error) => {
+        // TODO: error handling
+        this.pendingLoadPhotos = false;
       }
     );
   }

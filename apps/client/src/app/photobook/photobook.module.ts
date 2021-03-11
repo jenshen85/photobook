@@ -23,6 +23,7 @@ import { AddPhotoComponent } from './album-page/components/add-photo/add-photo.c
 import { FooterComponent } from './footer/footer.component';
 
 import { DragNDropDirective } from '../shared/directives/drag-n-drop.directive';
+import { AutoFocusDirective } from '../shared/directives/autofocus.directive';
 import { EditPhotoComponent } from './album-page/components/edit-photo/edit-photo.component';
 import { UserPageComponent } from './user-page/user-page.component'
 
@@ -46,14 +47,15 @@ import { UserPageComponent } from './user-page/user-page.component'
     FooterComponent,
     DragNDropDirective,
     EditPhotoComponent,
-    UserPageComponent
+    UserPageComponent,
+    AutoFocusDirective
   ],
   imports: [
     CommonModule,
     PhotobookRoutingModule,
     UiModule,
   ],
-  providers: [PhotobookService, DragNDropDirective],
+  providers: [PhotobookService, DragNDropDirective, AutoFocusDirective],
   entryComponents: [PhotoViewComponent, AddAlbumComponent, AddPhotoComponent],
   exports: [PhotobookRoutingModule],
 })

@@ -130,6 +130,12 @@
       }
     }
 
+    &.filled {
+      #{$btn}-ico {
+        color: $blue;
+      }
+    }
+
     &:hover:not(.liked) {
       #{$btn}-ico {
         color: $blue;

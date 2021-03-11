@@ -41,4 +41,12 @@ export class PhotoCardComponent implements OnInit {
   get userName(): string {
     return userName({ first_name: this.userProfile.first_name, last_name: this.userProfile.last_name});
   }
+
+  get commentsLength(): number {
+    return this.photo.comments.length;
+  }
+
+  get likesLength(): number {
+    return this.photo.likes.length;
+  }
 }
