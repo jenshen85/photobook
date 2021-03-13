@@ -38,7 +38,7 @@ export class UserProfile extends AbstractEntity {
   @OneToMany(
     () => Album,
     (album) => album.user_profile,
-    { onDelete: 'CASCADE', eager: true }
+    { onDelete: 'CASCADE', eager: false }
   )
   albums: Album[];
 

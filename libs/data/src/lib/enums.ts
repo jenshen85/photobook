@@ -35,6 +35,7 @@ export const enum SpriteIconEnum {
   top = 'top',
   user = 'user',
   send = 'send',
+  heart_stroke = 'heart-stroke'
 }
 
 export const enum ActionEnum {
@@ -44,6 +45,6 @@ export const enum ActionEnum {
 }
 
 export enum LikeEnum {
-  liked,
-  unliked
+  liked = "liked",
+  unliked = "unliked"
 }

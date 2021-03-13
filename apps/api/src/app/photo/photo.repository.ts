@@ -11,6 +11,7 @@ import { PhotoCredentialsDto, PhotoRoDto } from '@photobook/dto';
 
 import { IFileData } from '../file/file.service';
 import { GetPhotosQueryDto } from './dto/get-photo-query.dto';
+import { LikeEnum } from '@photobook/data';
 
 @EntityRepository(Photo)
 export class PhotoRepository extends Repository<Photo> {
@@ -22,7 +23,7 @@ export class PhotoRepository extends Repository<Photo> {
       .leftJoinAndSelect('photo.album', 'album', 'album.deleted_at IS NULL')
       .leftJoinAndSelect('photo.user_profile', 'user_profile', 'user_profile.deleted_at IS NULL')
       .leftJoinAndSelect('photo.comments', 'comment', 'comment.deleted_at IS NULL')
-      .leftJoinAndSelect('photo.likes', 'like')
+      .leftJoinAndSelect('photo.likes', 'like', 'like.status = :like_status', { like_status: LikeEnum.liked })
       .take(take)
       .skip(skip)
       .getMany();
@@ -37,7 +38,7 @@ export class PhotoRepository extends Repository<Photo> {
       .leftJoinAndSelect('photo.album', 'album', 'album.deleted_at IS NULL')
       .leftJoinAndSelect('photo.user_profile', 'user_profile', 'user_profile.deleted_at IS NULL')
       .leftJoinAndSelect('photo.comments', 'comment', 'comment.deleted_at IS NULL')
-      .leftJoinAndSelect('photo.likes', 'like')
+      .leftJoinAndSelect('photo.likes', 'like', 'like.status = :like_status', { like_status: LikeEnum.liked })
       .where({ album_id })
       .getMany();
 
@@ -51,7 +52,7 @@ export class PhotoRepository extends Repository<Photo> {
       .leftJoinAndSelect('photo.album', 'album', 'album.deleted_at IS NULL')
       .leftJoinAndSelect('photo.user_profile', 'user_profile', 'user_profile.deleted_at IS NULL')
       .leftJoinAndSelect('photo.comments', 'comment', 'comment.deleted_at IS NULL')
-      .leftJoinAndSelect('photo.likes', 'like')
+      .leftJoinAndSelect('photo.likes', 'like', 'like.status = :like_status', { like_status: LikeEnum.liked })
       .where({ id: photo_id })
       .getOne();
 
