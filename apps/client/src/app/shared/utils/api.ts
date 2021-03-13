@@ -6,7 +6,8 @@ export const PATHS = {
   photo: `${API_PATH}/photo`,
   album: `${API_PATH}/album`,
   comment: `${API_PATH}/comment`,
-  updateAlbums: (album_id: number | string) => `${API_PATH}/album/${album_id}`,
-  deleteAlbums: (album_id: number | string) => `${API_PATH}/album/${album_id}`,
-  getUserAllbums: (user_id: number | string) => `${API_PATH}/album/${user_id}`,
+  like: `${API_PATH}/like`,
+  // updateAlbums: (album_id: number | string) => `${API_PATH}/album/${album_id}`,
+  // deleteAlbums: (album_id: number | string) => `${API_PATH}/album/${album_id}`,
+  // getUserAllbums: (user_id: number | string) => `${API_PATH}/album/${user_id}`,
 };

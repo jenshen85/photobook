@@ -1,6 +1,6 @@
 import { HttpClient, HttpEvent } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { AlbumRoI, CommentCredentialsI, CommentRoI, PhotoRoI } from '@photobook/data';
+import { AlbumRoI, CommentCredentialsI, CommentRoI, LikeRoI, PhotoRoI } from '@photobook/data';
 import { Observable } from 'rxjs';
 
 import { PATHS } from '../shared/utils/api';
@@ -21,7 +21,7 @@ export class PhotobookService {
   }
 
   getAllAlbumsByUserId(user_id: number | string): Observable<AlbumRoI[]> {
-    return this._http.get<AlbumRoI[]>(PATHS.getUserAllbums(user_id));
+    return this._http.get<AlbumRoI[]>(`${PATHS.album}/${user_id}`);
   }
 
   createAlbum(data: FormData): Observable<AlbumRoI> {
@@ -79,5 +79,14 @@ export class PhotobookService {
 
   removeComment(comment_id: number): Observable<void> {
     return this._http.delete<void>(`${PATHS.comment}/${comment_id}`);
+  }
+
+  // likes
+  likePhoto(photo_id: number): Observable<LikeRoI> {
+    return this._http.post<LikeRoI>(`${PATHS.like}/${photo_id}`, {})
+  }
+
+  unLikePhoto(photo_id: number): Observable<void> {
+    return this._http.delete<void>(`${PATHS.like}/${photo_id}`)
   }
 }
