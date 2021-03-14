@@ -185,9 +185,9 @@ export class AlbumPageComponent implements OnInit {
 
     const updLikesSubs = dialogRef.componentInstance.updateLikes.subscribe((data) => {
       const photo = this.photos.find((photo) => photo.id === data.photo_id);
-      if(data.action === ActionEnum.update) {
+      if(photo && data.action === ActionEnum.update) {
         photo.likes.push(data.like);
-      } else if(data.action === ActionEnum.delete) {
+      } else if(photo && data.action === ActionEnum.delete) {
         const i = photo.likes.findIndex(like => like.id === data.like.id);
         photo.likes.splice(i, 1);
       }
