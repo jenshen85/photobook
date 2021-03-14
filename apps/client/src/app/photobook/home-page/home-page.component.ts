@@ -119,12 +119,14 @@ export class HomePageComponent implements OnInit {
     });
 
     const updCommentsSubs = dialogRef.componentInstance.updateComments.subscribe((data) => {
-      if(data.action === ActionEnum.create) {
+      const photo = this.photos.find((photo) => photo.id === data.comment.photo_id);
+
+      if(photo && data.action === ActionEnum.create) {
         photo.comments.push(data.comment);
-      } else if(data.action === ActionEnum.update) {
+      } else if(photo && data.action === ActionEnum.update) {
         const i = photo.comments.findIndex(comment => comment.id === data.comment.id);
         photo.comments.splice(i, 1, data.comment);
-      } else if(data.action === ActionEnum.delete) {
+      } else if(photo && data.action === ActionEnum.delete) {
         const i = photo.comments.findIndex(comment => comment.id === data.comment_id);
         photo.comments.splice(i, 1);
       }

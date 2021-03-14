@@ -210,8 +210,8 @@ export class PhotoViewComponent implements OnInit {
       .subscribe({
         next: () => {
           const index = this.comments.findIndex(comment => comment.id === comment_id);
-          this.comments.splice(index, 1);
-          this.updateComments.emit({ comment_id, action: ActionEnum.delete });
+          const comment = this.comments.splice(index, 1)[0];
+          this.updateComments.emit({ comment, comment_id, action: ActionEnum.delete });
           this.pendingComments = false;
         },
         error: (err) => {
