@@ -60,9 +60,12 @@
 
   <!-- <div class="top-bar top-bar--fixed">
     <div class="container top-bar__container">
-      <div class="header-user">
-        <photobook-small-ava [user]="user" [profile]="user.user_profile"></photobook-small-ava>
-        <span class="header-user__name">{{user.user_profile.first_name}}</span>
+      <div class="header-user" *ngIf="currentUserProfile">
+        <a photobook-small-ava
+          [routerLink]="['/photobook', currentUserProfile.id]"
+          [avatar]="currentUserProfile.avatar ? currentUserProfile.avatar : null"
+          [userName]="getName"></a>
+        <span class="header-user__name">{{currentUserProfile.first_name}}</span>
       </div>
     </div>
   </div> -->

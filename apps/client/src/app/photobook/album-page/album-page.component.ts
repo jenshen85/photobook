@@ -23,6 +23,7 @@ import {
   editPhotoOutDataType,
   deletePhotoOutDataType
 } from './components/edit-photo/edit-photo.component';
+import { userName } from '../../shared/utils/utils';
 
 @Component({
   selector: 'photobook-album-page',
@@ -87,6 +88,11 @@ export class AlbumPageComponent implements OnInit {
       .reduce((acc, like) => acc + like.length, 0);
   }
 
+  get getName() {
+    const {first_name, last_name } = this.currentUserProfile;
+    return userName({ first_name, last_name });
+  }
+
   ngOnDestroy(): void {
     this.subs.unsubscribe();
   }
@@ -124,7 +130,7 @@ export class AlbumPageComponent implements OnInit {
     this.pendingLoadPhotos = true;
     this.subs.sink = this._photoService.getAllAlbumPhotos(albumId).subscribe(
       (photos) => {
-        this.photos = photos;
+        this.photos = photos.sort((a, b) => a.id < b.id ? 1 : -1);
         this.pendingLoadPhotos = false;
       },
       (error) => {
@@ -150,7 +156,8 @@ export class AlbumPageComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((data: addPhotoDataOutType) => {
       if(data) {
-        data.forEach(photo => this.photos.push(photo));
+        const sortData = data.sort((a, b) => a.id > b.id ? 1 : -1);
+        sortData.forEach(photo => this.photos.unshift(photo));
       }
     });
   }

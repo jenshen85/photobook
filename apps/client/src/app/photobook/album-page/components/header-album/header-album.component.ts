@@ -78,9 +78,7 @@ export class HeaderAlbumComponent implements OnInit {
   }
 
   get getName() {
-    return userName({
-      first_name: this.currentUserProfile.first_name,
-      last_name: this.currentUserProfile.last_name
-    });
+    const {first_name, last_name } = this.currentUserProfile;
+    return userName({ first_name, last_name });
   }
 }
