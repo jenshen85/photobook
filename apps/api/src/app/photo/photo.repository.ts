@@ -140,24 +140,24 @@ export class PhotoRepository extends Repository<Photo> {
     album_id: number,
     user: Auth
   ): Promise<PhotoRoDto> {
-    const photo = new Photo();
-    photo.user_id = user.id;
-    photo.album_id = album_id;
-    photo.user_profile_id = user.user_profile_id;
-    photo.image = imageData.imageUrl;
-    photo.image_name = imageData.fileName;
+    const newPhoto = new Photo();
+    newPhoto.user_id = user.id;
+    newPhoto.album_id = album_id;
+    newPhoto.user_profile_id = user.user_profile_id;
+    newPhoto.image = imageData.imageUrl;
+    newPhoto.image_name = imageData.fileName;
 
     try {
-      await photo.save();
-      return plainToClass(PhotoRoDto, photo);
+      await newPhoto.save();
     } catch (error) {
-      console.log(error);
       if (error.code === '23505') {
         throw new ConflictException(`Photo with name "${imageData.fileName}" already exists`);
       } else {
         throw new InternalServerErrorException(error);
       }
     }
+
+    return await this.getOne(newPhoto.id);
   }
 
   async updatePhoto(
