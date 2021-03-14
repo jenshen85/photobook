@@ -10,16 +10,16 @@ import { Photo, Auth } from '../entities';
 import { PhotoCredentialsDto, PhotoRoDto } from '@photobook/dto';
 
 import { IFileData } from '../file/file.service';
-import { GetPhotosQueryDto } from './dto/get-photo-query.dto';
-import { LikeEnum } from '@photobook/data';
+import { GetPhotosQueryDto, PhotoQueryDto } from './dto/get-photo-query.dto';
+import { LikeEnum, PhotoRoI } from '@photobook/data';
 
 @EntityRepository(Photo)
 export class PhotoRepository extends Repository<Photo> {
 
-  async getAll({take = 0 , skip = 0}: GetPhotosQueryDto): Promise<PhotoRoDto[]> {
+  async getAll({take, skip}: GetPhotosQueryDto): Promise<PhotoRoDto[]> {
     const photos = await this.createQueryBuilder('photo')
       .where('photo.deleted_at IS NULL')
-      .orderBy('photo.created_at', 'DESC')
+      .orderBy('photo.id', 'DESC')
       .leftJoinAndSelect('photo.album', 'album', 'album.deleted_at IS NULL')
       .leftJoinAndSelect('photo.user_profile', 'user_profile', 'user_profile.deleted_at IS NULL')
       .leftJoinAndSelect('photo.comments', 'comment', 'comment.deleted_at IS NULL')
@@ -35,6 +35,7 @@ export class PhotoRepository extends Repository<Photo> {
   async getAllAlbumPhoto(album_id: number): Promise<PhotoRoDto[]> {
     const photos = await this.createQueryBuilder('photo')
       .where('photo.deleted_at IS NULL')
+      .orderBy('photo.id', 'DESC')
       .leftJoinAndSelect('photo.album', 'album', 'album.deleted_at IS NULL')
       .leftJoinAndSelect('photo.user_profile', 'user_profile', 'user_profile.deleted_at IS NULL')
       .leftJoinAndSelect('photo.comments', 'comment', 'comment.deleted_at IS NULL')
@@ -58,6 +59,68 @@ export class PhotoRepository extends Repository<Photo> {
 
     if (!photo || (!photo.album && !photo.user_profile)) {
       throw new NotFoundException(`Photo with ID ${photo_id} not found`);
+    }
+
+    return plainToClass(PhotoRoDto, photo);
+  }
+
+  async getNext(photo_id: number, photoQuery: PhotoQueryDto): Promise<PhotoRoDto | null> {
+    const { album_id } = photoQuery;
+    let photo: PhotoRoI;
+    const query = this.createQueryBuilder('photo');
+
+    query.orderBy('photo.id', 'DESC')
+      .where('photo.id < :photo_id', { photo_id })
+      .andWhere('photo.deleted_at IS NULL')
+
+    if(album_id) {
+      query.andWhere('photo.album_id = :album_id', { album_id });
+    }
+
+    query.leftJoinAndSelect('photo.album', 'album', 'album.deleted_at IS NULL')
+      .leftJoinAndSelect('photo.user_profile', 'user_profile', 'user_profile.deleted_at IS NULL')
+      .leftJoinAndSelect('photo.comments', 'comment', 'comment.deleted_at IS NULL')
+      .leftJoinAndSelect('photo.likes', 'like', 'like.status = :like_status', { like_status: LikeEnum.liked });
+
+    try {
+      photo = await query.getOne();
+    } catch (err) {
+      throw new InternalServerErrorException(err);
+    }
+
+    if (!photo || (!photo.album && !photo.user_profile)) {
+      return null;
+    }
+
+    return plainToClass(PhotoRoDto, photo);
+  }
+
+  async getPrev(photo_id: number, photoQuery: PhotoQueryDto): Promise<PhotoRoDto | null> {
+    const { album_id } = photoQuery;
+    let photo: PhotoRoI;
+    const query = this.createQueryBuilder('photo');
+
+    query.orderBy('photo.id', 'ASC')
+      .where('photo.id > :photo_id', { photo_id })
+      .andWhere('photo.deleted_at IS NULL')
+
+    if(album_id) {
+      query.andWhere('photo.album_id = :album_id', { album_id });
+    }
+
+    query.leftJoinAndSelect('photo.album', 'album', 'album.deleted_at IS NULL')
+      .leftJoinAndSelect('photo.user_profile', 'user_profile', 'user_profile.deleted_at IS NULL')
+      .leftJoinAndSelect('photo.comments', 'comment', 'comment.deleted_at IS NULL')
+      .leftJoinAndSelect('photo.likes', 'like', 'like.status = :like_status', { like_status: LikeEnum.liked });
+
+    try {
+      photo = await query.getOne();
+    } catch (err) {
+      throw new InternalServerErrorException(err);
+    }
+
+    if (!photo || (!photo.album && !photo.user_profile)) {
+      return null;
     }
 
     return plainToClass(PhotoRoDto, photo);

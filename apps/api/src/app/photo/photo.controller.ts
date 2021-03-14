@@ -22,7 +22,7 @@ import { PhotoCredentialsDto, PhotoRoDto } from '@photobook/dto';
 import { PhotoService } from './photo.service';
 import { JwtAuthGuard } from '../shared/guards/jwt-auth.guard';
 import { GetUser } from '../shared/decorators/get-user.decorator';
-import { GetPhotosQueryDto } from './dto/get-photo-query.dto';
+import { GetPhotosQueryDto, PhotoQueryDto } from './dto/get-photo-query.dto';
 
 @Controller('photo')
 @UseGuards(JwtAuthGuard)
@@ -46,6 +46,22 @@ export class PhotoController {
   @Get(':photo_id')
   getOne(@Param('photo_id', ParseIntPipe) photo_id: number): Promise<PhotoRoDto> {
     return this._photoService.getOne(photo_id);
+  }
+
+  @Get(':photo_id/next')
+  getNext(
+    @Param('photo_id', ParseIntPipe) photo_id: number,
+    @Query(ValidationPipe) photoQuery: PhotoQueryDto,
+  ): Promise<PhotoRoDto> {
+    return this._photoService.getNext(photo_id, photoQuery);
+  }
+
+  @Get(':photo_id/prev')
+  getPrev(
+    @Param('photo_id', ParseIntPipe) photo_id: number,
+    @Query(ValidationPipe) photoQuery: PhotoQueryDto,
+  ): Promise<PhotoRoDto> {
+    return this._photoService.getPrev(photo_id, photoQuery);
   }
 
   @Post(':album_id')

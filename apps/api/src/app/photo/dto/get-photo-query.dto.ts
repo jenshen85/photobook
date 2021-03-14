@@ -9,3 +9,8 @@ export class GetPhotosQueryDto {
   @IsNotEmpty()
   skip: number;
 }
+
+export class PhotoQueryDto {
+  @IsOptional()
+  album_id: number;
+}
