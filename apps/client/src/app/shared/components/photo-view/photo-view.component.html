@@ -1,19 +1,21 @@
 <div class="photo-view">
   <div class="photo-view__top">
-    <button class="photo-view__arrow photo-view__prev">
+    <button class="photo-view__arrow photo-view__prev" (click)="prevPhoto()" [disabled]="loadPhoto">
       <span photobook-app-icon [icon]="leftIcon"></span>
     </button>
     <div class="photo-view__image">
-      <img [src]="photo.image" alt="" (load)="onload($event)">
+      <img *ngIf="photo" [attr.alt]="photo.description && photo.description"
+        [src]="photo.image"
+        (load)="onloadImage($event)">
       <photobook-spinner position="absolute" *ngIf="loadPhoto"></photobook-spinner>
     </div>
-    <button class="photo-view__arrow photo-view__next">
+    <button class="photo-view__arrow photo-view__next" (click)="nextPhoto()" [disabled]="loadPhoto">
       <span photobook-app-icon [icon]="rightIcon"></span>
     </button>
   </div>
 
   <div class="photo-view__middle">
-    <div class="photo-view__user">
+    <div class="photo-view__user" *ngIf="photo">
       <a photobook-small-ava
         [routerLink]="['/photobook', photo.user_profile_id]"
         (click)="closeDialog()"
@@ -29,12 +31,28 @@
       </div>
     </div>
 
-    <div>likes</div>
+    <button class="photo-view__likes"
+      *ngIf="photo"
+      [class.liked]="isUserLike"
+      (click)="likePhotoHandler()"
+      [disabled]="likePending">
+      <span class="photo-view__likes-inner">
+        <span class="photo-view__likes-icon">
+          <span *ngIf="isUserLike" photobook-app-icon [icon]="likeIcon" [@fadeIn]></span>
+          <span photobook-app-icon [icon]="heartIcon"></span>
+        </span>
+        <span class="photo-view__likes-text">{{ likesLength }}</span>
+      </span>
+    </button>
   </div>
   <div class="photo-view__bottom">
-    <div class="photo-view__info" *ngIf="photo.title || photo.description">
-      <div *ngIf="photo.title" class="photo-view__title">{{photo.title}}</div>
-      <div *ngIf="photo.description" class="photo-view__description">{{photo.description}}</div>
+    <div class="photo-view__info" *ngIf="photo && (photo.title || photo.description)">
+      <div *ngIf="photo.title" class="photo-view__title">
+        {{photo.title}}
+      </div>
+      <div *ngIf="photo.description" class="photo-view__description">
+        {{photo.description}}
+      </div>
       <!-- <div class="photo-view__description">Lorem ipsum dolor sit amet <a href="#">#consectetur</a> adipisicing elit. Eaque quasi quisquam eos soluta ex. A ipsam, commodi aut quos est fugit omnis iste, et excepturi ad facilis? Id <a href="#">#vitae</a> porro sequi, rerum sit molestias facilis!</div> -->
     </div>
     <div class="photo-view__comments">
@@ -64,11 +82,15 @@
             </form>
           </div>
         </div>
+      </div>
 
-
+      <div class="comments"
+        *ngIf="comments.length || pendingComments"
+        [style.minHeight]="!comments.length && pendingComments ? '100px' : ''">
         <div class="comments__row"
           *ngFor="let comment of comments; let i = index"
-          (mouseover)="activeActions = i" (mouseleave)="activeActions = null"
+          (mouseover)="activeActions = i"
+          (mouseleave)="activeActions = null"
           [@fadeIn]>
           <div class="comments__ava">
             <a photobook-small-ava
@@ -82,14 +104,14 @@
             <div class="comments__date">
               добавлен {{ comment.created_at| date: 'd.MM.YYYY'}}
             </div>
-
+  
             <div class="comments__text">
               <input class="comments__control" type="text" autoFocus
                 *ngIf="editComment === i; else commentText" [(ngModel)]="comment.text">
               <ng-template #commentText>
                 {{comment.text}}
               </ng-template>
-
+  
               <div class="comments__actions"
                 *ngIf="(comment.user_profile_id === authUserProfile.id && activeActions === i) || editComment === i"
                 [@fadeIn]>
@@ -110,7 +132,7 @@
           </div>
         </div>
 
-        <photobook-spinner position="absolute" *ngIf="pendingComments"></photobook-spinner>
+        <photobook-spinner *ngIf="pendingComments" position="absolute" ></photobook-spinner>
       </div>
 
     </div>

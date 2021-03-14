@@ -1,6 +1,6 @@
-import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Inject, OnInit, Output, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { CommentRoI, PhotoRoI, SpriteIconEnum, UserProfileRoI } from '@photobook/data';
+import { ActionEnum, CommentRoI, LikeRoI, PhotoRoI, SpriteIconEnum, UserProfileRoI } from '@photobook/data';
 import { DialogRef, DIALOG_DATA } from '@photobook/ui';
 
 import { PhotobookService } from '../../../photobook/photobook.service';
@@ -11,6 +11,7 @@ export type openPhotoInDataType = {
   photo: PhotoRoI;
   authUserProfile: UserProfileRoI;
   photoUserProfile: UserProfileRoI;
+  album_id?: number;
 }
 
 @Component({
@@ -21,6 +22,17 @@ export type openPhotoInDataType = {
   animations: [ fadeAnimations.fadeIn() ],
 })
 export class PhotoViewComponent implements OnInit {
+  @Output() updateComments: EventEmitter<{
+    comment?: CommentRoI,
+    comment_id?: number,
+    action: ActionEnum
+  }> = new EventEmitter();
+  @Output() updateLikes: EventEmitter<{
+    like: LikeRoI,
+    photo_id: number,
+    action: ActionEnum
+  }> = new EventEmitter();
+
   photo: PhotoRoI;
   authUserProfile: UserProfileRoI;
   photoUserProfile: UserProfileRoI;
@@ -32,12 +44,14 @@ export class PhotoViewComponent implements OnInit {
   editIcon = SpriteIconEnum.edit;
   closeIcon = SpriteIconEnum.close;
   sendIcon = SpriteIconEnum.send;
+  heartIcon = SpriteIconEnum.heart_stroke;
+  likeIcon = SpriteIconEnum.heart;
 
   comments: CommentRoI[] = [];
-  loadComments: boolean;
 
   form: FormGroup;
   pendingComments: boolean;
+  likePending: boolean;
   activeActions: number | null = null;
   editComment: number | null = null;
 
@@ -50,23 +64,106 @@ export class PhotoViewComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.photo = this.data.photo;
     this.authUserProfile = this.data.authUserProfile;
     this.photoUserProfile = this.data.photoUserProfile;
-    this.loadPhoto = true;
-
     this.form = new FormGroup({
       text: new FormControl(null, [Validators.maxLength(200)])
     })
 
-    this.getComments();
+    this.loadPhoto = true;
+    this._photobookService.getPhoto(this.data.photo.id).subscribe({
+      next: (photo: PhotoRoI) => this.updatePhotoData(photo),
+      error: (err) => {
+        this.loadPhoto = false;
+      }
+    });
+  }
+
+  prevPhoto() {
+    const album_id = this.data.album_id;
+    this.loadPhoto = true;
+    this._photobookService.getPrevPhoto(this.photo.id, album_id).subscribe({
+      next: (photo: PhotoRoI) => this.updatePhotoData(photo),
+      error: (err: any) => {
+        console.log(err);
+      }
+    });
+  }
+
+  nextPhoto() {
+    const album_id = this.data.album_id;
+    this.loadPhoto = true;
+    this._photobookService.getNextPhoto(this.photo.id, album_id).subscribe({
+      next: (photo: any) => this.updatePhotoData(photo),
+      error: (err: any) => {
+        console.log(err);
+      }
+    });
+  }
+
+  updatePhotoData(photo: PhotoRoI) {
+    if(photo) {
+      this.photo = photo;
+      this.photoUserProfile = photo.user_profile;
+      this.getComments();
+    } else {
+      this.loadPhoto = false;
+    }
+  }
+
+  likePhotoHandler() {
+    if(!this.isUserLike) {
+      this.likePending = true;
+      this._photobookService.likePhoto(this.photo.id).subscribe({
+        next: (like) => {
+          this.photo.likes.push(like);
+          this.updateLikes.emit({
+            like,
+            photo_id: this.photo.id,
+            action: ActionEnum.update
+          });
+
+          this.likePending = false;
+        },
+        error: () => {
+          this.likePending = false;
+        }
+      });
+    } else {
+      this.likePending = true;
+      this._photobookService.unLikePhoto(this.photo.id).subscribe({
+        next: () => {
+          const index = this.photo.likes.findIndex(like => like.user_profile_id === this.authUserProfile.id);
+          const like = this.photo.likes.splice(index, 1)[0];
+          this.updateLikes.emit({
+            like,
+            photo_id: this.photo.id,
+            action: ActionEnum.delete
+          });
+
+          this.likePending = false;
+        },
+        error: () => {
+          this.likePending = false;
+        }
+      });
+    }
+  }
+
+  get isUserLike(): boolean {
+    return Boolean(this.photo.likes.find(like => like.user_profile_id === this.authUserProfile.id ));
   }
 
   getComments() {
+    this.pendingComments = true;
     this._photobookService.getAllComments(this.photo.id)
       .subscribe({
         next: (comments) => {
           this.comments = comments;
+          this.pendingComments = false;
+        },
+        error: (err) => {
+          this.pendingComments = false;
         }
       });
   }
@@ -79,6 +176,7 @@ export class PhotoViewComponent implements OnInit {
           next: (comment) => {
             this.comments.push(comment);
             this.form.get('text').setValue(null);
+            this.updateComments.emit({ comment, action: ActionEnum.create });
             this.pendingComments = false;
           },
           error: (err) => {
@@ -96,6 +194,7 @@ export class PhotoViewComponent implements OnInit {
         .subscribe({
           next: (comment) => {
             this.pendingComments = false;
+            this.updateComments.emit({ comment, action: ActionEnum.update });
             this.editComment = null;
           },
           error: (err) => {
@@ -106,16 +205,19 @@ export class PhotoViewComponent implements OnInit {
   }
 
   removeComment(comment_id: number) {
+    this.pendingComments = true;
     this._photobookService.removeComment(comment_id)
-        .subscribe({
-          next: () => {
-            const index = this.comments.findIndex(comment => comment.id === comment_id);
-            this.comments.splice(index, 1);
-          },
-          error: (err) => {
-            this.pendingComments = false;
-          }
-        });
+      .subscribe({
+        next: () => {
+          const index = this.comments.findIndex(comment => comment.id === comment_id);
+          this.comments.splice(index, 1);
+          this.updateComments.emit({ comment_id, action: ActionEnum.delete });
+          this.pendingComments = false;
+        },
+        error: (err) => {
+          this.pendingComments = false;
+        }
+      });
   }
 
   onEditClick(i: number | null) {
@@ -123,22 +225,28 @@ export class PhotoViewComponent implements OnInit {
   }
 
   userNameCalc(first_name: string, last_name: string): string {
-    return userName({ first_name, last_name});
+    return userName({ first_name, last_name });
   }
 
   get userName(): string {
-    return userName({ first_name: this.photoUserProfile.first_name, last_name: this.photoUserProfile.last_name});
+    const { first_name, last_name } = this.photoUserProfile;
+    return userName({ first_name, last_name });
   }
 
   get authUserName(): string {
-    return userName({ first_name: this.authUserProfile.first_name, last_name: this.authUserProfile.last_name});
+    const { first_name, last_name } = this.authUserProfile;
+    return userName({ first_name, last_name });
   }
 
   get photoDate(): Date {
     return this.photo.created_at;
   }
 
-  onload(_: Event) {
+  get likesLength() {
+    return this.photo.likes.length
+  }
+
+  onloadImage(_: Event) {
     this.loadPhoto = false;
   }
 

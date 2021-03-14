@@ -27,6 +27,7 @@
             *ngFor="let photo of photos" [photo]="photo"
             [albumTitle]="photo.album.title"
             [userProfile]="photo.user_profile"
+            [authUserProfile]="authUserProfile"
             (onPhotoClick)="openPhotoDialog($event)"
             [@fadeIn]></photobook-photo-card>
           <photobook-spinner position="absolute" *ngIf="pendingLoadPhotos"></photobook-spinner>

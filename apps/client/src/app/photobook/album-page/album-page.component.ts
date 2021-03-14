@@ -51,7 +51,7 @@ export class AlbumPageComponent implements OnInit {
     private readonly _photoService: PhotobookService,
     private readonly dialog: Dialog,
     private readonly _route: ActivatedRoute,
-    // private readonly _changeDetectionRef: ChangeDetectorRef,
+    private readonly _changeDetectionRef: ChangeDetectorRef,
   ) { }
 
   ngOnInit(): void {
@@ -155,11 +155,12 @@ export class AlbumPageComponent implements OnInit {
     });
   }
 
-  openPhotoDialog({photo, userProfile}): void {
+  openPhotoDialog({photo, userProfile}: {photo: PhotoRoI, userProfile: UserProfileRoI}): void {
     const data: openPhotoInDataType = {
       photo,
       authUserProfile: this.authUserProfile,
-      photoUserProfile: userProfile
+      photoUserProfile: userProfile,
+      album_id: this.album.id
     };
 
     const dialogRef = this.dialog.open(PhotoViewComponent, {
@@ -168,6 +169,33 @@ export class AlbumPageComponent implements OnInit {
       autoFocus: false,
       scrolledOverlayPosition: 'top',
       dialogContainerClass: ['photo-view-container']
+    });
+
+    const updCommentsSubs = dialogRef.componentInstance.updateComments.subscribe((data) => {
+      if(data.action === ActionEnum.create) {
+        photo.comments.push(data.comment);
+      } else if(data.action === ActionEnum.update) {
+        const i = photo.comments.findIndex(comment => comment.id === data.comment.id);
+        photo.comments.splice(i, 1, data.comment);
+      } else if(data.action === ActionEnum.delete) {
+        const i = photo.comments.findIndex(comment => comment.id === data.comment_id);
+        photo.comments.splice(i, 1);
+      }
+    });
+
+    const updLikesSubs = dialogRef.componentInstance.updateLikes.subscribe((data) => {
+      const photo = this.photos.find((photo) => photo.id === data.photo_id);
+      if(data.action === ActionEnum.update) {
+        photo.likes.push(data.like);
+      } else if(data.action === ActionEnum.delete) {
+        const i = photo.likes.findIndex(like => like.id === data.like.id);
+        photo.likes.splice(i, 1);
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(() => {
+      updCommentsSubs && updCommentsSubs.unsubscribe();
+      updLikesSubs && updLikesSubs.unsubscribe();
     });
   }
 

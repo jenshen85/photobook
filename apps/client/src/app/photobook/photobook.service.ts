@@ -45,6 +45,22 @@ export class PhotobookService {
     });
   }
 
+  getPhoto(photo_id: number | string): Observable<PhotoRoI> {
+    return this._http.get<PhotoRoI>(`${PATHS.photo}/${photo_id}`);
+  }
+
+  getNextPhoto(photo_id: number | string, album_id?: number | string): Observable<PhotoRoI> {
+    return this._http.get<PhotoRoI>(`${PATHS.photo}/${photo_id}/next`, {
+      params: { album_id: album_id ? album_id.toString() : '' }
+    });
+  }
+
+  getPrevPhoto(photo_id: number | string, album_id?: number | string): Observable<PhotoRoI> {
+    return this._http.get<PhotoRoI>(`${PATHS.photo}/${photo_id}/prev`, {
+      params: { album_id: album_id ? album_id.toString() : '' }
+    });
+  }
+
   getAllAlbumPhotos(album_id: number): Observable<PhotoRoI[]> {
     return this._http.get<PhotoRoI[]>(`${PATHS.photo}/album/${album_id}`);
   }

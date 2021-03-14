@@ -15,10 +15,22 @@
     position: relative;
 
     .photo-card__actions {
-      pointer-events: none;
+      // pointer-events: none;
       position: absolute;
       bottom: rem(20);
       left: rem(20);
+    }
+
+    &:hover {
+      .photo-card__img {
+        &::after {
+          opacity: 1;
+        }
+      }
+
+      .photo-card__img-zoom {
+        opacity: 1;
+      }
     }
   }
 
@@ -43,15 +55,15 @@
     }
 
 
-    &:hover {
-      &::after {
-        opacity: 1;
-      }
+    // &:hover {
+    //   &::after {
+    //     opacity: 1;
+    //   }
 
-      #{$img}-zoom {
-        opacity: 1;
-      }
-    }
+    //   #{$img}-zoom {
+    //     opacity: 1;
+    //   }
+    // }
 
     img {
       width: 100%;
@@ -115,10 +127,13 @@
     $btn: &;
     display: flex;
     align-items: center;
-    margin-right: rem(18);
+    margin-right: rem(12);
     cursor: pointer;
     border: 0;
     background: none;
+    @include panton;
+    font-weight: 600;
+    outline: none;
 
     &:last-child {
       margin-right: 0;
@@ -147,13 +162,12 @@
       height: rem(17);
       color: #d6d6d6;
       transition: color 0.3s;
-      margin-right: rem(10);
+      margin-right: rem(6);
     }
 
     &-num {
       font-size: rem(16);
       color: $text-color;
-      font-weight: normal;
     }
 
     &--noinfo {

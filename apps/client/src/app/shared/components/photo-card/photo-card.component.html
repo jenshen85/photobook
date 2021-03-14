@@ -66,19 +66,39 @@
 <ng-template #photoActions>
   <div class="photo-card__actions">
     <button class="photo-card__action"
-      [ngClass]="!hasInfo && 'photo-card__action--noinfo'"
-      [ngClass]="commentsLength && 'filled'"
-      [attr.disabled]="!hasInfo">
+      [class.photo-card__action--noinfo]="!hasInfo"
+      [class.filled]="commentsLength"
+      (click)="onPhotoClickHandler($event)">
       <span class="photo-card__action-ico" photobook-app-icon [icon]="commentIcon"></span>
       <span class="photo-card__action-num">{{ commentsLength ? commentsLength : ''}}</span>
     </button>
     <!-- liked -->
     <button class="photo-card__action"
-      [ngClass]="!hasInfo && 'photo-card__action--noinfo'"
-      [ngClass]="likesLength && 'liked'"
-      [attr.disabled]="!hasInfo">
+      [class.photo-card__action--noinfo]="!hasInfo"
+      [class.filled]="likesLength && !isUserLike"
+      [class.liked]="isUserLike"
+      [disabled]="likePending"
+      (click)="likePhotoHandler()">
       <span class="photo-card__action-ico" photobook-app-icon [icon]="likeIcon"></span>
       <span class="photo-card__action-num">{{ likesLength ? likesLength: '' }}</span>
     </button>
   </div>
 </ng-template>
+
+<!-- <ng-template #photoActions2>
+  <div class="photo-card__actions">
+    <span class="photo-card__action photo-card__action--noinfo"
+      [class.filled]="commentsLength">
+      <span class="photo-card__action-ico" photobook-app-icon [icon]="commentIcon"></span>
+      <span class="photo-card__action-num">{{ commentsLength ? commentsLength : ''}}</span>
+    </span>
+    <button class="photo-card__action photo-card__action--noinfo"
+      [class.filled]="likesLength && !isUserLike"
+      [class.liked]="isUserLike"
+      [disabled]="likePending"
+      (click)="likePhoto()">
+      <span class="photo-card__action-ico" photobook-app-icon [icon]="likeIcon"></span>
+      <span class="photo-card__action-num">{{ likesLength ? likesLength: '' }}</span>
+    </button>
+  </div>
+</ng-template> -->
