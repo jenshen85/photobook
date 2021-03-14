@@ -35,17 +35,23 @@
     <section class="photobook-section photos">
       <div class="container">
         <div class="photo-cards">
-          <photobook-spinner position="absolute" *ngIf="pendingLoadPhotos; else photosTmp"></photobook-spinner>
-          <ng-template #photosTmp>
-            <photobook-photo-card
-              [isAuthUser]="isAuth"
-              [hasInfo]="false"
-              *ngFor="let photo of photos" [photo]="photo" [@fadeIn]
-              [userProfile]="currentUserProfile"
-              [authUserProfile]="authUserProfile"
-              (onPhotoClick)="openPhotoDialog($event)"
-              (onEditClick)="openEditPhotoDilaog($event)"></photobook-photo-card>
-          </ng-template>
+          <photobook-photo-card
+            *ngFor="let photo of photos" [photo]="photo"
+            [isAuthUser]="isAuth"
+            [hasInfo]="false"
+            [userProfile]="currentUserProfile"
+            [authUserProfile]="authUserProfile"
+            (onPhotoClick)="openPhotoDialog($event)"
+            (onEditClick)="openEditPhotoDilaog($event)"
+            [@fadeIn]></photobook-photo-card>
+          <photobook-spinner position="absolute" *ngIf="pendingLoadPhotos;"></photobook-spinner>
+        </div>
+        <div class="photos-actions">
+          <button
+            *ngIf="loadMore"
+            (click)="loadPhotos(album.id)"
+            type="button"
+            class="button button-border">Показать еще</button>
         </div>
       </div>
     </section>

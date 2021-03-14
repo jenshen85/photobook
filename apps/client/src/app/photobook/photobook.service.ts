@@ -39,9 +39,7 @@ export class PhotobookService {
   // photos
   getPhotos({ take='9', skip='0' }: { take?: string, skip?: string }): Observable<PhotoRoI[]> {
     return this._http.get<PhotoRoI[]>(PATHS.photo, {
-      params: {
-        take, skip
-      }
+      params: { take, skip }
     });
   }
 
@@ -61,8 +59,10 @@ export class PhotobookService {
     });
   }
 
-  getAllAlbumPhotos(album_id: number): Observable<PhotoRoI[]> {
-    return this._http.get<PhotoRoI[]>(`${PATHS.photo}/album/${album_id}`);
+  getAllAlbumPhotos(album_id: number, { take, skip }: { take?: string, skip?: string }): Observable<PhotoRoI[]> {
+    return this._http.get<PhotoRoI[]>(`${PATHS.photo}/album/${album_id}`, {
+      params: { take, skip }
+    });
   }
 
   createPhoto<T, D>(album_id: number, data: T): Observable<HttpEvent<D>> {

@@ -47,6 +47,10 @@ export class AlbumPageComponent implements OnInit {
   pendingLoadAlbum = true;
   pendingLoadPhotos = true;
 
+  private _take = 9;
+  private _skip = 0;
+  loadMore = true;
+
   constructor(
     private readonly _authService: AuthService,
     private readonly _photoService: PhotobookService,
@@ -126,15 +130,45 @@ export class AlbumPageComponent implements OnInit {
     );
   }
 
+  // loadPhotos(albumId: number) {
+  //   this.pendingLoadPhotos = true;
+  //   this.subs.sink = this._photoService.getAllAlbumPhotos(albumId).subscribe(
+  //     (photos) => {
+  //       this.photos = photos.sort((a, b) => a.id < b.id ? 1 : -1);
+  //       this.pendingLoadPhotos = false;
+  //     },
+  //     (error) => {
+  //       // TODO: error handling
+  //       this.pendingLoadPhotos = false;
+  //     }
+  //   );
+  // }
+
   loadPhotos(albumId: number) {
     this.pendingLoadPhotos = true;
-    this.subs.sink = this._photoService.getAllAlbumPhotos(albumId).subscribe(
+    this.subs.sink = this._photoService.getAllAlbumPhotos(albumId, {
+      take: this._take.toString(),
+      skip: this._skip.toString()
+    }).subscribe(
       (photos) => {
-        this.photos = photos.sort((a, b) => a.id < b.id ? 1 : -1);
-        this.pendingLoadPhotos = false;
+        if(photos.length) {
+          const sortedPhotos = photos.sort((a, b) => a.id < b.id ? 1 : -1);
+          sortedPhotos.forEach(photo => this.photos.push(photo));
+          this.pendingLoadPhotos = false;
+          this._skip = this._skip + this._take;
+
+          if(photos.length < this._take) {
+            this.loadMore = false;
+          }
+        } else {
+          this.loadMore = false;
+        }
       },
       (error) => {
         // TODO: error handling
+        console.log(error);
+      },
+      () => {
         this.pendingLoadPhotos = false;
       }
     );
