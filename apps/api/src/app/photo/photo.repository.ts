@@ -32,7 +32,7 @@ export class PhotoRepository extends Repository<Photo> {
     return resultPhotos.map((photo) => plainToClass(PhotoRoDto, photo));
   }
 
-  async getAllAlbumPhoto(album_id: number): Promise<PhotoRoDto[]> {
+  async getAllAlbumPhoto(album_id: number, { take, skip }: GetPhotosQueryDto): Promise<PhotoRoDto[]> {
     const photos = await this.createQueryBuilder('photo')
       .where('photo.deleted_at IS NULL')
       .orderBy('photo.id', 'DESC')
@@ -41,6 +41,8 @@ export class PhotoRepository extends Repository<Photo> {
       .leftJoinAndSelect('photo.comments', 'comment', 'comment.deleted_at IS NULL')
       .leftJoinAndSelect('photo.likes', 'like', 'like.status = :like_status', { like_status: LikeEnum.liked })
       .where({ album_id })
+      .take(take)
+      .skip(skip)
       .getMany();
 
     const resultPhotos = photos.filter((photo) => photo.album && photo.user_profile);

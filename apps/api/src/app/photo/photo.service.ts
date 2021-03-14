@@ -23,8 +23,8 @@ export class PhotoService {
     return this._photoRepository.getAll(getPhotosQuery);
   }
 
-  async getAllAlbumPhoto(album_id: number): Promise<PhotoRoDto[]> {
-    return this._photoRepository.getAllAlbumPhoto(album_id);
+  async getAllAlbumPhoto(album_id: number, getPhotosQuery: GetPhotosQueryDto): Promise<PhotoRoDto[]> {
+    return this._photoRepository.getAllAlbumPhoto(album_id, getPhotosQuery);
   }
 
   async getOne(photo_id: number): Promise<PhotoRoDto> {

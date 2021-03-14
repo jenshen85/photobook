@@ -38,9 +38,10 @@ export class PhotoController {
 
   @Get('album/:album_id')
   getAllAlbumPhoto(
-    @Param('album_id', ParseIntPipe) album_id: number
+    @Param('album_id', ParseIntPipe) album_id: number,
+    @Query(ValidationPipe) getPhotosQuery: GetPhotosQueryDto,
   ): Promise<PhotoRoDto[]> {
-    return this._photoService.getAllAlbumPhoto(album_id);
+    return this._photoService.getAllAlbumPhoto(album_id, getPhotosQuery);
   }
 
   @Get(':photo_id')
