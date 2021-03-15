@@ -8,31 +8,36 @@ import {
   ActionEnum,
   UserProfileRoI,
 } from '@photobook/data';
-import { DialogRef, DIALOG_DATA } from '@photobook/ui';
-import { fadeIn } from 'ng-animate';
+import { Dialog, DialogRef, DIALOG_DATA } from '@photobook/ui';
 import { SubSink } from 'subsink';
 import { PhotobookService } from '../../../photobook.service';
-import { checkFileSize, checkFileTypes, getBase64, toFormData } from '../../../../shared/utils/utils';
+import {
+  checkFileSize,
+  checkFileTypes,
+  getBase64,
+  toFormData,
+} from '../../../../shared/utils/utils';
 import { fadeAnimations } from 'apps/client/src/app/shared/utils/animations';
+import { ConfirmComponent } from '../../../components/confirm/confirm.component';
 
 export type addAlbumOutDataType = {
-  action: ActionEnum,
-  album?: AlbumRoI,
+  action: ActionEnum;
+  album?: AlbumRoI;
   album_id?: number;
-}
+};
 
 export type addAlbumInDataType = {
   album?: AlbumRoI;
   authUserProfile: UserProfileRoI;
-  action: ActionEnum,
-}
+  action: ActionEnum;
+};
 
 @Component({
   selector: 'div[photobook-add-album]',
   templateUrl: './add-album.component.html',
   styleUrls: ['./add-album.component.scss'],
   host: { class: 'common-dialog photobook-add-album' },
-  animations: [ fadeAnimations.fadeIn() ],
+  animations: [fadeAnimations.fadeIn()],
 })
 export class AddAlbumComponent implements OnInit {
   subs = new SubSink();
@@ -48,6 +53,7 @@ export class AddAlbumComponent implements OnInit {
   constructor(
     private photobookService: PhotobookService,
     private readonly dialogRef: DialogRef<AddAlbumComponent>,
+    private readonly _dialog: Dialog,
     @Inject(DIALOG_DATA) private data: addAlbumInDataType
   ) {}
 
@@ -103,8 +109,8 @@ export class AddAlbumComponent implements OnInit {
       (album) => {
         const data: addAlbumOutDataType = {
           action: ActionEnum.create,
-          album
-        }
+          album,
+        };
         this.pending = false;
         this.dialogRef.close(data);
       },
@@ -117,31 +123,48 @@ export class AddAlbumComponent implements OnInit {
 
   updateAlbum(data: FormData): void {
     this.pending = true;
-    this.subs.sink = this.photobookService.updateAlbum(this.album.id, data).subscribe(
-      (album) => {
-        const data: addAlbumOutDataType = {
-          action: ActionEnum.update,
-          album,
+    this.subs.sink = this.photobookService
+      .updateAlbum(this.album.id, data)
+      .subscribe(
+        (album) => {
+          const data: addAlbumOutDataType = {
+            action: ActionEnum.update,
+            album,
+          };
+          this.pending = false;
+          this.dialogRef.close(data);
+        },
+        (error) => {
+          this.pending = false;
+          console.log(error);
         }
-        this.pending = false;
-        this.dialogRef.close(data);
-      },
-      (error) => {
-        this.pending = false;
-        console.log(error);
-      }
-    );
+      );
   }
 
   removeAlbum(album_id: number): void {
-    this.subs.sink = this.photobookService.removeAlbum(album_id).subscribe(
-      () => {
-        const data: addAlbumOutDataType = {
-          action: ActionEnum.delete,
-          album_id
-        }
-        this.dialogRef.close(data);
+    const confirm = this._dialog.open(ConfirmComponent, {
+      data: {
+        title: 'Удалить альбом',
+        message: `Вы действительно хотите удалить альбом "${this.album.title}" и его фото (${this.album.photos.length})?`,
+      },
+      isScrolled: true,
+      autoFocus: false,
+      scrolledOverlayPosition: 'center',
+      dialogContainerClass: ['confirm-container'],
+    });
+
+    confirm.afterClosed().subscribe((cond) => {
+      if (cond) {
+        this.subs.sink = this.photobookService
+          .removeAlbum(album_id)
+          .subscribe(() => {
+            const data: addAlbumOutDataType = {
+              action: ActionEnum.delete,
+              album_id,
+            };
+            this.dialogRef.close(data);
+          });
       }
-    );
+    });
   }
 }

@@ -6,6 +6,10 @@
   position: relative;
 }
 
+.cdk-scrolled-overlay-wrapper {
+  position: absolute;
+}
+
 .cdk-scrolled-overlay {
   display: block;
   padding: 0 15px;

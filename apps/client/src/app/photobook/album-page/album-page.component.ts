@@ -54,7 +54,7 @@ export class AlbumPageComponent implements OnInit {
   constructor(
     private readonly _authService: AuthService,
     private readonly _photoService: PhotobookService,
-    private readonly dialog: Dialog,
+    private readonly _dialog: Dialog,
     private readonly _route: ActivatedRoute,
     private readonly _changeDetectionRef: ChangeDetectorRef,
   ) { }
@@ -130,20 +130,6 @@ export class AlbumPageComponent implements OnInit {
     );
   }
 
-  // loadPhotos(albumId: number) {
-  //   this.pendingLoadPhotos = true;
-  //   this.subs.sink = this._photoService.getAllAlbumPhotos(albumId).subscribe(
-  //     (photos) => {
-  //       this.photos = photos.sort((a, b) => a.id < b.id ? 1 : -1);
-  //       this.pendingLoadPhotos = false;
-  //     },
-  //     (error) => {
-  //       // TODO: error handling
-  //       this.pendingLoadPhotos = false;
-  //     }
-  //   );
-  // }
-
   loadPhotos(albumId: number) {
     this.pendingLoadPhotos = true;
     this.subs.sink = this._photoService.getAllAlbumPhotos(albumId, {
@@ -180,7 +166,7 @@ export class AlbumPageComponent implements OnInit {
       album: this.album
     }
 
-    const dialogRef = this.dialog.open(AddPhotoComponent, {
+    const dialogRef = this._dialog.open(AddPhotoComponent, {
       data,
       isScrolled: true,
       autoFocus: false,
@@ -204,7 +190,7 @@ export class AlbumPageComponent implements OnInit {
       album_id: this.album.id
     };
 
-    const dialogRef = this.dialog.open(PhotoViewComponent, {
+    const dialogRef = this._dialog.open(PhotoViewComponent, {
       data,
       isScrolled: true,
       autoFocus: false,
@@ -247,7 +233,7 @@ export class AlbumPageComponent implements OnInit {
       photo,
       authUserProfile: this.authUserProfile
     }
-    const dialogRef = this.dialog.open(EditPhotoComponent, {
+    const dialogRef = this._dialog.open(EditPhotoComponent, {
       data,
       isScrolled: true,
       autoFocus: false,

@@ -1,31 +1,42 @@
-import { Component, OnInit, ChangeDetectionStrategy, Inject } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ChangeDetectionStrategy,
+  Inject,
+} from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActionEnum, PhotoRoI, SpriteIconEnum, UserProfileRoI } from '@photobook/data';
+import {
+  ActionEnum,
+  PhotoRoI,
+  SpriteIconEnum,
+  UserProfileRoI,
+} from '@photobook/data';
 import { PhotoCredentialsDto } from '@photobook/dto';
-import { DialogRef, DIALOG_DATA } from '@photobook/ui';
+import { Dialog, DialogRef, DIALOG_DATA } from '@photobook/ui';
 import { SubSink } from 'subsink';
+import { ConfirmComponent } from '../../../components/confirm/confirm.component';
 import { PhotobookService } from '../../../photobook.service';
 
 export type editPhotoInDataType = {
-  photo: PhotoRoI,
-  authUserProfile: UserProfileRoI
-}
+  photo: PhotoRoI;
+  authUserProfile: UserProfileRoI;
+};
 
 export type editPhotoOutDataType = {
-  photo: PhotoRoI,
-  action: ActionEnum.update
-}
+  photo: PhotoRoI;
+  action: ActionEnum.update;
+};
 
 export type deletePhotoOutDataType = {
-  photo_id: number,
-  action: ActionEnum.delete
-}
+  photo_id: number;
+  action: ActionEnum.delete;
+};
 
 @Component({
   selector: 'photobook-edit-photo',
   templateUrl: './edit-photo.component.html',
   styleUrls: ['./edit-photo.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EditPhotoComponent implements OnInit {
   subs = new SubSink();
@@ -38,8 +49,9 @@ export class EditPhotoComponent implements OnInit {
   constructor(
     private readonly _photoBookService: PhotobookService,
     private readonly dialogRef: DialogRef<EditPhotoComponent>,
+    private readonly _dialog: Dialog,
     @Inject(DIALOG_DATA) private data: editPhotoInDataType
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.photo = this.data.photo;
@@ -53,7 +65,7 @@ export class EditPhotoComponent implements OnInit {
         description: new FormControl(
           this.photo ? this.photo.description : null,
           [Validators.maxLength(200)]
-        )
+        ),
       },
       { updateOn: 'change' }
     );
@@ -63,13 +75,18 @@ export class EditPhotoComponent implements OnInit {
     if (this.form.valid) {
       const data: PhotoCredentialsDto = this.form.value;
       this.pending = true;
-      this.subs.sink = this._photoBookService.updatePhoto<PhotoCredentialsDto, PhotoRoI>(this.photo.album_id, this.photo.id, data)
+      this.subs.sink = this._photoBookService
+        .updatePhoto<PhotoCredentialsDto, PhotoRoI>(
+          this.photo.album_id,
+          this.photo.id,
+          data
+        )
         .subscribe(
           (photo) => {
             this.pending = false;
             const data: editPhotoOutDataType = {
               photo,
-              action: ActionEnum.update
+              action: ActionEnum.update,
             };
             this.dialogRef.close(data);
           },
@@ -81,15 +98,30 @@ export class EditPhotoComponent implements OnInit {
     }
   }
 
-  removeAlbum(album_id: number, photo_id: number): void {
-    this.subs.sink = this._photoBookService.removePhoto(album_id, photo_id).subscribe(
-      () => {
-        const data: deletePhotoOutDataType = {
-          photo_id,
-          action: ActionEnum.delete
-        }
-        this.dialogRef.close(data);
+  removePhoto(album_id: number, photo_id: number): void {
+    const confirm = this._dialog.open(ConfirmComponent, {
+      data: {
+        title: 'Удалить фотографию',
+        message: 'Вы действительно хотите удалить этот фото?',
+      },
+      isScrolled: true,
+      autoFocus: false,
+      scrolledOverlayPosition: 'center',
+      dialogContainerClass: ['confirm-container'],
+    });
+
+    confirm.afterClosed().subscribe((cond) => {
+      if (cond) {
+        this.subs.sink = this._photoBookService
+          .removePhoto(album_id, photo_id)
+          .subscribe(() => {
+            const data: deletePhotoOutDataType = {
+              photo_id,
+              action: ActionEnum.delete,
+            };
+            this.dialogRef.close(data);
+          });
       }
-    );
+    });
   }
 }

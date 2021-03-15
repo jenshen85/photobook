@@ -6,34 +6,78 @@
     <div class="common-dialog-body">
       <label class="edti-photo-form__field">
         <span class="edti-photo-form__label">Название</span>
-        <input [ngClass]="form.get('title').invalid && form.get('title').touched && 'error'"
-          class="form-control" type="text" placeholder="Название" formControlName="title">
-        <span class="edti-photo-form__error" *ngIf="form.get('title').invalid && form.get('title').touched" [@fade]>
-          <small *ngIf="form.get('title').errors.required">Поле должно быть заполнено</small>
+        <input
+          [ngClass]="
+            form.get('title').invalid && form.get('title').touched && 'error'
+          "
+          class="form-control"
+          type="text"
+          placeholder="Название"
+          formControlName="title"
+        />
+        <span
+          class="edti-photo-form__error"
+          *ngIf="form.get('title').invalid && form.get('title').touched"
+          [@fade]
+        >
+          <small *ngIf="form.get('title').errors.required"
+            >Поле должно быть заполнено</small
+          >
           <small *ngIf="form.get('title').errors.maxlength">
-            Превышена максимальная длина описания ({{form.get('title').errors.maxlength.requiredLength}} символов)
+            Превышена максимальная длина описания ({{
+              form.get('title').errors.maxlength.requiredLength
+            }}
+            символов)
           </small>
         </span>
       </label>
 
       <label class="edti-photo-form__field">
         <span class="edti-photo-form__label">Описание</span>
-        <textarea [ngClass]="form.get('description').invalid && form.get('description').touched && 'error'"
-          class="form-control" formControlName="description" placeholder="Описание"></textarea>
-        <span class="edti-photo-form__error" *ngIf="form.get('description').invalid && form.get('description').touched" [@fade]>
+        <textarea
+          [ngClass]="
+            form.get('description').invalid &&
+            form.get('description').touched &&
+            'error'
+          "
+          class="form-control"
+          formControlName="description"
+          placeholder="Описание"
+        ></textarea>
+        <span
+          class="edti-photo-form__error"
+          *ngIf="
+            form.get('description').invalid && form.get('description').touched
+          "
+          [@fade]
+        >
           <small *ngIf="form.get('description').errors.maxlength">
-            Превышена максимальная длина описания ({{form.get('description').errors.maxlength.requiredLength}} символов)
+            Превышена максимальная длина описания ({{
+              form.get('description').errors.maxlength.requiredLength
+            }}
+            символов)
           </small>
         </span>
       </label>
     </div>
 
     <div class="common-dialog-footer">
-      <button type="submit" [disabled]="form.invalid && form.touched" class="button button-bg-blue">Сохранить</button>
-      <button type="button" dialogClose class="button btn-white">Отменить</button>
-      <button type="button"
+      <button
+        type="submit"
+        [disabled]="form.invalid && form.touched"
+        class="button button-bg-blue"
+      >
+        Сохранить
+      </button>
+      <button type="button" dialogClose class="button btn-white">
+        Отменить
+      </button>
+      <button
+        type="button"
         *ngIf="photo"
-        (click)="removeAlbum(photo.album_id, photo.id)" class="button button-remove">
+        (click)="removePhoto(photo.album_id, photo.id)"
+        class="button button-remove"
+      >
         <span photobook-app-icon [icon]="removeIcon"></span>
         Удалить
       </button>
