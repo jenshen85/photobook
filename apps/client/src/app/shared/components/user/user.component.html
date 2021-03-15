@@ -1,12 +1,16 @@
 <div class="user" *ngIf="profile">
   <div class="user__inner">
     <div class="user__ava" *ngIf="profile">
-      <img *ngIf="profile.avatar; else fallbackImg" [src]="profile.avatar" [alt]="userName">
+      <img
+        *ngIf="profile.avatar; else fallbackImg"
+        [src]="profile.avatar"
+        [alt]="userName"
+      />
       <ng-template #fallbackImg>
         <span photobook-app-icon [icon]="userIcon"></span>
       </ng-template>
       <div class="user__change-photo" *ngIf="isEdit">
-        <photobook-upload-image formControlName="{{avatarControl}}">
+        <photobook-upload-image formControlName="{{ avatarControl }}">
           Изменить фото
         </photobook-upload-image>
       </div>
@@ -14,19 +18,33 @@
 
     <div class="user__info">
       <div class="user__name">
-        <span *ngIf="!isEdit; else editName">{{userName}}</span>
+        <span *ngIf="!isEdit; else editName">{{ userName }}</span>
         <ng-template #editName>
           <span class="user__field">
-            <input class="user__control" type="text" formControlName="{{firstNameControl}}" placeholder="Имя">
-            <input class="user__control" type="text" formControlName="{{lastNameControl}}" placeholder="Фамилия">
+            <input
+              class="user__control"
+              type="text"
+              formControlName="{{ firstNameControl }}"
+              placeholder="Имя"
+            />
+            <input
+              class="user__control"
+              type="text"
+              formControlName="{{ lastNameControl }}"
+              placeholder="Фамилия"
+            />
           </span>
         </ng-template>
       </div>
       <div class="user__desc">
-        <span *ngIf="!isEdit; else editDesc">{{profile.description}}</span>
+        <span *ngIf="!isEdit; else editDesc">{{ profile.description }}</span>
         <ng-template #editDesc>
           <span class="user__field">
-            <textarea class="user__control" placeholder="описание" formControlName="{{descriptionControl}}"></textarea>
+            <textarea
+              class="user__control"
+              placeholder="описание"
+              formControlName="{{ descriptionControl }}"
+            ></textarea>
           </span>
         </ng-template>
       </div>

@@ -1,25 +1,38 @@
 <div class="album-card">
-  <a [routerLink]="['/', 'photobook', album.user_profile_id, album.id]" class="album-card__top">
+  <a
+    [routerLink]="['/', 'photobook', album.user_profile_id, album.id]"
+    class="album-card__top"
+  >
     <div
       class="album-card__img"
-      [style.backgroundImage]="!album.preview
-        ? 'url(../../../../assets/images/picture.svg)'
-        : null"
-      >
-      <img *ngIf="album.preview" [src]="album.preview" [alt]="album.title">
+      [style.backgroundImage]="
+        !album.preview ? 'url(../../../../assets/images/picture.svg)' : null
+      "
+    >
+      <img *ngIf="album.preview" [src]="album.preview" [alt]="album.title" />
     </div>
     <div class="album-card__info">
-      <div class="album-card__desc" *ngIf="album.description">{{album.description}}</div>
-      <div class="album-card__length">{{album.photos.length}} фотографий</div>
+      <div class="album-card__desc" *ngIf="album.description">
+        {{ album.description }}
+      </div>
+      <div class="album-card__length">{{ album.photos.length }} фотографий</div>
     </div>
   </a>
   <div class="album-card__bottom">
-    <button *ngIf="editable" type="button" class="album-card__edit" (click)="editClick.emit(album)">
+    <button
+      *ngIf="editable"
+      type="button"
+      class="album-card__edit"
+      (click)="editClick.emit(album)"
+    >
       <span photobook-app-icon [icon]="editIcon"></span>
     </button>
 
-    <a [routerLink]="['/', 'photobook', album.user_profile_id, album.id]" class="album-card__name">
-      {{album.title}}
+    <a
+      [routerLink]="['/', 'photobook', album.user_profile_id, album.id]"
+      class="album-card__name"
+    >
+      {{ album.title }}
     </a>
   </div>
 </div>

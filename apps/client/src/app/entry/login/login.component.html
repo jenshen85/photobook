@@ -1,38 +1,59 @@
 <photobook-fade>
   <div class="big-title big-title-white">Добро пожаловать</div>
   <div class="entry-description">
-    Перед вами сервис, который поможет вам организовать свои фотографии в альбомы и поделиться ими со всем миром!
+    Перед вами сервис, который поможет вам организовать свои фотографии в
+    альбомы и поделиться ими со всем миром!
   </div>
 
   <div class="entry-form-out">
     <form [formGroup]="form" (ngSubmit)="submit($event)" class="entry-form">
-
       <photobook-form-control
         inputName="email"
-        [class]="form.get('email').invalid && form.get('email').touched ? 'form-control--invalid' : 'form-control--valid'"
+        [class]="
+          form.get('email').invalid && form.get('email').touched
+            ? 'form-control--invalid'
+            : 'form-control--valid'
+        "
         [className]="'form-control'"
         [icon]="envelopeIcon"
         [iconPrefix]="true"
         [label]="'Электронная почта*'"
-        [type]="'email'">
-        <span *ngIf="form.get('email').invalid && form.get('email').touched" class="form-control__error">
-          <small *ngIf="form.get('email').errors.required">This field is required</small>
+        [type]="'email'"
+      >
+        <span
+          *ngIf="form.get('email').invalid && form.get('email').touched"
+          class="form-control__error"
+        >
+          <small *ngIf="form.get('email').errors.required"
+            >This field is required</small
+          >
           <small *ngIf="form.get('email').errors.email">Email not valid</small>
         </span>
       </photobook-form-control>
 
       <photobook-form-control
         inputName="password"
-        [class]="form.get('password').invalid && form.get('password').touched ? 'form-control--invalid' : 'form-control--valid'"
+        [class]="
+          form.get('password').invalid && form.get('password').touched
+            ? 'form-control--invalid'
+            : 'form-control--valid'
+        "
         [className]="'form-control'"
         [icon]="passwordIcon"
         [iconPrefix]="true"
         [label]="'Пароль*'"
-        [type]="'password'">
-        <span *ngIf="form.get('password').invalid && form.get('password').touched" class="form-control__error">
-          <small *ngIf="form.get('password').errors.required">This field is required</small>
+        [type]="'password'"
+      >
+        <span
+          *ngIf="form.get('password').invalid && form.get('password').touched"
+          class="form-control__error"
+        >
+          <small *ngIf="form.get('password').errors.required"
+            >This field is required</small
+          >
           <small *ngIf="form.get('password').errors.minlength">
-            Password where short, min length: {{form.get('password').errors.minlength.requiredLength}}
+            Password where short, min length:
+            {{ form.get('password').errors.minlength.requiredLength }}
           </small>
         </span>
       </photobook-form-control>
@@ -42,14 +63,16 @@
           <button
             type="submit"
             [disabled]="form.invalid && form.touched"
-            class="button button-bg-blue">
+            class="button button-bg-blue"
+          >
             Войти
           </button>
 
           <button
             type="button"
             [routerLink]="['/register']"
-            class="button button-white">
+            class="button button-white"
+          >
             Зарегистрироваться
           </button>
         </div>

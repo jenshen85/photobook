@@ -7,14 +7,12 @@ import { AuthService } from '../auth/auth.service';
   templateUrl: './photobook.component.html',
   styleUrls: ['./photobook.component.scss'],
   host: { class: 'photobook-photo-book' },
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
 })
 export class PhotobookComponent implements OnInit {
   subs = new SubSink();
 
-  constructor(
-    private readonly _authService: AuthService,
-  ) {}
+  constructor(private readonly _authService: AuthService) {}
 
   ngOnInit(): void {
     this.subs.sink = this._authService.getMeProfile().subscribe(

@@ -2,13 +2,22 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { SubSink } from 'subsink';
 
-import { ActionEnum, AlbumRoI, SpriteIconEnum, UserProfileRoI } from '@photobook/data';
+import {
+  ActionEnum,
+  AlbumRoI,
+  SpriteIconEnum,
+  UserProfileRoI,
+} from '@photobook/data';
 import { Dialog } from '@photobook/ui';
 
 import { AuthService } from '../../auth/auth.service';
 import { PhotobookService } from '../photobook.service';
 
-import { AddAlbumComponent, addAlbumInDataType, addAlbumOutDataType } from './components/add-album/add-album.component';
+import {
+  AddAlbumComponent,
+  addAlbumInDataType,
+  addAlbumOutDataType,
+} from './components/add-album/add-album.component';
 
 import { fadeAnimations } from '../../shared/utils/animations';
 
@@ -16,7 +25,7 @@ import { fadeAnimations } from '../../shared/utils/animations';
   selector: 'photobook-user-page',
   templateUrl: './user-page.component.html',
   styleUrls: ['./user-page.component.scss'],
-  animations: [ fadeAnimations.fadeIn() ],
+  animations: [fadeAnimations.fadeIn()],
 })
 export class UserPageComponent implements OnInit {
   subs = new SubSink();
@@ -36,15 +45,17 @@ export class UserPageComponent implements OnInit {
     private readonly _authService: AuthService,
     private readonly _photoService: PhotobookService,
     private readonly _dialog: Dialog,
-    private readonly _route: ActivatedRoute,
-  ) { }
+    private readonly _route: ActivatedRoute
+  ) {}
 
   ngOnInit(): void {
-    this.subs.sink = this._authService.authUserProfile().subscribe((authUserProfile) => {
-      if(authUserProfile) {
-        this.authUserProfile = authUserProfile;
-      }
-    });
+    this.subs.sink = this._authService
+      .authUserProfile()
+      .subscribe((authUserProfile) => {
+        if (authUserProfile) {
+          this.authUserProfile = authUserProfile;
+        }
+      });
 
     this.getUserProfile();
     this.getAlbums();
@@ -55,7 +66,7 @@ export class UserPageComponent implements OnInit {
   }
 
   get user(): UserProfileRoI {
-    if(this.authUserProfile.id === this.currentUserProfile.id) {
+    if (this.authUserProfile.id === this.currentUserProfile.id) {
       return this.authUserProfile;
     }
 
@@ -67,17 +78,19 @@ export class UserPageComponent implements OnInit {
       const userProfileId = params.get('user_profile_id');
 
       this.pending = true;
-      this.subs.sink = this._authService.getUserProfile(userProfileId).subscribe({
-        next: (currentUserProfile) => {
-          this.currentUserProfile = currentUserProfile;
-          this.pending = false;
-        },
-        error: (error) => {
-          // TODO: error handling
-          console.log(error);
-          this.pending = false;
-        }
-      });
+      this.subs.sink = this._authService
+        .getUserProfile(userProfileId)
+        .subscribe({
+          next: (currentUserProfile) => {
+            this.currentUserProfile = currentUserProfile;
+            this.pending = false;
+          },
+          error: (error) => {
+            // TODO: error handling
+            console.log(error);
+            this.pending = false;
+          },
+        });
     });
   }
 
@@ -86,25 +99,28 @@ export class UserPageComponent implements OnInit {
   }
 
   getAlbums() {
-    this.subs.sink = this._route.paramMap.subscribe( (params) => {
+    this.subs.sink = this._route.paramMap.subscribe((params) => {
       const userProfileId = params.get('user_profile_id');
 
       this.pendingAlbums = true;
-      this.subs.sink = this._photoService.getAllAlbumsByUserId(userProfileId).subscribe(
-        (albums) => {
-          this.albums = albums.sort(
-            (a, b) => Number(new Date(a.created_at)) - Number(new Date(b.created_at))
-          );
-        },
-        (error) => {
-          // TODO: error handling
-          console.log(error);
-          this.pendingAlbums = false;
-        },
-        () => {
-          this.pendingAlbums = false;
-        }
-      )
+      this.subs.sink = this._photoService
+        .getAllAlbumsByUserId(userProfileId)
+        .subscribe(
+          (albums) => {
+            this.albums = albums.sort(
+              (a, b) =>
+                Number(new Date(a.created_at)) - Number(new Date(b.created_at))
+            );
+          },
+          (error) => {
+            // TODO: error handling
+            console.log(error);
+            this.pendingAlbums = false;
+          },
+          () => {
+            this.pendingAlbums = false;
+          }
+        );
     });
   }
 
@@ -118,19 +134,27 @@ export class UserPageComponent implements OnInit {
       data: addAlbumData,
       isScrolled: true,
       scrolledOverlayPosition: 'top',
-      dialogContainerClass: ['add-album-container']
+      dialogContainerClass: ['add-album-container'],
     });
 
     dialogRef.afterClosed().subscribe((data: addAlbumOutDataType) => {
-      if(data && data.action === ActionEnum.create) {
+      if (data && data.action === ActionEnum.create) {
         this.albums.push(data.album);
-      } else if(data && data.action === ActionEnum.update) {
-        const index = this.albums.findIndex(album => album.id === data.album.id);
-        this.albums = [ ...this.albums.slice(0, index), data.album, ...this.albums.slice(index + 1)]
-      } else if(data && data.action === ActionEnum.delete) {
-        const index = this.albums.findIndex(album => album.id === data.album_id);
+      } else if (data && data.action === ActionEnum.update) {
+        const index = this.albums.findIndex(
+          (album) => album.id === data.album.id
+        );
+        this.albums = [
+          ...this.albums.slice(0, index),
+          data.album,
+          ...this.albums.slice(index + 1),
+        ];
+      } else if (data && data.action === ActionEnum.delete) {
+        const index = this.albums.findIndex(
+          (album) => album.id === data.album_id
+        );
         this.albums.splice(index, 1);
       }
-    })
+    });
   }
 }

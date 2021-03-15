@@ -9,7 +9,6 @@ import { LoginComponent } from './login/login.component';
 import { RestoreComponent } from './restore/restore.component';
 import { ProfileComponent } from './profile/profile.component';
 
-
 const routes: Routes = [
   {
     path: '',

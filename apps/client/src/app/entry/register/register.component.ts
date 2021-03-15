@@ -9,7 +9,7 @@ import { AuthService } from '../../auth/auth.service';
   selector: 'photobook-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss'],
-  host: {'class': 'photobook-register'}
+  host: { class: 'photobook-register' },
 })
 export class RegisterComponent implements OnInit {
   form: FormGroup;
@@ -18,13 +18,16 @@ export class RegisterComponent implements OnInit {
   envelopeIcon: SpriteIconEnum = SpriteIconEnum.envelope;
   passwordIcon: SpriteIconEnum = SpriteIconEnum.password;
 
-  constructor( private readonly _authService: AuthService) {}
+  constructor(private readonly _authService: AuthService) {}
 
   ngOnInit(): void {
     this.form = new FormGroup({
       username: new FormControl(null, [Validators.required]),
       email: new FormControl(null, [Validators.required, Validators.email]),
-      password: new FormControl(null, [Validators.required, Validators.minLength(8)]),
+      password: new FormControl(null, [
+        Validators.required,
+        Validators.minLength(8),
+      ]),
     });
   }
 
@@ -33,13 +36,13 @@ export class RegisterComponent implements OnInit {
   }
 
   submit($event: Event) {
-    if(this.form.valid) {
+    if (this.form.valid) {
       const data: UserCredentialsI = this.form.value;
       this.registerSubs = this._authService.register(data).subscribe(
         (userdata) => console.log(userdata),
         (error) => {
           // TODO: error handling
-        },
+        }
       );
     } else {
       this.form.markAsTouched();

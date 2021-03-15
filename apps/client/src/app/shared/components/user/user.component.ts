@@ -16,7 +16,7 @@ import { fadeAnimations } from '../../utils/animations';
   templateUrl: './user.component.html',
   styleUrls: ['./user.component.scss'],
   host: { class: 'photobook-user' },
-  animations: [ fadeAnimations.fadeIn() ],
+  animations: [fadeAnimations.fadeIn()],
   viewProviders: [
     {
       provide: ControlContainer,
@@ -38,7 +38,7 @@ export class UserComponentComponent implements OnInit, OnChanges {
   get userName() {
     return userName({
       first_name: this.profile.first_name,
-      last_name: this.profile.last_name
+      last_name: this.profile.last_name,
     });
   }
 

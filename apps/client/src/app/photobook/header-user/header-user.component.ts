@@ -1,6 +1,10 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { SpriteIconEnum, UserProfileCredentialsI, UserProfileRoI } from '@photobook/data';
+import {
+  SpriteIconEnum,
+  UserProfileCredentialsI,
+  UserProfileRoI,
+} from '@photobook/data';
 import { SubSink } from 'subsink';
 import { AuthService } from '../../auth/auth.service';
 import { fadeAnimations } from '../../shared/utils/animations';
@@ -13,9 +17,10 @@ import { toFormData } from '../../shared/utils/utils';
   host: {
     class: 'photobook-header-user',
     '[class]': 'isEdit ? "user-edit" : ""',
-    '[style.backgroundImage]': 'currentUserProfile.cover ? "url(" + currentUserProfile.cover + ")" : "url(assets/images/welcom-bg.png)"'
+    '[style.backgroundImage]':
+      'currentUserProfile.cover ? "url(" + currentUserProfile.cover + ")" : "url(assets/images/welcom-bg.png)"',
   },
-  animations: [ fadeAnimations.fadeIn() ],
+  animations: [fadeAnimations.fadeIn()],
 })
 export class HeaderUserComponent implements OnInit {
   subs = new SubSink();
@@ -35,9 +40,7 @@ export class HeaderUserComponent implements OnInit {
   albumIcon: SpriteIconEnum = SpriteIconEnum.album;
   homeIcon: SpriteIconEnum = SpriteIconEnum.home;
 
-  constructor(
-    private readonly _authService: AuthService,
-  ) {}
+  constructor(private readonly _authService: AuthService) {}
 
   ngOnInit(): void {
     this.profileForm = new FormGroup({
@@ -73,7 +76,7 @@ export class HeaderUserComponent implements OnInit {
   }
 
   get user(): UserProfileRoI {
-    if(this.authUserProfile.id === this.currentUserProfile.id) {
+    if (this.authUserProfile.id === this.currentUserProfile.id) {
       return this.authUserProfile;
     }
 

@@ -1,7 +1,8 @@
 <photobook-spinner *ngIf="pending; else content"></photobook-spinner>
 
 <ng-template #content>
-  <header photobook-header-album
+  <header
+    photobook-header-album
     [currentUserProfile]="currentUserProfile"
     [authUserProfile]="authUserProfile"
     [album]="album"
@@ -15,43 +16,44 @@
   <div class="top-bar">
     <div class="container top-bar__container">
       <div class="photo-stat">
-        <div class="photo-stat__item">
-          {{ photosLength }} Фотографий
-        </div>
+        <div class="photo-stat__item">{{ photosLength }} Фотографий</div>
 
-        <div class="photo-stat__item">
-          {{ likesLength }} Лайков
-        </div>
+        <div class="photo-stat__item">{{ likesLength }} Лайков</div>
 
-        <div class="photo-stat__item">
-          {{ commentsLength }} Комментария
-        </div>
+        <div class="photo-stat__item">{{ commentsLength }} Комментария</div>
       </div>
     </div>
   </div>
 
   <main class="photobook-main">
-
     <section class="photobook-section photos">
       <div class="container">
         <div class="photo-cards">
           <photobook-photo-card
-            *ngFor="let photo of photos" [photo]="photo"
+            *ngFor="let photo of photos"
+            [photo]="photo"
             [isAuthUser]="isAuth"
             [hasInfo]="false"
             [userProfile]="currentUserProfile"
             [authUserProfile]="authUserProfile"
             (onPhotoClick)="openPhotoDialog($event)"
             (onEditClick)="openEditPhotoDilaog($event)"
-            [@fadeIn]></photobook-photo-card>
-          <photobook-spinner position="absolute" *ngIf="pendingLoadPhotos;"></photobook-spinner>
+            [@fadeIn]
+          ></photobook-photo-card>
+          <photobook-spinner
+            position="absolute"
+            *ngIf="pendingLoadPhotos"
+          ></photobook-spinner>
         </div>
         <div class="photos-actions">
           <button
             *ngIf="loadMore"
             (click)="loadPhotos(album.id)"
             type="button"
-            class="button button-border">Показать еще</button>
+            class="button button-border"
+          >
+            Показать еще
+          </button>
         </div>
       </div>
     </section>
@@ -61,8 +63,11 @@
 
   <footer
     photobook-footer
-    [userBg]="album && album.preview ? album.preview : 'assets/images/default-bg.jpg'"
-    [isEdit]="isEdit"></footer>
+    [userBg]="
+      album && album.preview ? album.preview : 'assets/images/default-bg.jpg'
+    "
+    [isEdit]="isEdit"
+  ></footer>
 
   <!-- <div class="top-bar top-bar--fixed">
     <div class="container top-bar__container">

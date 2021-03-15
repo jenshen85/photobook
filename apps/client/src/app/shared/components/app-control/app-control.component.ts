@@ -15,11 +15,12 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: AppControlComponent,
-      multi: true
-    }
-  ]
+      multi: true,
+    },
+  ],
 })
-export class AppControlComponent implements OnInit, AfterViewInit, ControlValueAccessor {
+export class AppControlComponent
+  implements OnInit, AfterViewInit, ControlValueAccessor {
   onChange: Function;
   onTouched: Function;
   // @Optional()
@@ -31,13 +32,11 @@ export class AppControlComponent implements OnInit, AfterViewInit, ControlValueA
   @Input() isReadonly? = false;
   value = '';
 
-  constructor() { }
+  constructor() {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
-  ngAfterViewInit(): void {
-  }
+  ngAfterViewInit(): void {}
 
   writeValue(value: string): void {
     this.value = value;

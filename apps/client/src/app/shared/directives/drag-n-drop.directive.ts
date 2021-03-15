@@ -4,11 +4,11 @@ import {
   HostBinding,
   HostListener,
   Input,
-  Output
+  Output,
 } from '@angular/core';
 
 @Directive({
-  selector: '[dragNdrop]'
+  selector: '[dragNdrop]',
 })
 export class DragNDropDirective {
   @Input() dropClass: string;
@@ -33,7 +33,7 @@ export class DragNDropDirective {
     this.fileOver = false;
     let files = $event.dataTransfer.files;
 
-    if(files.length) {
+    if (files.length) {
       this.fileDropped.emit(files);
     }
   }

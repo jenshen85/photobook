@@ -6,12 +6,14 @@
     [authUserProfile]="authUserProfile"
     [isEdit]="isEdit"
     (onEditHandler)="editHandler($event)"
-    photobook-header-user>
-  </header>
+    photobook-header-user
+  ></header>
 
   <div class="top-bar">
     <div class="container top-bar__container">
-      <photobook-search-control placeholder="Исследовать мир"></photobook-search-control>
+      <photobook-search-control
+        placeholder="Исследовать мир"
+      ></photobook-search-control>
     </div>
   </div>
 
@@ -24,13 +26,18 @@
 
         <div class="photo-cards">
           <photobook-photo-card
-            *ngFor="let photo of photos" [photo]="photo"
+            *ngFor="let photo of photos"
+            [photo]="photo"
             [albumTitle]="photo.album.title"
             [userProfile]="photo.user_profile"
             [authUserProfile]="authUserProfile"
             (onPhotoClick)="openPhotoDialog($event)"
-            [@fadeIn]></photobook-photo-card>
-          <photobook-spinner position="absolute" *ngIf="pendingLoadPhotos"></photobook-spinner>
+            [@fadeIn]
+          ></photobook-photo-card>
+          <photobook-spinner
+            position="absolute"
+            *ngIf="pendingLoadPhotos"
+          ></photobook-spinner>
         </div>
 
         <div class="photos-actions">
@@ -38,7 +45,10 @@
             *ngIf="loadMore"
             (click)="getPhotos()"
             type="button"
-            class="button button-border">Показать еще</button>
+            class="button button-border"
+          >
+            Показать еще
+          </button>
         </div>
       </div>
     </section>
@@ -46,9 +56,5 @@
     <div class="photobook-main-overlay" *ngIf="isEdit" [@fadeIn]></div>
   </main>
 
-  <footer
-    photobook-footer
-    [userBg]="user.cover"
-    [isEdit]="isEdit"></footer>
-
+  <footer photobook-footer [userBg]="user.cover" [isEdit]="isEdit"></footer>
 </ng-template>

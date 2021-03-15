@@ -7,28 +7,49 @@
 
   <div class="entry-form-out">
     <form [formGroup]="form" (ngSubmit)="submit($event)" class="entry-form">
-
       <photobook-form-control
         inputName="first_name"
-        [class]="form.get('first_name').invalid && form.get('first_name').touched ? 'form-control--invalid' : 'form-control--valid'"
+        [class]="
+          form.get('first_name').invalid && form.get('first_name').touched
+            ? 'form-control--invalid'
+            : 'form-control--valid'
+        "
         [className]="'form-control'"
         [icon]="userIcon"
         [iconPrefix]="true"
-        [label]="'Имя*'">
-        <span *ngIf="form.get('first_name').invalid && form.get('first_name').touched" class="form-control__error">
-          <small *ngIf="form.get('first_name').errors.required">This field is required</small>
+        [label]="'Имя*'"
+      >
+        <span
+          *ngIf="
+            form.get('first_name').invalid && form.get('first_name').touched
+          "
+          class="form-control__error"
+        >
+          <small *ngIf="form.get('first_name').errors.required"
+            >This field is required</small
+          >
         </span>
       </photobook-form-control>
 
       <photobook-form-control
         inputName="last_name"
-        [class]="form.get('last_name').invalid && form.get('last_name').touched ? 'form-control--invalid' : 'form-control--valid'"
+        [class]="
+          form.get('last_name').invalid && form.get('last_name').touched
+            ? 'form-control--invalid'
+            : 'form-control--valid'
+        "
         [className]="'form-control'"
         [icon]="userIcon"
         [iconPrefix]="true"
-        [label]="'Фамилия*'">
-        <span *ngIf="form.get('last_name').invalid && form.get('last_name').touched" class="form-control__error">
-          <small *ngIf="form.get('last_name').errors.required">This field is required</small>
+        [label]="'Фамилия*'"
+      >
+        <span
+          *ngIf="form.get('last_name').invalid && form.get('last_name').touched"
+          class="form-control__error"
+        >
+          <small *ngIf="form.get('last_name').errors.required"
+            >This field is required</small
+          >
         </span>
       </photobook-form-control>
 
@@ -44,7 +65,8 @@
           <button
             type="submit"
             [disabled]="form.invalid && form.touched"
-            class="button button-bg-blue">
+            class="button button-bg-blue"
+          >
             Сохранить
           </button>
         </div>

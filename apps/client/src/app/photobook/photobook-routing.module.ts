@@ -17,18 +17,18 @@ const routes: Routes = [
       },
       {
         path: ':user_profile_id',
-        component: UserPageComponent
+        component: UserPageComponent,
       },
       {
         path: ':user_profile_id/:album_id',
         component: AlbumPageComponent,
       },
-    ]
+    ],
   },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class PhotobookRoutingModule { }
+export class PhotobookRoutingModule {}

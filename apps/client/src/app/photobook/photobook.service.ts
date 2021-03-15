@@ -1,23 +1,32 @@
 import { HttpClient, HttpEvent } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { AlbumRoI, CommentCredentialsI, CommentRoI, LikeRoI, PhotoRoI } from '@photobook/data';
+import {
+  AlbumRoI,
+  CommentCredentialsI,
+  CommentRoI,
+  LikeRoI,
+  PhotoRoI,
+} from '@photobook/data';
 import { Observable } from 'rxjs';
 
 import { PATHS } from '../shared/utils/api';
 
 @Injectable()
 export class PhotobookService {
-  constructor(
-    private readonly _http: HttpClient
-  ) {}
+  constructor(private readonly _http: HttpClient) {}
 
   // albums
   getAllAlbums(): Observable<AlbumRoI[]> {
     return this._http.get<AlbumRoI[]>(PATHS.album);
   }
 
-  getUserAlbumById(user_profile_id: number | string, album_id: number | string): Observable<AlbumRoI> {
-    return this._http.get<AlbumRoI>(`${PATHS.album}/${user_profile_id}/${album_id}`);
+  getUserAlbumById(
+    user_profile_id: number | string,
+    album_id: number | string
+  ): Observable<AlbumRoI> {
+    return this._http.get<AlbumRoI>(
+      `${PATHS.album}/${user_profile_id}/${album_id}`
+    );
   }
 
   getAllAlbumsByUserId(user_id: number | string): Observable<AlbumRoI[]> {
@@ -33,13 +42,19 @@ export class PhotobookService {
   }
 
   removeAlbum(album_id: number | string): Observable<void> {
-    return this._http.delete<void>(`${PATHS.album}/${album_id}`)
+    return this._http.delete<void>(`${PATHS.album}/${album_id}`);
   }
 
   // photos
-  getPhotos({ take='9', skip='0' }: { take?: string, skip?: string }): Observable<PhotoRoI[]> {
+  getPhotos({
+    take = '9',
+    skip = '0',
+  }: {
+    take?: string;
+    skip?: string;
+  }): Observable<PhotoRoI[]> {
     return this._http.get<PhotoRoI[]>(PATHS.photo, {
-      params: { take, skip }
+      params: { take, skip },
     });
   }
 
@@ -47,21 +62,30 @@ export class PhotobookService {
     return this._http.get<PhotoRoI>(`${PATHS.photo}/${photo_id}`);
   }
 
-  getNextPhoto(photo_id: number | string, album_id?: number | string): Observable<PhotoRoI> {
+  getNextPhoto(
+    photo_id: number | string,
+    album_id?: number | string
+  ): Observable<PhotoRoI> {
     return this._http.get<PhotoRoI>(`${PATHS.photo}/${photo_id}/next`, {
-      params: { album_id: album_id ? album_id.toString() : '' }
+      params: { album_id: album_id ? album_id.toString() : '' },
     });
   }
 
-  getPrevPhoto(photo_id: number | string, album_id?: number | string): Observable<PhotoRoI> {
+  getPrevPhoto(
+    photo_id: number | string,
+    album_id?: number | string
+  ): Observable<PhotoRoI> {
     return this._http.get<PhotoRoI>(`${PATHS.photo}/${photo_id}/prev`, {
-      params: { album_id: album_id ? album_id.toString() : '' }
+      params: { album_id: album_id ? album_id.toString() : '' },
     });
   }
 
-  getAllAlbumPhotos(album_id: number, { take, skip }: { take?: string, skip?: string }): Observable<PhotoRoI[]> {
+  getAllAlbumPhotos(
+    album_id: number,
+    { take, skip }: { take?: string; skip?: string }
+  ): Observable<PhotoRoI[]> {
     return this._http.get<PhotoRoI[]>(`${PATHS.photo}/album/${album_id}`, {
-      params: { take, skip }
+      params: { take, skip },
     });
   }
 
@@ -72,25 +96,41 @@ export class PhotobookService {
     });
   }
 
-  updatePhoto<T, D>(album_id: number, photo_id: number, data: T): Observable<D> {
+  updatePhoto<T, D>(
+    album_id: number,
+    photo_id: number,
+    data: T
+  ): Observable<D> {
     return this._http.patch<D>(`${PATHS.photo}/${album_id}/${photo_id}`, data);
   }
 
   removePhoto(album_id: number, photo_id: number): Observable<void> {
-    return this._http.delete<void>(`${PATHS.photo}/${album_id}/${photo_id}`)
+    return this._http.delete<void>(`${PATHS.photo}/${album_id}/${photo_id}`);
   }
 
   // comments
   getAllComments(photo_id: number): Observable<CommentRoI[]> {
-    return this._http.get<CommentRoI[]>(`${PATHS.comment}/${photo_id}`)
+    return this._http.get<CommentRoI[]>(`${PATHS.comment}/${photo_id}`);
   }
 
-  createComment(commentCredentilas: CommentCredentialsI, photo_id: number): Observable<CommentRoI> {
-    return this._http.post<CommentRoI>(`${PATHS.comment}/${photo_id}`, commentCredentilas);
+  createComment(
+    commentCredentilas: CommentCredentialsI,
+    photo_id: number
+  ): Observable<CommentRoI> {
+    return this._http.post<CommentRoI>(
+      `${PATHS.comment}/${photo_id}`,
+      commentCredentilas
+    );
   }
 
-  updateComment(commentCredentilas: CommentCredentialsI, comment_id: number): Observable<CommentRoI> {
-    return this._http.patch<CommentRoI>(`${PATHS.comment}/${comment_id}`, commentCredentilas);
+  updateComment(
+    commentCredentilas: CommentCredentialsI,
+    comment_id: number
+  ): Observable<CommentRoI> {
+    return this._http.patch<CommentRoI>(
+      `${PATHS.comment}/${comment_id}`,
+      commentCredentilas
+    );
   }
 
   removeComment(comment_id: number): Observable<void> {
@@ -99,10 +139,10 @@ export class PhotobookService {
 
   // likes
   likePhoto(photo_id: number): Observable<LikeRoI> {
-    return this._http.post<LikeRoI>(`${PATHS.like}/${photo_id}`, {})
+    return this._http.post<LikeRoI>(`${PATHS.like}/${photo_id}`, {});
   }
 
   unLikePhoto(photo_id: number): Observable<void> {
-    return this._http.delete<void>(`${PATHS.like}/${photo_id}`)
+    return this._http.delete<void>(`${PATHS.like}/${photo_id}`);
   }
 }

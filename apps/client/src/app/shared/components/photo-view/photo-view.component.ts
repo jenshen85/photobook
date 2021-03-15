@@ -1,6 +1,21 @@
-import { Component, ElementRef, EventEmitter, Inject, OnInit, Output, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  Inject,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActionEnum, CommentRoI, LikeRoI, PhotoRoI, SpriteIconEnum, UserProfileRoI } from '@photobook/data';
+import {
+  ActionEnum,
+  CommentRoI,
+  LikeRoI,
+  PhotoRoI,
+  SpriteIconEnum,
+  UserProfileRoI,
+} from '@photobook/data';
 import { DialogRef, DIALOG_DATA } from '@photobook/ui';
 
 import { PhotobookService } from '../../../photobook/photobook.service';
@@ -12,25 +27,25 @@ export type openPhotoInDataType = {
   authUserProfile: UserProfileRoI;
   photoUserProfile: UserProfileRoI;
   album_id?: number;
-}
+};
 
 @Component({
   selector: 'photobook-photo-view',
   templateUrl: './photo-view.component.html',
   styleUrls: ['./photo-view.component.scss'],
   host: { class: 'photobook-photo-view' },
-  animations: [ fadeAnimations.fadeIn() ],
+  animations: [fadeAnimations.fadeIn()],
 })
 export class PhotoViewComponent implements OnInit {
   @Output() updateComments: EventEmitter<{
-    comment?: CommentRoI,
-    comment_id?: number,
-    action: ActionEnum
+    comment?: CommentRoI;
+    comment_id?: number;
+    action: ActionEnum;
   }> = new EventEmitter();
   @Output() updateLikes: EventEmitter<{
-    like: LikeRoI,
-    photo_id: number,
-    action: ActionEnum
+    like: LikeRoI;
+    photo_id: number;
+    action: ActionEnum;
   }> = new EventEmitter();
 
   photo: PhotoRoI;
@@ -67,15 +82,15 @@ export class PhotoViewComponent implements OnInit {
     this.authUserProfile = this.data.authUserProfile;
     this.photoUserProfile = this.data.photoUserProfile;
     this.form = new FormGroup({
-      text: new FormControl(null, [Validators.maxLength(200)])
-    })
+      text: new FormControl(null, [Validators.maxLength(200)]),
+    });
 
     this.loadPhoto = true;
     this._photobookService.getPhoto(this.data.photo.id).subscribe({
       next: (photo: PhotoRoI) => this.updatePhotoData(photo),
       error: (err) => {
         this.loadPhoto = false;
-      }
+      },
     });
   }
 
@@ -86,7 +101,7 @@ export class PhotoViewComponent implements OnInit {
       next: (photo: PhotoRoI) => this.updatePhotoData(photo),
       error: (err: any) => {
         console.log(err);
-      }
+      },
     });
   }
 
@@ -97,12 +112,12 @@ export class PhotoViewComponent implements OnInit {
       next: (photo: any) => this.updatePhotoData(photo),
       error: (err: any) => {
         console.log(err);
-      }
+      },
     });
   }
 
   updatePhotoData(photo: PhotoRoI) {
-    if(photo) {
+    if (photo) {
       this.photo = photo;
       this.photoUserProfile = photo.user_profile;
       this.getComments();
@@ -112,7 +127,7 @@ export class PhotoViewComponent implements OnInit {
   }
 
   likePhotoHandler() {
-    if(!this.isUserLike) {
+    if (!this.isUserLike) {
       this.likePending = true;
       this._photobookService.likePhoto(this.photo.id).subscribe({
         next: (like) => {
@@ -120,58 +135,64 @@ export class PhotoViewComponent implements OnInit {
           this.updateLikes.emit({
             like,
             photo_id: this.photo.id,
-            action: ActionEnum.update
+            action: ActionEnum.update,
           });
 
           this.likePending = false;
         },
         error: () => {
           this.likePending = false;
-        }
+        },
       });
     } else {
       this.likePending = true;
       this._photobookService.unLikePhoto(this.photo.id).subscribe({
         next: () => {
-          const index = this.photo.likes.findIndex(like => like.user_profile_id === this.authUserProfile.id);
+          const index = this.photo.likes.findIndex(
+            (like) => like.user_profile_id === this.authUserProfile.id
+          );
           const like = this.photo.likes.splice(index, 1)[0];
           this.updateLikes.emit({
             like,
             photo_id: this.photo.id,
-            action: ActionEnum.delete
+            action: ActionEnum.delete,
           });
 
           this.likePending = false;
         },
         error: () => {
           this.likePending = false;
-        }
+        },
       });
     }
   }
 
   get isUserLike(): boolean {
-    return Boolean(this.photo.likes.find(like => like.user_profile_id === this.authUserProfile.id ));
+    return Boolean(
+      this.photo.likes.find(
+        (like) => like.user_profile_id === this.authUserProfile.id
+      )
+    );
   }
 
   getComments() {
     this.pendingComments = true;
-    this._photobookService.getAllComments(this.photo.id)
-      .subscribe({
-        next: (comments) => {
-          this.comments = comments;
-          this.pendingComments = false;
-        },
-        error: (err) => {
-          this.pendingComments = false;
-        }
-      });
+    this._photobookService.getAllComments(this.photo.id).subscribe({
+      next: (comments) => {
+        this.comments = comments;
+        this.pendingComments = false;
+      },
+      error: (err) => {
+        this.pendingComments = false;
+      },
+    });
   }
 
   createComment() {
     if (this.form.valid && this.form.value.text) {
       this.pendingComments = true;
-      this._photobookService.createComment(this.form.value, this.photo.id)
+      this._photobookService
+        .createComment(this.form.value, this.photo.id)
         .subscribe({
           next: (comment) => {
             this.comments.push(comment);
@@ -181,7 +202,7 @@ export class PhotoViewComponent implements OnInit {
           },
           error: (err) => {
             this.pendingComments = false;
-          }
+          },
         });
     } else {
       this.commentControl.nativeElement.focus();
@@ -189,8 +210,9 @@ export class PhotoViewComponent implements OnInit {
   }
 
   updateComment(comment: CommentRoI) {
-    if(comment.text.length) {
-      this._photobookService.updateComment({text: comment.text}, comment.id)
+    if (comment.text.length) {
+      this._photobookService
+        .updateComment({ text: comment.text }, comment.id)
         .subscribe({
           next: (comment) => {
             this.pendingComments = false;
@@ -199,25 +221,30 @@ export class PhotoViewComponent implements OnInit {
           },
           error: (err) => {
             this.pendingComments = false;
-          }
+          },
         });
     }
   }
 
   removeComment(comment_id: number) {
     this.pendingComments = true;
-    this._photobookService.removeComment(comment_id)
-      .subscribe({
-        next: () => {
-          const index = this.comments.findIndex(comment => comment.id === comment_id);
-          const comment = this.comments.splice(index, 1)[0];
-          this.updateComments.emit({ comment, comment_id, action: ActionEnum.delete });
-          this.pendingComments = false;
-        },
-        error: (err) => {
-          this.pendingComments = false;
-        }
-      });
+    this._photobookService.removeComment(comment_id).subscribe({
+      next: () => {
+        const index = this.comments.findIndex(
+          (comment) => comment.id === comment_id
+        );
+        const comment = this.comments.splice(index, 1)[0];
+        this.updateComments.emit({
+          comment,
+          comment_id,
+          action: ActionEnum.delete,
+        });
+        this.pendingComments = false;
+      },
+      error: (err) => {
+        this.pendingComments = false;
+      },
+    });
   }
 
   onEditClick(i: number | null) {
@@ -243,7 +270,7 @@ export class PhotoViewComponent implements OnInit {
   }
 
   get likesLength() {
-    return this.photo.likes.length
+    return this.photo.likes.length;
   }
 
   onloadImage(_: Event) {
@@ -251,6 +278,6 @@ export class PhotoViewComponent implements OnInit {
   }
 
   closeDialog() {
-    this.dialogRef.close()
+    this.dialogRef.close();
   }
 }

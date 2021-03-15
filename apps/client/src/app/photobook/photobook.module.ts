@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from "@angular/common";
+import { CommonModule } from '@angular/common';
 import { UiModule } from '@photobook/ui';
-import { PhotobookRoutingModule } from './photobook-routing.module'
+import { PhotobookRoutingModule } from './photobook-routing.module';
 
 import { PhotobookService } from './photobook.service';
 
@@ -19,14 +19,14 @@ import { PhotoViewComponent } from '../shared/components/photo-view/photo-view.c
 import { AddAlbumComponent } from './user-page/components/add-album/add-album.component';
 import { FileControlComponent } from '../shared/components/file-control/file-control.component';
 import { AppControlComponent } from '../shared/components/app-control/app-control.component';
-import { AddPhotoComponent } from './album-page/components/add-photo/add-photo.component'
+import { AddPhotoComponent } from './album-page/components/add-photo/add-photo.component';
 import { FooterComponent } from './footer/footer.component';
 
 import { DragNDropDirective } from '../shared/directives/drag-n-drop.directive';
 import { AutoFocusDirective } from '../shared/directives/autofocus.directive';
 import { EditPhotoComponent } from './album-page/components/edit-photo/edit-photo.component';
 import { UserPageComponent } from './user-page/user-page.component';
-import { ConfirmComponent } from './components/confirm/confirm.component'
+import { ConfirmComponent } from './components/confirm/confirm.component';
 
 @NgModule({
   declarations: [
@@ -50,15 +50,16 @@ import { ConfirmComponent } from './components/confirm/confirm.component'
     EditPhotoComponent,
     UserPageComponent,
     AutoFocusDirective,
-    ConfirmComponent
+    ConfirmComponent,
   ],
-  imports: [
-    CommonModule,
-    PhotobookRoutingModule,
-    UiModule,
-  ],
+  imports: [CommonModule, PhotobookRoutingModule, UiModule],
   providers: [PhotobookService, DragNDropDirective, AutoFocusDirective],
-  entryComponents: [PhotoViewComponent, AddAlbumComponent, AddPhotoComponent, ConfirmComponent],
+  entryComponents: [
+    PhotoViewComponent,
+    AddAlbumComponent,
+    AddPhotoComponent,
+    ConfirmComponent,
+  ],
   exports: [PhotobookRoutingModule],
 })
 export class PhotobookModule {}

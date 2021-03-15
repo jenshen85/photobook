@@ -16,10 +16,7 @@ import { AppComponent } from './app.component';
 import { NotfoundComponent } from './notfound/notfound.component';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    NotfoundComponent,
-  ],
+  declarations: [AppComponent, NotfoundComponent],
   imports: [
     BrowserModule,
     HttpClientModule,

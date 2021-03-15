@@ -1,9 +1,9 @@
 import { FormControl } from '@angular/forms';
 
-export function toFormData<T>( formValue: T ) {
+export function toFormData<T>(formValue: T) {
   const formData = new FormData();
 
-  for ( const key of Object.keys(formValue) ) {
+  for (const key of Object.keys(formValue)) {
     const value = formValue[key];
     value && formData.append(key, value);
   }
@@ -11,15 +11,24 @@ export function toFormData<T>( formValue: T ) {
   return formData;
 }
 
-export function getUserName(username: string, first_name: string, last_name: string): string {
+export function getUserName(
+  username: string,
+  first_name: string,
+  last_name: string
+): string {
   if (first_name) {
     return `${first_name}${last_name ? ' ' + last_name : ''}`;
   }
   return username;
 }
 
-export function userName(profile: {first_name: string, last_name: string}): string {
-  return `${profile.first_name}${profile.last_name ? ` ${profile.last_name}` : ''}`;
+export function userName(profile: {
+  first_name: string;
+  last_name: string;
+}): string {
+  return `${profile.first_name}${
+    profile.last_name ? ` ${profile.last_name}` : ''
+  }`;
 }
 
 export function getScrollbarWidth() {
@@ -27,7 +36,7 @@ export function getScrollbarWidth() {
 }
 
 function getExt(fileName: string): string {
-  return (fileName.split('.')).slice(-1)[0];
+  return fileName.split('.').slice(-1)[0];
 }
 
 export function checkFileTypes(types: string[]) {
@@ -40,21 +49,21 @@ export function checkFileTypes(types: string[]) {
 export function checkFileTypesHandler(types: string[], files: FileList | File) {
   const results = [];
 
-  if(files instanceof FileList) {
+  if (files instanceof FileList) {
     for (let file in files) {
-      if(typeof files[file] === 'object') {
+      if (typeof files[file] === 'object') {
         const checkResult: boolean = !types.includes(files[file].type);
         results.push(checkResult);
       }
     }
-  } else if(files instanceof File) {
+  } else if (files instanceof File) {
     const checkResult: boolean = !types.includes(files.type);
     results.push(checkResult);
   }
 
-  if ( results.includes(true) ) {
+  if (results.includes(true)) {
     return {
-      requiredFileType: true
+      requiredFileType: true,
     };
   }
 
@@ -69,26 +78,26 @@ export function bytesToSize(bytes: number): string {
 }
 
 export function checkFileSize(size: number) {
-  return function(control: FormControl) {
+  return function (control: FormControl) {
     const files: FileList = control.value;
     return checkFileSizeHandler(size, files);
-  }
+  };
 }
 
 export function checkFileSizeHandler(size: number, files: FileList) {
   const results = [];
 
   for (let file in files) {
-    if(typeof files[file] === 'object') {
+    if (typeof files[file] === 'object') {
       const fileSize = files[file].size;
       const checkResult: boolean = fileSize > size * 1000000;
       results.push(checkResult);
     }
   }
 
-  if ( results.includes(true) ) {
+  if (results.includes(true)) {
     return {
-      maxFileSize: true
+      maxFileSize: true,
     };
   }
 

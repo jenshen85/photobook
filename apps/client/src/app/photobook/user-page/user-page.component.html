@@ -7,12 +7,14 @@
     [isEdit]="isEdit"
     [isAlbums]="true"
     (onEditHandler)="editHandler($event)"
-    photobook-header-user>
-  </header>
+    photobook-header-user
+  ></header>
 
   <div class="top-bar">
     <div class="container top-bar__container">
-      <photobook-search-control placeholder="Исследовать мир"></photobook-search-control>
+      <photobook-search-control
+        placeholder="Исследовать мир"
+      ></photobook-search-control>
     </div>
   </div>
 
@@ -21,7 +23,15 @@
       <div class="container">
         <div class="photobook-head">
           <h2 class="photobook-main-title">Мои альбомы</h2>
-          <button *ngIf="currentUserProfile.id === authUserProfile.id" type="button" (click)="addAlbum()" [icon]="addIcon" photobook-ph-button>Добавить</button>
+          <button
+            *ngIf="currentUserProfile.id === authUserProfile.id"
+            type="button"
+            (click)="addAlbum()"
+            [icon]="addIcon"
+            photobook-ph-button
+          >
+            Добавить
+          </button>
         </div>
 
         <div class="photo-albums">
@@ -31,18 +41,17 @@
             (editClick)="addAlbum(album)"
             [editable]="currentUserProfile.id === authUserProfile.id"
             [@fadeIn]
-            ></photbook-photo-album>
+          ></photbook-photo-album>
         </div>
       </div>
     </section>
-    <photobook-spinner position="absolute" *ngIf="pendingAlbums"></photobook-spinner>
+    <photobook-spinner
+      position="absolute"
+      *ngIf="pendingAlbums"
+    ></photobook-spinner>
 
     <div class="photobook-main-overlay" *ngIf="isEdit" [@fadeIn]></div>
   </main>
 
-  <footer
-    photobook-footer
-    [userBg]="user.cover"
-    [isEdit]="isEdit"></footer>
-
+  <footer photobook-footer [userBg]="user.cover" [isEdit]="isEdit"></footer>
 </ng-template>

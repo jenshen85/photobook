@@ -14,14 +14,21 @@ import { Dialog } from '@photobook/ui';
 import { AuthService } from '../../auth/auth.service';
 import { PhotobookService } from '../photobook.service';
 
-import { openPhotoInDataType, PhotoViewComponent } from '../../shared/components/photo-view/photo-view.component';
-import { AddPhotoComponent, addPhotoDataInType, addPhotoDataOutType } from './components/add-photo/add-photo.component';
+import {
+  openPhotoInDataType,
+  PhotoViewComponent,
+} from '../../shared/components/photo-view/photo-view.component';
+import {
+  AddPhotoComponent,
+  addPhotoDataInType,
+  addPhotoDataOutType,
+} from './components/add-photo/add-photo.component';
 import { fadeAnimations } from '../../shared/utils/animations';
 import {
   EditPhotoComponent,
   editPhotoInDataType,
   editPhotoOutDataType,
-  deletePhotoOutDataType
+  deletePhotoOutDataType,
 } from './components/edit-photo/edit-photo.component';
 import { userName } from '../../shared/utils/utils';
 
@@ -29,7 +36,7 @@ import { userName } from '../../shared/utils/utils';
   selector: 'photobook-album-page',
   templateUrl: './album-page.component.html',
   styleUrls: ['./album-page.component.scss'],
-  animations: [ fadeAnimations.fadeIn() ],
+  animations: [fadeAnimations.fadeIn()],
 })
 export class AlbumPageComponent implements OnInit {
   subs = new SubSink();
@@ -56,18 +63,20 @@ export class AlbumPageComponent implements OnInit {
     private readonly _photoService: PhotobookService,
     private readonly _dialog: Dialog,
     private readonly _route: ActivatedRoute,
-    private readonly _changeDetectionRef: ChangeDetectorRef,
-  ) { }
+    private readonly _changeDetectionRef: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
     const userProfileId = +this._route.snapshot.paramMap.get('user_profile_id');
     const albumId = +this._route.snapshot.paramMap.get('album_id');
 
-    this.subs.sink = this._authService.authUserProfile().subscribe((authUserProfile) => {
-      if(authUserProfile) {
-        this.authUserProfile = authUserProfile;
-      }
-    })
+    this.subs.sink = this._authService
+      .authUserProfile()
+      .subscribe((authUserProfile) => {
+        if (authUserProfile) {
+          this.authUserProfile = authUserProfile;
+        }
+      });
 
     this.getUserProfile(userProfileId);
     this.loadAlbum(userProfileId, albumId);
@@ -83,17 +92,19 @@ export class AlbumPageComponent implements OnInit {
   }
 
   get commentsLength(): number {
-    return this.photos.map((photo) => photo.comments)
+    return this.photos
+      .map((photo) => photo.comments)
       .reduce((acc, comment) => acc + comment.length, 0);
   }
 
   get likesLength(): number {
-    return this.photos.map((photo) => photo.likes)
+    return this.photos
+      .map((photo) => photo.likes)
       .reduce((acc, like) => acc + like.length, 0);
   }
 
   get getName() {
-    const {first_name, last_name } = this.currentUserProfile;
+    const { first_name, last_name } = this.currentUserProfile;
     return userName({ first_name, last_name });
   }
 
@@ -118,76 +129,86 @@ export class AlbumPageComponent implements OnInit {
 
   loadAlbum(userProfileId: number, albumId: number) {
     this.pendingLoadAlbum = true;
-    this.subs.sink = this._photoService.getUserAlbumById(userProfileId, albumId).subscribe(
-      (album) => {
-        this.album = album;
-        this.pendingLoadAlbum = false;
-      },
-      (error) => {
-        // TODO: error handling
-        this.pendingLoadAlbum = false;
-      }
-    );
+    this.subs.sink = this._photoService
+      .getUserAlbumById(userProfileId, albumId)
+      .subscribe(
+        (album) => {
+          this.album = album;
+          this.pendingLoadAlbum = false;
+        },
+        (error) => {
+          // TODO: error handling
+          this.pendingLoadAlbum = false;
+        }
+      );
   }
 
   loadPhotos(albumId: number) {
     this.pendingLoadPhotos = true;
-    this.subs.sink = this._photoService.getAllAlbumPhotos(albumId, {
-      take: this._take.toString(),
-      skip: this._skip.toString()
-    }).subscribe(
-      (photos) => {
-        if(photos.length) {
-          const sortedPhotos = photos.sort((a, b) => a.id < b.id ? 1 : -1);
-          sortedPhotos.forEach(photo => this.photos.push(photo));
-          this.pendingLoadPhotos = false;
-          this._skip = this._skip + this._take;
+    this.subs.sink = this._photoService
+      .getAllAlbumPhotos(albumId, {
+        take: this._take.toString(),
+        skip: this._skip.toString(),
+      })
+      .subscribe(
+        (photos) => {
+          if (photos.length) {
+            const sortedPhotos = photos.sort((a, b) => (a.id < b.id ? 1 : -1));
+            sortedPhotos.forEach((photo) => this.photos.push(photo));
+            this.pendingLoadPhotos = false;
+            this._skip = this._skip + this._take;
 
-          if(photos.length < this._take) {
+            if (photos.length < this._take) {
+              this.loadMore = false;
+            }
+          } else {
             this.loadMore = false;
           }
-        } else {
-          this.loadMore = false;
+        },
+        (error) => {
+          // TODO: error handling
+          console.log(error);
+        },
+        () => {
+          this.pendingLoadPhotos = false;
         }
-      },
-      (error) => {
-        // TODO: error handling
-        console.log(error);
-      },
-      () => {
-        this.pendingLoadPhotos = false;
-      }
-    );
+      );
   }
 
   addPhotoHandler() {
     const data: addPhotoDataInType = {
       authUserProfile: this.authUserProfile,
-      album: this.album
-    }
+      album: this.album,
+    };
 
     const dialogRef = this._dialog.open(AddPhotoComponent, {
       data,
       isScrolled: true,
       autoFocus: false,
       scrolledOverlayPosition: 'center',
-      dialogContainerClass: ['add-photo-container']
+      dialogContainerClass: ['add-photo-container'],
     });
 
     dialogRef.afterClosed().subscribe((data: addPhotoDataOutType) => {
-      if(data) {
-        const sortData = data.sort((a, b) => a.id > b.id ? 1 : -1);
-        sortData.forEach(photo => this.photos.unshift(photo));
+      if (data) {
+        const sortData = data.sort((a, b) => (a.id > b.id ? 1 : -1));
+        sortData.forEach((photo) => this.photos.unshift(photo));
       }
     });
   }
 
-  openPhotoDialog({photo, userProfile}: {photo: PhotoRoI, userProfile: UserProfileRoI}): void {
+  openPhotoDialog({
+    photo,
+    userProfile,
+  }: {
+    photo: PhotoRoI;
+    userProfile: UserProfileRoI;
+  }): void {
     const data: openPhotoInDataType = {
       photo,
       authUserProfile: this.authUserProfile,
       photoUserProfile: userProfile,
-      album_id: this.album.id
+      album_id: this.album.id,
     };
 
     const dialogRef = this._dialog.open(PhotoViewComponent, {
@@ -195,32 +216,42 @@ export class AlbumPageComponent implements OnInit {
       isScrolled: true,
       autoFocus: false,
       scrolledOverlayPosition: 'top',
-      dialogContainerClass: ['photo-view-container']
+      dialogContainerClass: ['photo-view-container'],
     });
 
-    const updCommentsSubs = dialogRef.componentInstance.updateComments.subscribe((data) => {
-      const photo = this.photos.find((photo) => photo.id === data.comment.photo_id);
+    const updCommentsSubs = dialogRef.componentInstance.updateComments.subscribe(
+      (data) => {
+        const photo = this.photos.find(
+          (photo) => photo.id === data.comment.photo_id
+        );
 
-      if(photo && data.action === ActionEnum.create) {
-        photo.comments.push(data.comment);
-      } else if(photo && data.action === ActionEnum.update) {
-        const i = photo.comments.findIndex(comment => comment.id === data.comment.id);
-        photo.comments.splice(i, 1, data.comment);
-      } else if(photo && data.action === ActionEnum.delete) {
-        const i = photo.comments.findIndex(comment => comment.id === data.comment_id);
-        photo.comments.splice(i, 1);
+        if (photo && data.action === ActionEnum.create) {
+          photo.comments.push(data.comment);
+        } else if (photo && data.action === ActionEnum.update) {
+          const i = photo.comments.findIndex(
+            (comment) => comment.id === data.comment.id
+          );
+          photo.comments.splice(i, 1, data.comment);
+        } else if (photo && data.action === ActionEnum.delete) {
+          const i = photo.comments.findIndex(
+            (comment) => comment.id === data.comment_id
+          );
+          photo.comments.splice(i, 1);
+        }
       }
-    });
+    );
 
-    const updLikesSubs = dialogRef.componentInstance.updateLikes.subscribe((data) => {
-      const photo = this.photos.find((photo) => photo.id === data.photo_id);
-      if(photo && data.action === ActionEnum.update) {
-        photo.likes.push(data.like);
-      } else if(photo && data.action === ActionEnum.delete) {
-        const i = photo.likes.findIndex(like => like.id === data.like.id);
-        photo.likes.splice(i, 1);
+    const updLikesSubs = dialogRef.componentInstance.updateLikes.subscribe(
+      (data) => {
+        const photo = this.photos.find((photo) => photo.id === data.photo_id);
+        if (photo && data.action === ActionEnum.update) {
+          photo.likes.push(data.like);
+        } else if (photo && data.action === ActionEnum.delete) {
+          const i = photo.likes.findIndex((like) => like.id === data.like.id);
+          photo.likes.splice(i, 1);
+        }
       }
-    });
+    );
 
     dialogRef.afterClosed().subscribe(() => {
       updCommentsSubs && updCommentsSubs.unsubscribe();
@@ -231,27 +262,37 @@ export class AlbumPageComponent implements OnInit {
   openEditPhotoDilaog(photo: PhotoRoI): void {
     const data: editPhotoInDataType = {
       photo,
-      authUserProfile: this.authUserProfile
-    }
+      authUserProfile: this.authUserProfile,
+    };
     const dialogRef = this._dialog.open(EditPhotoComponent, {
       data,
       isScrolled: true,
       autoFocus: false,
       scrolledOverlayPosition: 'center',
-      dialogContainerClass: ['photo-view-container']
+      dialogContainerClass: ['photo-view-container'],
     });
 
-    dialogRef.afterClosed().subscribe((data: editPhotoOutDataType | deletePhotoOutDataType) => {
-      if(data.action === ActionEnum.update) {
-        if(data.photo) {
-          const index = this.photos.findIndex(photo => photo.id === data.photo.id);
-          this.photos = [ ...this.photos.slice(0, index), data.photo, ...this.photos.slice(index + 1)];
+    dialogRef
+      .afterClosed()
+      .subscribe((data: editPhotoOutDataType | deletePhotoOutDataType) => {
+        if (data.action === ActionEnum.update) {
+          if (data.photo) {
+            const index = this.photos.findIndex(
+              (photo) => photo.id === data.photo.id
+            );
+            this.photos = [
+              ...this.photos.slice(0, index),
+              data.photo,
+              ...this.photos.slice(index + 1),
+            ];
+          }
+        } else if (data.action === ActionEnum.delete) {
+          const index = this.photos.findIndex(
+            (photo) => photo.id === data.photo_id
+          );
+          this.photos.splice(index, 1);
         }
-      } else if(data.action === ActionEnum.delete) {
-        const index = this.photos.findIndex(photo => photo.id === data.photo_id);
-        this.photos.splice(index, 1);
-      }
-    });
+      });
   }
 
   editHandler(isEdit: boolean) {

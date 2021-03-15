@@ -32,8 +32,10 @@ export class LoginComponent implements OnInit {
       const data: AuthCredentialsI = this.form.value;
       this._authService.login(data).subscribe(
         (userdata) => {},
-        (error) => { /* TODO: error handling */ },
-        () => this.pending = false
+        (error) => {
+          /* TODO: error handling */
+        },
+        () => (this.pending = false)
       );
     } else {
       this.form.markAsTouched();

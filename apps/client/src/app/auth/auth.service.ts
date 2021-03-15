@@ -13,7 +13,7 @@ import {
   UserRoDto,
 } from '@photobook/dto';
 import { JwtPayload, UserProfileRoI, UserRoI } from '@photobook/data';
-import { PATHS } from '../shared/utils/api'
+import { PATHS } from '../shared/utils/api';
 
 export const ACCESS_TOKEN_KEY = 'access_token';
 
@@ -29,11 +29,19 @@ export function tokenSetter(token: string): void {
   providedIn: 'root',
 })
 export class AuthService {
-  private _authUserProfileSubj: BehaviorSubject<UserProfileRoI> = new BehaviorSubject(null);
-  private _authUserProfile$: Observable<UserProfileRoI> = this._authUserProfileSubj.asObservable();
+  private _authUserProfileSubj: BehaviorSubject<
+    UserProfileRoI
+  > = new BehaviorSubject(null);
+  private _authUserProfile$: Observable<
+    UserProfileRoI
+  > = this._authUserProfileSubj.asObservable();
 
-  private _currentUserProfileSubj: BehaviorSubject<UserProfileRoI> = new BehaviorSubject(null);
-  private _currentUserProfile$: Observable<UserProfileRoI> = this._currentUserProfileSubj.asObservable();
+  private _currentUserProfileSubj: BehaviorSubject<
+    UserProfileRoI
+  > = new BehaviorSubject(null);
+  private _currentUserProfile$: Observable<
+    UserProfileRoI
+  > = this._currentUserProfileSubj.asObservable();
 
   constructor(
     private readonly _http: HttpClient,
@@ -55,7 +63,7 @@ export class AuthService {
       tap((token) => {
         tokenSetter(token.accessToken);
 
-        if(this.getPayload().hasProfile) {
+        if (this.getPayload().hasProfile) {
           this._router.navigate(['photobook']);
         } else {
           this._router.navigate(['profile']);
@@ -67,7 +75,9 @@ export class AuthService {
 
   restore() {}
 
-  createUserProfile(data: UserProfileCredentialsDto): Observable<UserProfileRoI> {
+  createUserProfile(
+    data: UserProfileCredentialsDto
+  ): Observable<UserProfileRoI> {
     return this._http.post<UserProfileRoI>(PATHS.profile, data).pipe(
       tap((data) => {
         this._router.navigate(['photobook']);
@@ -86,12 +96,14 @@ export class AuthService {
   }
 
   getUserProfile(user_profile_id: number | string): Observable<UserProfileRoI> {
-    return this._http.get<UserProfileRoI>(`${PATHS.profile}/${user_profile_id}`).pipe(
-      map((data) => {
-        this._currentUserProfileSubj.next(data);
-        return data;
-      })
-    );
+    return this._http
+      .get<UserProfileRoI>(`${PATHS.profile}/${user_profile_id}`)
+      .pipe(
+        map((data) => {
+          this._currentUserProfileSubj.next(data);
+          return data;
+        })
+      );
   }
 
   updateMeProfile(data: FormData): Observable<UserProfileRoI> {

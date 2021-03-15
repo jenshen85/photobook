@@ -1,18 +1,30 @@
 <photobook-fade>
-  <div class="big-title big-title-white">Восстановление <br> пароля</div>
+  <div class="big-title big-title-white">
+    Восстановление <br />
+    пароля
+  </div>
   <div class="entry-form-out">
     <form [formGroup]="form" (ngSubmit)="submit($event)" class="entry-form">
-
       <photobook-form-control
         inputName="email"
-        [class]="form.get('email').invalid && form.get('email').touched ? 'form-control--invalid' : 'form-control--valid'"
+        [class]="
+          form.get('email').invalid && form.get('email').touched
+            ? 'form-control--invalid'
+            : 'form-control--valid'
+        "
         [className]="'form-control'"
         [icon]="envelopeIcon"
         [iconPrefix]="true"
         [label]="'Электронная почта*'"
-        [type]="'email'">
-        <span *ngIf="form.get('email').invalid && form.get('email').touched" class="form-control__error">
-          <small *ngIf="form.get('email').errors.required">This field is required</small>
+        [type]="'email'"
+      >
+        <span
+          *ngIf="form.get('email').invalid && form.get('email').touched"
+          class="form-control__error"
+        >
+          <small *ngIf="form.get('email').errors.required"
+            >This field is required</small
+          >
           <small *ngIf="form.get('email').errors.email">Email not valid</small>
         </span>
       </photobook-form-control>
@@ -22,19 +34,20 @@
           <button
             type="submit"
             [disabled]="form.invalid && form.touched"
-            class="button button-bg-blue">
+            class="button button-bg-blue"
+          >
             Восстановить пароль
           </button>
 
           <button
             type="button"
             [routerLink]="['/']"
-            class="button button-white">
+            class="button button-white"
+          >
             Войти
           </button>
         </div>
       </div>
-
     </form>
   </div>
 </photobook-fade>

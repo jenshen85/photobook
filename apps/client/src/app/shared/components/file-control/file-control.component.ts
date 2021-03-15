@@ -1,4 +1,12 @@
-import { Component, ElementRef, HostListener, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  HostListener,
+  Input,
+  OnInit,
+  Renderer2,
+  ViewChild,
+} from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
@@ -7,15 +15,15 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
   styleUrls: ['./file-control.component.scss'],
   host: {
     class: 'photobook-file-control',
-    type: 'file'
+    type: 'file',
   },
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: FileControlComponent,
-      multi: true
-    }
-  ]
+      multi: true,
+    },
+  ],
 })
 export class FileControlComponent implements ControlValueAccessor {
   onChange: Function;
@@ -29,7 +37,10 @@ export class FileControlComponent implements ControlValueAccessor {
     this.files = data;
   }
 
-  constructor(private host: ElementRef<HTMLInputElement>, private render: Renderer2) { }
+  constructor(
+    private host: ElementRef<HTMLInputElement>,
+    private render: Renderer2
+  ) {}
 
   writeValue(value: null): void {
     this.host.nativeElement.value = '';

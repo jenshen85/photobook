@@ -1,44 +1,70 @@
 <div class="photo-view">
   <div class="photo-view__top">
-    <button class="photo-view__arrow photo-view__prev" (click)="prevPhoto()" [disabled]="loadPhoto">
+    <button
+      class="photo-view__arrow photo-view__prev"
+      (click)="prevPhoto()"
+      [disabled]="loadPhoto"
+    >
       <span photobook-app-icon [icon]="leftIcon"></span>
     </button>
     <div class="photo-view__image">
-      <img *ngIf="photo" [attr.alt]="photo.description && photo.description"
+      <img
+        *ngIf="photo"
+        [attr.alt]="photo.description && photo.description"
         [src]="photo.image"
-        (load)="onloadImage($event)">
-      <photobook-spinner position="absolute" *ngIf="loadPhoto"></photobook-spinner>
+        (load)="onloadImage($event)"
+      />
+      <photobook-spinner
+        position="absolute"
+        *ngIf="loadPhoto"
+      ></photobook-spinner>
     </div>
-    <button class="photo-view__arrow photo-view__next" (click)="nextPhoto()" [disabled]="loadPhoto">
+    <button
+      class="photo-view__arrow photo-view__next"
+      (click)="nextPhoto()"
+      [disabled]="loadPhoto"
+    >
       <span photobook-app-icon [icon]="rightIcon"></span>
     </button>
   </div>
 
   <div class="photo-view__middle">
     <div class="photo-view__user" *ngIf="photo">
-      <a photobook-small-ava
+      <a
+        photobook-small-ava
         [routerLink]="['/photobook', photo.user_profile_id]"
         (click)="closeDialog()"
         [avatar]="photoUserProfile.avatar"
-        [userName]="userName"></a>
+        [userName]="userName"
+      ></a>
       <div>
-        <a class="photo-view__user-name" [routerLink]="['user', photo.user_profile_id]">
-          {{userName}}
+        <a
+          class="photo-view__user-name"
+          [routerLink]="['user', photo.user_profile_id]"
+        >
+          {{ userName }}
         </a>
         <div class="photo-view__date">
-          добавлено {{ photoDate | date: 'd.MM.YYYY'}}
+          добавлено {{ photoDate | date: 'd.MM.YYYY' }}
         </div>
       </div>
     </div>
 
-    <button class="photo-view__likes"
+    <button
+      class="photo-view__likes"
       *ngIf="photo"
       [class.liked]="isUserLike"
       (click)="likePhotoHandler()"
-      [disabled]="likePending">
+      [disabled]="likePending"
+    >
       <span class="photo-view__likes-inner">
         <span class="photo-view__likes-icon">
-          <span *ngIf="isUserLike" photobook-app-icon [icon]="likeIcon" [@fadeIn]></span>
+          <span
+            *ngIf="isUserLike"
+            photobook-app-icon
+            [icon]="likeIcon"
+            [@fadeIn]
+          ></span>
           <span photobook-app-icon [icon]="heartIcon"></span>
         </span>
         <span class="photo-view__likes-text">{{ likesLength }}</span>
@@ -46,12 +72,15 @@
     </button>
   </div>
   <div class="photo-view__bottom">
-    <div class="photo-view__info" *ngIf="photo && (photo.title || photo.description)">
+    <div
+      class="photo-view__info"
+      *ngIf="photo && (photo.title || photo.description)"
+    >
       <div *ngIf="photo.title" class="photo-view__title">
-        {{photo.title}}
+        {{ photo.title }}
       </div>
       <div *ngIf="photo.description" class="photo-view__description">
-        {{photo.description}}
+        {{ photo.description }}
       </div>
       <!-- <div class="photo-view__description">Lorem ipsum dolor sit amet <a href="#">#consectetur</a> adipisicing elit. Eaque quasi quisquam eos soluta ex. A ipsam, commodi aut quos est fugit omnis iste, et excepturi ad facilis? Id <a href="#">#vitae</a> porro sequi, rerum sit molestias facilis!</div> -->
     </div>
@@ -62,69 +91,126 @@
       <div class="comments">
         <div class="comments__row">
           <div class="comments__ava">
-            <a photobook-small-ava
+            <a
+              photobook-small-ava
               [routerLink]="['/photobook', authUserProfile.id]"
               [avatar]="authUserProfile.avatar"
-              [userName]="authUserName"></a>
+              [userName]="authUserName"
+            ></a>
           </div>
           <div class="comments__cont">
             <div class="comments__name">
-              {{authUserName}}
+              {{ authUserName }}
             </div>
-            <form [formGroup]="form" (ngSubmit)="createComment()" class="comment-form">
+            <form
+              [formGroup]="form"
+              (ngSubmit)="createComment()"
+              class="comment-form"
+            >
               <label class="comment-form__field">
                 <textarea
-                  formControlName='text'
+                  formControlName="text"
                   class="comment-form__control"
-                  placeholder="Оставьте отзыв" #commentControl></textarea>
+                  placeholder="Оставьте отзыв"
+                  #commentControl
+                ></textarea>
               </label>
-              <button type="submit" class="button button-border">Комментировать</button>
+              <button type="submit" class="button button-border">
+                Комментировать
+              </button>
             </form>
           </div>
         </div>
       </div>
 
-      <div class="comments"
+      <div
+        class="comments"
         *ngIf="comments.length || pendingComments"
-        [style.minHeight]="!comments.length && pendingComments ? '100px' : ''">
-        <div class="comments__row"
+        [style.minHeight]="!comments.length && pendingComments ? '100px' : ''"
+      >
+        <div
+          class="comments__row"
           *ngFor="let comment of comments; let i = index"
           (mouseover)="activeActions = i"
           (mouseleave)="activeActions = null"
-          [@fadeIn]>
+          [@fadeIn]
+        >
           <div class="comments__ava">
-            <a photobook-small-ava
+            <a
+              photobook-small-ava
               [routerLink]="['/photobook', 'user', comment.user_profile_id]"
               [avatar]="comment.user_profile.avatar"
-              [userName]="userNameCalc(comment.user_profile.first_name, comment.user_profile.last_name)"
-              ></a>
+              [userName]="
+                userNameCalc(
+                  comment.user_profile.first_name,
+                  comment.user_profile.last_name
+                )
+              "
+            ></a>
           </div>
           <div class="comments__cont">
-            <div class="comments__name">{{userNameCalc(comment.user_profile.first_name, comment.user_profile.last_name)}}</div>
-            <div class="comments__date">
-              добавлен {{ comment.created_at| date: 'd.MM.YYYY'}}
+            <div class="comments__name">
+              {{
+                userNameCalc(
+                  comment.user_profile.first_name,
+                  comment.user_profile.last_name
+                )
+              }}
             </div>
-  
+            <div class="comments__date">
+              добавлен {{ comment.created_at | date: 'd.MM.YYYY' }}
+            </div>
+
             <div class="comments__text">
-              <input class="comments__control" type="text" autoFocus
-                *ngIf="editComment === i; else commentText" [(ngModel)]="comment.text">
+              <input
+                class="comments__control"
+                type="text"
+                autoFocus
+                *ngIf="editComment === i; else commentText"
+                [(ngModel)]="comment.text"
+              />
               <ng-template #commentText>
-                {{comment.text}}
+                {{ comment.text }}
               </ng-template>
-  
-              <div class="comments__actions"
-                *ngIf="(comment.user_profile_id === authUserProfile.id && activeActions === i) || editComment === i"
-                [@fadeIn]>
-                <button *ngIf="editComment === i" (click)="updateComment(comment)" class="comments__btn comments__btn--edit" title="обновить">
+
+              <div
+                class="comments__actions"
+                *ngIf="
+                  (comment.user_profile_id === authUserProfile.id &&
+                    activeActions === i) ||
+                  editComment === i
+                "
+                [@fadeIn]
+              >
+                <button
+                  *ngIf="editComment === i"
+                  (click)="updateComment(comment)"
+                  class="comments__btn comments__btn--edit"
+                  title="обновить"
+                >
                   <span photobook-app-icon [icon]="sendIcon"></span>
                 </button>
-                <button *ngIf="editComment === i" (click)="onEditClick(null)" class="comments__btn comments__btn--edit" title="отменить">
+                <button
+                  *ngIf="editComment === i"
+                  (click)="onEditClick(null)"
+                  class="comments__btn comments__btn--edit"
+                  title="отменить"
+                >
                   <span photobook-app-icon [icon]="closeIcon"></span>
                 </button>
-                <button *ngIf="editComment !== i" (click)="onEditClick(i)" class="comments__btn comments__btn--edit" title="редактировать">
+                <button
+                  *ngIf="editComment !== i"
+                  (click)="onEditClick(i)"
+                  class="comments__btn comments__btn--edit"
+                  title="редактировать"
+                >
                   <span photobook-app-icon [icon]="editIcon"></span>
                 </button>
-                <button (click)="removeComment(comment.id)" class="comments__btn comments__btn--delete" title="удалить">
+                <button
+                  (click)="removeComment(comment.id)"
+                  class="comments__btn comments__btn--delete"
+                  title="удалить"
+                >
                   <span photobook-app-icon [icon]="removeIcon"></span>
                 </button>
               </div>
@@ -132,9 +218,11 @@
           </div>
         </div>
 
-        <photobook-spinner *ngIf="pendingComments" position="absolute" ></photobook-spinner>
+        <photobook-spinner
+          *ngIf="pendingComments"
+          position="absolute"
+        ></photobook-spinner>
       </div>
-
     </div>
   </div>
 </div>

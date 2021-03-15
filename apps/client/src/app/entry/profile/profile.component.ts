@@ -8,7 +8,7 @@ import { AuthService } from '../../auth/auth.service';
   selector: 'photobook-profile',
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProfileComponent implements OnInit {
   form: FormGroup;
@@ -19,9 +19,9 @@ export class ProfileComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = new FormGroup({
-      first_name: new FormControl(null, [ Validators.required ]),
-      last_name: new FormControl(null, [ Validators.required ]),
-      description: new FormControl(null)
+      first_name: new FormControl(null, [Validators.required]),
+      last_name: new FormControl(null, [Validators.required]),
+      description: new FormControl(null),
     });
   }
 
@@ -31,8 +31,10 @@ export class ProfileComponent implements OnInit {
       const data: UserProfileCredentialsDto = this.form.value;
       this._authService.createUserProfile(data).subscribe(
         (userdata) => {},
-        (error) => { /* TODO: error handling */ },
-        () => this.pending = false
+        (error) => {
+          /* TODO: error handling */
+        },
+        () => (this.pending = false)
       );
     } else {
       this.form.markAsTouched();

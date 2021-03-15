@@ -10,7 +10,10 @@ import { userName } from '../../utils/utils';
   host: { class: 'photobook-photo-card' },
 })
 export class PhotoCardComponent implements OnInit {
-  @Output() onPhotoClick: EventEmitter<{photo: PhotoRoI, userProfile: UserProfileRoI}> = new EventEmitter();
+  @Output() onPhotoClick: EventEmitter<{
+    photo: PhotoRoI;
+    userProfile: UserProfileRoI;
+  }> = new EventEmitter();
   @Output() onEditClick: EventEmitter<PhotoRoI> = new EventEmitter();
   @Input() authUserProfile: UserProfileRoI;
   @Input() userProfile: UserProfileRoI;
@@ -27,24 +30,25 @@ export class PhotoCardComponent implements OnInit {
   albumIcon = SpriteIconEnum.album;
   editIcon = SpriteIconEnum.edit;
 
-  constructor(
-    private readonly _photoBookService: PhotobookService
-  ) {}
+  constructor(private readonly _photoBookService: PhotobookService) {}
 
   ngOnInit(): void {}
 
   onPhotoClickHandler(e: Event) {
     e.preventDefault();
-    this.onPhotoClick.emit({ photo: this.photo, userProfile: this.userProfile })
+    this.onPhotoClick.emit({
+      photo: this.photo,
+      userProfile: this.userProfile,
+    });
   }
 
   onEditClickHandler(e: Event) {
     e.preventDefault();
-    this.onEditClick.emit(this.photo)
+    this.onEditClick.emit(this.photo);
   }
 
   likePhotoHandler() {
-    if(!this.isUserLike) {
+    if (!this.isUserLike) {
       this.likePending = true;
       this._photoBookService.likePhoto(this.photo.id).subscribe({
         next: (like) => {
@@ -53,25 +57,30 @@ export class PhotoCardComponent implements OnInit {
         },
         error: () => {
           this.likePending = false;
-        }
+        },
       });
     } else {
       this.likePending = true;
       this._photoBookService.unLikePhoto(this.photo.id).subscribe({
         next: () => {
-          const index = this.photo.likes.findIndex(like => like.user_profile_id === this.authUserProfile.id);
+          const index = this.photo.likes.findIndex(
+            (like) => like.user_profile_id === this.authUserProfile.id
+          );
           this.photo.likes.splice(index, 1);
           this.likePending = false;
         },
         error: () => {
           this.likePending = false;
-        }
+        },
       });
     }
   }
 
   get userName(): string {
-    return userName({ first_name: this.userProfile.first_name, last_name: this.userProfile.last_name});
+    return userName({
+      first_name: this.userProfile.first_name,
+      last_name: this.userProfile.last_name,
+    });
   }
 
   get commentsLength(): number {
@@ -83,6 +92,10 @@ export class PhotoCardComponent implements OnInit {
   }
 
   get isUserLike(): boolean {
-    return Boolean(this.photo.likes.find(like => like.user_profile_id === this.authUserProfile.id ));
+    return Boolean(
+      this.photo.likes.find(
+        (like) => like.user_profile_id === this.authUserProfile.id
+      )
+    );
   }
 }

@@ -9,7 +9,8 @@ import { SpriteIconEnum } from '@photobook/data';
   host: {
     class: 'photobook-footer footer',
     '[class]': 'isEdit ? "user-edit" : ""',
-    '[style.backgroundImage]': 'userBg ? "url(" + userBg + ")" : "url(assets/images/welcom-bg.png)"'
+    '[style.backgroundImage]':
+      'userBg ? "url(" + userBg + ")" : "url(assets/images/welcom-bg.png)"',
   },
   // animations: [ fadeAnimations.fadeIn() ],
 })

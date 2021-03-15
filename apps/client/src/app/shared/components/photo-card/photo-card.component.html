@@ -1,62 +1,104 @@
 <div class="photo-card">
   <div class="photo-card__top">
     <a href="#" class="photo-card__img" (click)="onPhotoClickHandler($event)">
-      <img [src]="photo.image" [alt]="photo.title">
-      <span class="photo-card__img-zoom" photobook-app-icon [icon]="loupeIcon"></span>
+      <img [src]="photo.image" [alt]="photo.title" />
+      <span
+        class="photo-card__img-zoom"
+        photobook-app-icon
+        [icon]="loupeIcon"
+      ></span>
     </a>
 
-    <ng-container *ngIf="!hasInfo" [ngTemplateOutlet]="photoActions"></ng-container>
+    <ng-container
+      *ngIf="!hasInfo"
+      [ngTemplateOutlet]="photoActions"
+    ></ng-container>
   </div>
 
   <div class="photo-card__middle" *ngIf="hasInfo">
-
     <div class="photo-card__info">
-      <a photobook-small-ava
+      <a
+        photobook-small-ava
         [routerLink]="['/photobook', photo.user_profile_id]"
         [avatar]="userProfile.avatar"
-        [userName]="userName"></a>
+        [userName]="userName"
+      ></a>
 
-      <div *ngIf="photo.title"
+      <div
+        *ngIf="photo.title"
         class="photo-card__photo"
-        title="{{photo.title}}">{{photo.title}}</div>
+        title="{{ photo.title }}"
+      >
+        {{ photo.title }}
+      </div>
 
-      <ng-container *ngIf="hasInfo" [ngTemplateOutlet]="photoActions"></ng-container>
+      <ng-container
+        *ngIf="hasInfo"
+        [ngTemplateOutlet]="photoActions"
+      ></ng-container>
     </div>
-
   </div>
 
   <div class="photo-card__bottom">
-    <button *ngIf="!hasInfo && isAuthUser" (click)="onEditClickHandler($event)" class="photo-card__edit">
+    <button
+      *ngIf="!hasInfo && isAuthUser"
+      (click)="onEditClickHandler($event)"
+      class="photo-card__edit"
+    >
       <span photobook-app-icon [icon]="editIcon"></span>
     </button>
 
-    <a *ngIf="albumTitle; else photoTitle" [routerLink]="['/', 'photobook', photo.user_profile_id, photo.album_id]" class="photo-card__album">
-      <span class="photo-card__album-ico" photobook-app-icon [icon]="albumIcon"></span>
+    <a
+      *ngIf="albumTitle; else photoTitle"
+      [routerLink]="['/', 'photobook', photo.user_profile_id, photo.album_id]"
+      class="photo-card__album"
+    >
+      <span
+        class="photo-card__album-ico"
+        photobook-app-icon
+        [icon]="albumIcon"
+      ></span>
       {{ albumTitle }}
     </a>
 
     <ng-template #photoTitle>
-      <a href="#"
+      <a
+        href="#"
         *ngIf="isAuthUser && !photo.title; else photoTitle2"
         (click)="onEditClickHandler($event)"
-        class="photo-card__album">
-        <span class="photo-card__album-ico" photobook-app-icon [icon]="albumIcon"></span>
+        class="photo-card__album"
+      >
+        <span
+          class="photo-card__album-ico"
+          photobook-app-icon
+          [icon]="albumIcon"
+        ></span>
         добавить название
       </a>
     </ng-template>
 
     <ng-template #photoTitle2>
-      <a *ngIf="photo.title; else photoTitle3"
+      <a
+        *ngIf="photo.title; else photoTitle3"
         [routerLink]="['/', 'photobook', photo.user_profile_id, photo.album_id]"
-        class="photo-card__album">
-        <span class="photo-card__album-ico" photobook-app-icon [icon]="albumIcon"></span>
-        {{photo.title}}
+        class="photo-card__album"
+      >
+        <span
+          class="photo-card__album-ico"
+          photobook-app-icon
+          [icon]="albumIcon"
+        ></span>
+        {{ photo.title }}
       </a>
     </ng-template>
 
     <ng-template #photoTitle3>
       <span class="photo-card__album">
-        <span class="photo-card__album-ico" photobook-app-icon [icon]="albumIcon"></span>
+        <span
+          class="photo-card__album-ico"
+          photobook-app-icon
+          [icon]="albumIcon"
+        ></span>
         Нет названия
       </span>
     </ng-template>
@@ -65,40 +107,38 @@
 
 <ng-template #photoActions>
   <div class="photo-card__actions">
-    <button class="photo-card__action"
+    <button
+      class="photo-card__action"
       [class.photo-card__action--noinfo]="!hasInfo"
       [class.filled]="commentsLength"
-      (click)="onPhotoClickHandler($event)">
-      <span class="photo-card__action-ico" photobook-app-icon [icon]="commentIcon"></span>
-      <span class="photo-card__action-num">{{ commentsLength ? commentsLength : ''}}</span>
+      (click)="onPhotoClickHandler($event)"
+    >
+      <span
+        class="photo-card__action-ico"
+        photobook-app-icon
+        [icon]="commentIcon"
+      ></span>
+      <span class="photo-card__action-num">{{
+        commentsLength ? commentsLength : ''
+      }}</span>
     </button>
     <!-- liked -->
-    <button class="photo-card__action"
+    <button
+      class="photo-card__action"
       [class.photo-card__action--noinfo]="!hasInfo"
       [class.filled]="likesLength && !isUserLike"
       [class.liked]="isUserLike"
       [disabled]="likePending"
-      (click)="likePhotoHandler()">
-      <span class="photo-card__action-ico" photobook-app-icon [icon]="likeIcon"></span>
-      <span class="photo-card__action-num">{{ likesLength ? likesLength: '' }}</span>
+      (click)="likePhotoHandler()"
+    >
+      <span
+        class="photo-card__action-ico"
+        photobook-app-icon
+        [icon]="likeIcon"
+      ></span>
+      <span class="photo-card__action-num">{{
+        likesLength ? likesLength : ''
+      }}</span>
     </button>
   </div>
 </ng-template>
-
-<!-- <ng-template #photoActions2>
-  <div class="photo-card__actions">
-    <span class="photo-card__action photo-card__action--noinfo"
-      [class.filled]="commentsLength">
-      <span class="photo-card__action-ico" photobook-app-icon [icon]="commentIcon"></span>
-      <span class="photo-card__action-num">{{ commentsLength ? commentsLength : ''}}</span>
-    </span>
-    <button class="photo-card__action photo-card__action--noinfo"
-      [class.filled]="likesLength && !isUserLike"
-      [class.liked]="isUserLike"
-      [disabled]="likePending"
-      (click)="likePhoto()">
-      <span class="photo-card__action-ico" photobook-app-icon [icon]="likeIcon"></span>
-      <span class="photo-card__action-num">{{ likesLength ? likesLength: '' }}</span>
-    </button>
-  </div>
-</ng-template> -->
