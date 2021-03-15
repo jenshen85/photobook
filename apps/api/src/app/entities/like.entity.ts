@@ -1,15 +1,15 @@
-import { LikeEnum } from "@photobook/data";
-import { Column, Entity, JoinColumn, ManyToOne } from "typeorm";
-import { AbstractEntity } from "./abstract-entity";
-import { Photo } from "./photo.entity";
-import { UserProfile } from "./user-profile.entity";
+import { LikeEnum } from '@photobook/data';
+import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
+import { AbstractEntity } from './abstract-entity';
+import { Photo } from './photo.entity';
+import { UserProfile } from './user-profile.entity';
 
 @Entity()
 export class Like extends AbstractEntity {
   @Column({
     type: 'enum',
     enum: LikeEnum,
-    default: LikeEnum.unliked
+    default: LikeEnum.unliked,
   })
   status: LikeEnum;
 

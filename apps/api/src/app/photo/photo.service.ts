@@ -6,7 +6,6 @@ import { PhotoCredentialsDto, PhotoRoDto } from '@photobook/dto';
 
 import { PhotoRepository } from './photo.repository';
 import { FileService } from '../file/file.service';
-// import { AlbumService } from '../album/album.service';
 import { generateFileName } from '../shared/utils/edit-file-name';
 import { GetPhotosQueryDto, PhotoQueryDto } from './dto/get-photo-query.dto';
 
@@ -15,7 +14,6 @@ export class PhotoService {
   constructor(
     @InjectRepository(Photo)
     private readonly _photoRepository: PhotoRepository,
-    // private readonly _albumService: AlbumService,
     private readonly _fileService: FileService
   ) {}
 

@@ -7,14 +7,17 @@ import { Repository, EntityRepository } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
 import { plainToClass } from 'class-transformer';
 
-import { UserRoDto, UserCredentialsDto, AuthCredentialsDto } from '@photobook/dto';
+import {
+  UserRoDto,
+  UserCredentialsDto,
+  AuthCredentialsDto,
+} from '@photobook/dto';
 import { JwtPayload } from '@photobook/data';
 
 import { Auth } from '../entities';
 
 @EntityRepository(Auth)
 export class AuthRepository extends Repository<Auth> {
-
   async createUser(userCredentials: UserCredentialsDto): Promise<UserRoDto> {
     const { email, username, password } = userCredentials;
     const user = new Auth();
@@ -35,7 +38,10 @@ export class AuthRepository extends Repository<Auth> {
     }
   }
 
-  async updateUser(userCredentials: UserCredentialsDto, user: Auth): Promise<UserRoDto> {
+  async updateUser(
+    userCredentials: UserCredentialsDto,
+    user: Auth
+  ): Promise<UserRoDto> {
     const { username } = userCredentials;
     const found = await this.getUser(user.id);
     found.username = username;
@@ -47,17 +53,6 @@ export class AuthRepository extends Repository<Auth> {
       throw new InternalServerErrorException(error);
     }
   }
-
-  // async setUserProfile(user: User, profile: UserProfile): Promise<User> {
-  //   user.user_profile = profile;
-
-  //   try {
-  //     await user.save();
-  //     return user;
-  //   } catch (error) {
-  //     throw new InternalServerErrorException(error);
-  //   }
-  // }
 
   async getAll(): Promise<UserRoDto[]> {
     const users = await this.find();

@@ -1,16 +1,23 @@
-import { InternalServerErrorException, NotFoundException } from "@nestjs/common";
-import { EntityRepository, Repository } from "typeorm";
-import { plainToClass } from "class-transformer";
+import {
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
+import { EntityRepository, Repository } from 'typeorm';
+import { plainToClass } from 'class-transformer';
 
-import { CommentCredentialsDto, CommentRoDto } from "@photobook/dto";
-import { Comment } from "../entities/comment.entity";
+import { CommentCredentialsDto, CommentRoDto } from '@photobook/dto';
+import { Comment } from '../entities/comment.entity';
 
 @EntityRepository(Comment)
 export class CommentRepository extends Repository<Comment> {
   async getAll(photo_id: number): Promise<CommentRoDto[]> {
     const comments = await this.createQueryBuilder('comment')
       .where('comment.deleted_at IS NULL')
-      .leftJoinAndSelect('comment.user_profile', 'user_profile', 'user_profile.deleted_at IS NULL')
+      .leftJoinAndSelect(
+        'comment.user_profile',
+        'user_profile',
+        'user_profile.deleted_at IS NULL'
+      )
       .where('comment.photo_id = :photo_id', { photo_id })
       .getMany();
 
@@ -18,11 +25,18 @@ export class CommentRepository extends Repository<Comment> {
     return resultComments.map((comment) => plainToClass(CommentRoDto, comment));
   }
 
-  async getComment(photo_id: number, comment_id: number): Promise<CommentRoDto> {
+  async getComment(
+    photo_id: number,
+    comment_id: number
+  ): Promise<CommentRoDto> {
     const comment = await this.createQueryBuilder('comment')
       .where('comment.deleted_at IS NULL')
-      .leftJoinAndSelect('comment.user_profile', 'user_profile', 'user_profile.deleted_at IS NULL')
-      .where({id: comment_id})
+      .leftJoinAndSelect(
+        'comment.user_profile',
+        'user_profile',
+        'user_profile.deleted_at IS NULL'
+      )
+      .where({ id: comment_id })
       .andWhere('comment.photo_id = :photo_id', { photo_id })
       .getOne();
 
@@ -52,7 +66,9 @@ export class CommentRepository extends Repository<Comment> {
     user_profile_id: number,
     comment_id: number
   ): Promise<CommentRoDto> {
-    const comment = await this.findOne({where: { id: comment_id, user_profile_id }});
+    const comment = await this.findOne({
+      where: { id: comment_id, user_profile_id },
+    });
 
     if (!comment) {
       throw new NotFoundException(`Comment with ID ${comment_id} not found`);
@@ -68,8 +84,13 @@ export class CommentRepository extends Repository<Comment> {
     }
   }
 
-  async deleteComment(user_profile_id: number, comment_id: number): Promise<void> {
-    const comment = await this.findOne({where: { id: comment_id, user_profile_id }});
+  async deleteComment(
+    user_profile_id: number,
+    comment_id: number
+  ): Promise<void> {
+    const comment = await this.findOne({
+      where: { id: comment_id, user_profile_id },
+    });
 
     if (!comment) {
       throw new NotFoundException(`Comment with ID ${comment_id} not found`);

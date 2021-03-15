@@ -19,10 +19,10 @@ import { AuthRepository } from './auth.repository';
       useFactory: (configService: ConfigService) => ({
         secret: configService.get<string>(ConfigEnum.JWT_SECRET),
         signOptions: {
-          expiresIn: configService.get<string>(ConfigEnum.JWT_EXPIRES_IN)
-        }
+          expiresIn: configService.get<string>(ConfigEnum.JWT_EXPIRES_IN),
+        },
       }),
-      inject: [ConfigService]
+      inject: [ConfigService],
     }),
     TypeOrmModule.forFeature([AuthRepository]),
   ],

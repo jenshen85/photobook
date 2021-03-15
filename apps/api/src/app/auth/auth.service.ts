@@ -1,7 +1,6 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
-// import { JwtPayload } from '@photobook/data';
 
 import {
   UserCredentialsDto,
@@ -18,7 +17,6 @@ export class AuthService {
   constructor(
     @InjectRepository(Auth)
     private readonly _authRepository: AuthRepository,
-    // private readonly _userService: UserService,
     private readonly _jwtService: JwtService
   ) {}
 
@@ -27,7 +25,9 @@ export class AuthService {
   }
 
   async signIn(authCredentials: AuthCredentialsDto): Promise<AuthRoDto> {
-    const payload = await this._authRepository.validateUserPassword(authCredentials);
+    const payload = await this._authRepository.validateUserPassword(
+      authCredentials
+    );
     if (!payload) {
       throw new UnauthorizedException('Invalid credentials');
     }
@@ -36,7 +36,10 @@ export class AuthService {
     return { accessToken };
   }
 
-  public async setHasProfile(user: Auth, user_profile_id: number): Promise<UserRoDto> {
+  public async setHasProfile(
+    user: Auth,
+    user_profile_id: number
+  ): Promise<UserRoDto> {
     return await this._authRepository.setHasProfile(user, user_profile_id);
   }
 
@@ -51,17 +54,4 @@ export class AuthService {
   async deleteUser(user: Auth): Promise<void> {
     return await this._authRepository.deleteUser(user);
   }
-
-  // private async _createUser(userCredentials: UserCredentialsDto): Promise<UserRoDto> {
-  //   let user = await this._authRepository.createUser(userCredentials);
-  //   // const profile = await this._userProfileService.createUserProfile(user);
-  //   // user = await this._authRepository.setUserProfile(user, profile);
-  //   return plainToClass(UserRoDto, user);
-  // }
-
-  // private async _validateUser(
-  //   authCredentials: AuthCredentialsDto,
-  // ): Promise<JwtPayload> {
-  //   return await this._authRepository.validateUserPassword(authCredentials);
-  // }
 }

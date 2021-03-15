@@ -41,8 +41,14 @@ export class UserProfileService {
     return await this._userProfileRepository.getUserProfile(user_profile_id);
   }
 
-  async createUserProfile(user: Auth, userProfileCredentials?: UserProfileCredentialsDto): Promise<UserProfileRODto> {
-    const newUserProfile = await this._userProfileRepository.createProfile(user, userProfileCredentials);
+  async createUserProfile(
+    user: Auth,
+    userProfileCredentials?: UserProfileCredentialsDto
+  ): Promise<UserProfileRODto> {
+    const newUserProfile = await this._userProfileRepository.createProfile(
+      user,
+      userProfileCredentials
+    );
     await this._authService.setHasProfile(user, newUserProfile.id);
     return newUserProfile;
   }
@@ -52,13 +58,15 @@ export class UserProfileService {
     userProfileCredentials: UserProfileCredentialsDto,
     user: Auth
   ): Promise<UserProfileRODto> {
-    const profile = await this._userProfileRepository.getUserProfile(user.user_profile_id);
+    const profile = await this._userProfileRepository.getUserProfile(
+      user.user_profile_id
+    );
 
-    if(files.avatar && profile.avatar) {
+    if (files.avatar && profile.avatar) {
       await this._fileService.deleteFile(profile.avatar);
     }
 
-    if(files.cover && profile.cover) {
+    if (files.cover && profile.cover) {
       await this._fileService.deleteFile(profile.cover);
     }
 
@@ -79,7 +87,7 @@ export class UserProfileService {
     const cover = files.cover ? files.cover[0] : null;
     let avatarData: IFileData, coverData: IFileData;
 
-    if(avatar) {
+    if (avatar) {
       avatarData = await this._fileService.saveFile(
         avatar,
         profileFilesPath,
@@ -88,7 +96,7 @@ export class UserProfileService {
       );
     }
 
-    if(cover) {
+    if (cover) {
       coverData = await this._fileService.saveFile(
         cover,
         profileFilesPath,

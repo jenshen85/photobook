@@ -1,8 +1,8 @@
-import { join } from 'path'
+import { join } from 'path';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ServeStaticModule } from '@nestjs/serve-static'
+import { ServeStaticModule } from '@nestjs/serve-static';
 
 import { typeOrmConfig } from './config/typeorm.config';
 import { AuthModule } from './auth/auth.module';
@@ -14,13 +14,12 @@ import { CommentModule } from './comment/comment.module';
 import { LikeModule } from './like/like.module';
 
 const environment = process.env.NODE_ENV || 'development';
-// console.log('======' + environment + '======');
 
 @Module({
   imports: [
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'client'),
-      exclude: ['/api*']
+      exclude: ['/api*'],
     }),
     ConfigModule.forRoot({
       envFilePath: `.env.${environment}`,
@@ -38,7 +37,7 @@ const environment = process.env.NODE_ENV || 'development';
     PhotoModule,
     FileModule,
     CommentModule,
-    LikeModule
+    LikeModule,
   ],
   controllers: [],
   providers: [],

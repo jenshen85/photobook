@@ -1,11 +1,9 @@
-import { Entity, Column, OneToOne, JoinColumn, OneToMany, ManyToOne } from 'typeorm';
+import { Entity, Column, OneToOne, JoinColumn, OneToMany } from 'typeorm';
 import { AbstractEntity } from './abstract-entity';
 import { Album } from './album.entity';
 import { Auth } from './auth.entity';
 import { Photo } from './photo.entity';
 import { Comment } from './comment.entity';
-// import { Photo } from './photo.entity';
-// import { User } from './user.entity';
 
 @Entity()
 export class UserProfile extends AbstractEntity {
@@ -27,31 +25,29 @@ export class UserProfile extends AbstractEntity {
   @Column({ nullable: true })
   user_id: number;
 
-  @OneToOne(
-    () => Auth,
-    (user) => user.user_profile,
-    { onDelete: 'CASCADE', eager: true }
-  )
+  @OneToOne(() => Auth, (user) => user.user_profile, {
+    onDelete: 'CASCADE',
+    eager: true,
+  })
   @JoinColumn({ name: 'user_id' })
   user: Auth;
 
-  @OneToMany(
-    () => Album,
-    (album) => album.user_profile,
-    { onDelete: 'CASCADE', eager: false }
-  )
+  @OneToMany(() => Album, (album) => album.user_profile, {
+    onDelete: 'CASCADE',
+    eager: false,
+  })
   albums: Album[];
 
   // join photos
-  @OneToMany(
-    () => Photo, (photo) => photo.user_profile,
-    { onDelete: 'CASCADE', eager: true }
-  )
+  @OneToMany(() => Photo, (photo) => photo.user_profile, {
+    onDelete: 'CASCADE',
+    eager: true,
+  })
   photos: Photo[];
 
-  @OneToMany(
-    () => Comment, (comment) => comment.user_profile,
-    { onDelete: 'CASCADE', eager: true }
-  )
+  @OneToMany(() => Comment, (comment) => comment.user_profile, {
+    onDelete: 'CASCADE',
+    eager: true,
+  })
   comments: Comment[];
 }

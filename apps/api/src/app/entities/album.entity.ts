@@ -8,7 +8,6 @@ import {
 } from 'typeorm';
 import { AbstractEntity } from './abstract-entity';
 import { UserProfile } from './user-profile.entity';
-// import { User } from './user.entity';
 import { Photo } from './photo.entity';
 
 @Entity()

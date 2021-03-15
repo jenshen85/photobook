@@ -12,7 +12,6 @@ import { IProfileFilesData } from './user-profile.service';
 
 @EntityRepository(UserProfile)
 export class UserProfileRepository extends Repository<UserProfile> {
-
   async getMe(user: Auth): Promise<UserProfileRODto> {
     const meProfile = await this.createQueryBuilder('user_profile')
       .where('user_profile.deleted_at IS NULL')
@@ -28,7 +27,10 @@ export class UserProfileRepository extends Repository<UserProfile> {
   }
 
   async getUserProfile(user_profile_id: number): Promise<UserProfileRODto> {
-    const profile = await this.findOne({where: {id: user_profile_id}, relations: ['user']});
+    const profile = await this.findOne({
+      where: { id: user_profile_id },
+      relations: ['user'],
+    });
 
     if (!profile) {
       throw new NotFoundException('Profile does not exists');
@@ -37,7 +39,10 @@ export class UserProfileRepository extends Repository<UserProfile> {
     return plainToClass(UserProfileRODto, profile);
   }
 
-  async createProfile(user: Auth, userProfileCredentials?: UserProfileCredentialsDto): Promise<UserProfileRODto> {
+  async createProfile(
+    user: Auth,
+    userProfileCredentials?: UserProfileCredentialsDto
+  ): Promise<UserProfileRODto> {
     let profile = await this.findOne({ where: { user_id: user.id } });
 
     if (profile) {

@@ -1,12 +1,13 @@
-import { Injectable } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import { LikeRoDto } from "@photobook/dto";
-import { LikeRepository } from "./like.repository";
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { LikeRoDto } from '@photobook/dto';
+import { LikeRepository } from './like.repository';
 
 @Injectable()
 export class LikeService {
   constructor(
-    @InjectRepository(LikeRepository) private readonly _likeRepository: LikeRepository
+    @InjectRepository(LikeRepository)
+    private readonly _likeRepository: LikeRepository
   ) {}
 
   async like(user_profile_id: number, photo_id: number): Promise<LikeRoDto> {

@@ -33,8 +33,10 @@ export class UserProfileController {
     return this._userProfileService.getMe(user);
   }
 
-  @Get("/:user_profile_id")
-  getUser(@Param('user_profile_id', ParseIntPipe) user_profile_id: number): Promise<UserProfileRODto> {
+  @Get('/:user_profile_id')
+  getUser(
+    @Param('user_profile_id', ParseIntPipe) user_profile_id: number
+  ): Promise<UserProfileRODto> {
     return this._userProfileService.getUser(user_profile_id);
   }
 
@@ -43,7 +45,10 @@ export class UserProfileController {
     @Body() userProfileCredentials: UserProfileCredentialsDto,
     @GetUser() user: Auth
   ): Promise<UserProfileRODto> {
-    return this._userProfileService.createUserProfile(user, userProfileCredentials);
+    return this._userProfileService.createUserProfile(
+      user,
+      userProfileCredentials
+    );
   }
 
   @Patch()

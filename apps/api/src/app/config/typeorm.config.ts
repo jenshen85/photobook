@@ -32,6 +32,6 @@ export const typeOrmConfig: typeOrmConfigType = (
   password: configService.get<string>(ConfigEnum.DB_PASSWORD),
   database: configService.get<string>(ConfigEnum.DB_DATABASE),
   entities: [...entitiesArr],
-  synchronize: (configService.get<string>(ConfigEnum.DB_SYNCHRONIZE) === 'true'),
-  logging: (configService.get<string>(ConfigEnum.DB_LOGING) === 'true'),
+  synchronize: configService.get<string>(ConfigEnum.DB_SYNCHRONIZE) === 'true',
+  logging: configService.get<string>(ConfigEnum.DB_LOGING) === 'true',
 });
