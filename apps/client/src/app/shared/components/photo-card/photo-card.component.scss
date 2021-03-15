@@ -132,7 +132,7 @@
     border: 0;
     background: none;
     @include panton;
-    font-weight: 600;
+    font-weight: 700;
     outline: none;
 
     &:last-child {
@@ -162,12 +162,12 @@
       height: rem(17);
       color: #d6d6d6;
       transition: color 0.3s;
-      margin-right: rem(6);
     }
 
     &-num {
       font-size: rem(15);
       color: $blue;
+      margin-left: rem(4);
     }
 
     &--noinfo {
