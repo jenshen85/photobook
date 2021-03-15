@@ -16,7 +16,8 @@ import {
   SpriteIconEnum,
   UserProfileRoI,
 } from '@photobook/data';
-import { DialogRef, DIALOG_DATA } from '@photobook/ui';
+import { Dialog, DialogRef, DIALOG_DATA } from '@photobook/ui';
+import { ConfirmComponent } from '../../../photobook/components/confirm/confirm.component';
 
 import { PhotobookService } from '../../../photobook/photobook.service';
 import { fadeAnimations } from '../../utils/animations';
@@ -75,6 +76,7 @@ export class PhotoViewComponent implements OnInit {
   constructor(
     private readonly _photobookService: PhotobookService,
     private readonly dialogRef: DialogRef<PhotoViewComponent>,
+    private readonly _dialog: Dialog,
     @Inject(DIALOG_DATA) private data: openPhotoInDataType
   ) {}
 
@@ -227,6 +229,25 @@ export class PhotoViewComponent implements OnInit {
   }
 
   removeComment(comment_id: number) {
+    const confirm = this._dialog.open(ConfirmComponent, {
+      data: {
+        title: 'Удалить комментарий',
+        message: `Вы действительно хотите удалить комментарий?`,
+      },
+      isScrolled: true,
+      autoFocus: false,
+      scrolledOverlayPosition: 'center',
+      dialogContainerClass: ['confirm-container'],
+    });
+
+    confirm.afterClosed().subscribe((cond) => {
+      if (cond) {
+        this.removeCommentHandler(comment_id);
+      }
+    });
+  }
+
+  removeCommentHandler(comment_id: number) {
     this.pendingComments = true;
     this._photobookService.removeComment(comment_id).subscribe({
       next: () => {

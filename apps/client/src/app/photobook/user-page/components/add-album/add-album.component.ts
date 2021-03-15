@@ -155,16 +155,20 @@ export class AddAlbumComponent implements OnInit {
 
     confirm.afterClosed().subscribe((cond) => {
       if (cond) {
-        this.subs.sink = this.photobookService
-          .removeAlbum(album_id)
-          .subscribe(() => {
-            const data: addAlbumOutDataType = {
-              action: ActionEnum.delete,
-              album_id,
-            };
-            this.dialogRef.close(data);
-          });
+        this.removeAlbumHandler(album_id);
       }
     });
+  }
+
+  removeAlbumHandler(album_id: number): void {
+    this.subs.sink = this.photobookService
+      .removeAlbum(album_id)
+      .subscribe(() => {
+        const data: addAlbumOutDataType = {
+          action: ActionEnum.delete,
+          album_id,
+        };
+        this.dialogRef.close(data);
+      });
   }
 }

@@ -112,16 +112,20 @@ export class EditPhotoComponent implements OnInit {
 
     confirm.afterClosed().subscribe((cond) => {
       if (cond) {
-        this.subs.sink = this._photoBookService
-          .removePhoto(album_id, photo_id)
-          .subscribe(() => {
-            const data: deletePhotoOutDataType = {
-              photo_id,
-              action: ActionEnum.delete,
-            };
-            this.dialogRef.close(data);
-          });
+        this.removePhotoHandler(album_id, photo_id);
       }
     });
+  }
+
+  removePhotoHandler(album_id: number, photo_id: number): void {
+    this.subs.sink = this._photoBookService
+      .removePhoto(album_id, photo_id)
+      .subscribe(() => {
+        const data: deletePhotoOutDataType = {
+          photo_id,
+          action: ActionEnum.delete,
+        };
+        this.dialogRef.close(data);
+      });
   }
 }
