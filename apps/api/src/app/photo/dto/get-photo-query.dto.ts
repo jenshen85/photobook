@@ -1,13 +1,13 @@
-import { IsNotEmpty, IsOptional } from "class-validator";
+import { IsNotEmpty, IsOptional } from 'class-validator';
 
 export class GetPhotosQueryDto {
   @IsOptional()
   @IsNotEmpty()
-  take: number;
+  take?: number;
 
   @IsOptional()
   @IsNotEmpty()
-  skip: number;
+  skip?: number;
 }
 
 export class PhotoQueryDto {

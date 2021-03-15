@@ -1,4 +1,5 @@
 {
+  "editor.formatOnSave": true,
   "vsicons.presets.angular": true,
   "gitdoc.enabled": false
 }

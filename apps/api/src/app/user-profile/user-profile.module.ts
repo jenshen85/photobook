@@ -12,10 +12,10 @@ import { AuthRepository } from '../auth/auth.repository';
   imports: [
     TypeOrmModule.forFeature([UserProfileRepository, AuthRepository]),
     FileModule,
-    AuthModule
+    AuthModule,
   ],
   providers: [UserProfileService],
   controllers: [UserProfileController],
-  exports: [UserProfileService]
+  exports: [UserProfileService],
 })
 export class UserProfileModule {}

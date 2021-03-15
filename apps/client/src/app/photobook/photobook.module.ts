@@ -25,7 +25,8 @@ import { FooterComponent } from './footer/footer.component';
 import { DragNDropDirective } from '../shared/directives/drag-n-drop.directive';
 import { AutoFocusDirective } from '../shared/directives/autofocus.directive';
 import { EditPhotoComponent } from './album-page/components/edit-photo/edit-photo.component';
-import { UserPageComponent } from './user-page/user-page.component'
+import { UserPageComponent } from './user-page/user-page.component';
+import { ConfirmComponent } from './components/confirm/confirm.component'
 
 @NgModule({
   declarations: [
@@ -48,7 +49,8 @@ import { UserPageComponent } from './user-page/user-page.component'
     DragNDropDirective,
     EditPhotoComponent,
     UserPageComponent,
-    AutoFocusDirective
+    AutoFocusDirective,
+    ConfirmComponent
   ],
   imports: [
     CommonModule,
@@ -56,7 +58,7 @@ import { UserPageComponent } from './user-page/user-page.component'
     UiModule,
   ],
   providers: [PhotobookService, DragNDropDirective, AutoFocusDirective],
-  entryComponents: [PhotoViewComponent, AddAlbumComponent, AddPhotoComponent],
+  entryComponents: [PhotoViewComponent, AddAlbumComponent, AddPhotoComponent, ConfirmComponent],
   exports: [PhotobookRoutingModule],
 })
 export class PhotobookModule {}

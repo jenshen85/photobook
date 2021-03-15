@@ -11,16 +11,22 @@ import { AlbumCredentialsDto, AlbumRoDto } from '@photobook/dto';
 
 @EntityRepository(Album)
 export class AlbumRepository extends Repository<Album> {
-
   async getAll(user_profile_id: number): Promise<AlbumRoDto[]> {
-    const albums = await this.find({where: { user_profile_id }});
+    const albums = await this.find({ where: { user_profile_id } });
     return albums.map((album) => plainToClass(AlbumRoDto, album));
   }
 
-  async getById(user_profile_id: number, album_id: number): Promise<AlbumRoDto> {
+  async getById(
+    user_profile_id: number,
+    album_id: number
+  ): Promise<AlbumRoDto> {
     const album = await this.createQueryBuilder('album')
       .where('album.deleted_at IS NULL')
-      .leftJoinAndSelect('album.user_profile', 'user_profile', 'user_profile.deleted_at IS NULL')
+      .leftJoinAndSelect(
+        'album.user_profile',
+        'user_profile',
+        'user_profile.deleted_at IS NULL'
+      )
       .where('album.user_profile_id = :user_profile_id', { user_profile_id })
       .andWhere('album.id = :album_id', { album_id })
       // .leftJoinAndSelect('album.photos', 'photo', 'photo.deleted_at IS NULL')
@@ -57,7 +63,7 @@ export class AlbumRepository extends Repository<Album> {
     album.title = title;
     description && (album.description = description);
     album.user_id = user.id;
-    album.user_profile_id = user.user_profile_id
+    album.user_profile_id = user.user_profile_id;
 
     try {
       await album.save();

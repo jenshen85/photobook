@@ -23,7 +23,10 @@ export class PhotoService {
     return this._photoRepository.getAll(getPhotosQuery);
   }
 
-  async getAllAlbumPhoto(album_id: number, getPhotosQuery: GetPhotosQueryDto): Promise<PhotoRoDto[]> {
+  async getAllAlbumPhoto(
+    album_id: number,
+    getPhotosQuery?: GetPhotosQueryDto
+  ): Promise<PhotoRoDto[]> {
     return this._photoRepository.getAllAlbumPhoto(album_id, getPhotosQuery);
   }
 
@@ -31,11 +34,17 @@ export class PhotoService {
     return await this._photoRepository.getOne(photo_id);
   }
 
-  async getNext(photo_id: number, photoQuery: PhotoQueryDto): Promise<PhotoRoDto> {
+  async getNext(
+    photo_id: number,
+    photoQuery: PhotoQueryDto
+  ): Promise<PhotoRoDto> {
     return await this._photoRepository.getNext(photo_id, photoQuery);
   }
 
-  async getPrev(photo_id: number, photoQuery: PhotoQueryDto): Promise<PhotoRoDto> {
+  async getPrev(
+    photo_id: number,
+    photoQuery: PhotoQueryDto
+  ): Promise<PhotoRoDto> {
     return await this._photoRepository.getPrev(photo_id, photoQuery);
   }
 
@@ -86,12 +95,20 @@ export class PhotoService {
   async updatePhoto(
     album_id: number,
     photo_id: number,
-    photoCredentials: PhotoCredentialsDto,
+    photoCredentials: PhotoCredentialsDto
   ): Promise<PhotoRoDto> {
-    return await this._photoRepository.updatePhoto(album_id, photo_id, photoCredentials);
+    return await this._photoRepository.updatePhoto(
+      album_id,
+      photo_id,
+      photoCredentials
+    );
   }
 
   async deletePhoto(album_id: number, photo_id: number): Promise<void> {
     return await this._photoRepository.deletePhoto(album_id, photo_id);
+  }
+
+  async deleteAlbumPhotos(album_id: number): Promise<void> {
+    await this._photoRepository.deleteAlbumPhotos(album_id);
   }
 }

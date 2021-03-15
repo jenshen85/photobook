@@ -31,7 +31,7 @@ export class PhotoController {
 
   @Get()
   getAll(
-    @Query(ValidationPipe) getPhotosQuery: GetPhotosQueryDto,
+    @Query(ValidationPipe) getPhotosQuery?: GetPhotosQueryDto
   ): Promise<PhotoRoDto[]> {
     return this._photoService.getAll(getPhotosQuery);
   }
@@ -39,20 +39,22 @@ export class PhotoController {
   @Get('album/:album_id')
   getAllAlbumPhoto(
     @Param('album_id', ParseIntPipe) album_id: number,
-    @Query(ValidationPipe) getPhotosQuery: GetPhotosQueryDto,
+    @Query(ValidationPipe) getPhotosQuery: GetPhotosQueryDto
   ): Promise<PhotoRoDto[]> {
     return this._photoService.getAllAlbumPhoto(album_id, getPhotosQuery);
   }
 
   @Get(':photo_id')
-  getOne(@Param('photo_id', ParseIntPipe) photo_id: number): Promise<PhotoRoDto> {
+  getOne(
+    @Param('photo_id', ParseIntPipe) photo_id: number
+  ): Promise<PhotoRoDto> {
     return this._photoService.getOne(photo_id);
   }
 
   @Get(':photo_id/next')
   getNext(
     @Param('photo_id', ParseIntPipe) photo_id: number,
-    @Query(ValidationPipe) photoQuery: PhotoQueryDto,
+    @Query(ValidationPipe) photoQuery: PhotoQueryDto
   ): Promise<PhotoRoDto> {
     return this._photoService.getNext(photo_id, photoQuery);
   }
@@ -60,7 +62,7 @@ export class PhotoController {
   @Get(':photo_id/prev')
   getPrev(
     @Param('photo_id', ParseIntPipe) photo_id: number,
-    @Query(ValidationPipe) photoQuery: PhotoQueryDto,
+    @Query(ValidationPipe) photoQuery: PhotoQueryDto
   ): Promise<PhotoRoDto> {
     return this._photoService.getPrev(photo_id, photoQuery);
   }
@@ -89,7 +91,7 @@ export class PhotoController {
   update(
     @Param('album_id', ParseIntPipe) album_id: number,
     @Param('photo_id', ParseIntPipe) photo_id: number,
-    @Body() photoCredentials: PhotoCredentialsDto,
+    @Body() photoCredentials: PhotoCredentialsDto
   ): Promise<PhotoRoDto> {
     return this._photoService.updatePhoto(album_id, photo_id, photoCredentials);
   }
@@ -97,7 +99,7 @@ export class PhotoController {
   @Delete(':album_id/:photo_id')
   delete(
     @Param('album_id', ParseIntPipe) album_id: number,
-    @Param('photo_id', ParseIntPipe) photo_id: number,
+    @Param('photo_id', ParseIntPipe) photo_id: number
   ): Promise<void> {
     return this._photoService.deletePhoto(album_id, photo_id);
   }

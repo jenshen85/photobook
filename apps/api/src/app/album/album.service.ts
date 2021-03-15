@@ -2,10 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { AlbumCredentialsDto, AlbumRoDto } from '@photobook/dto';
-import { Auth, Album } from '../entities';
+import { Auth } from '../entities';
 
 import { AlbumRepository } from './album.repository';
 import { FileService, IFileData } from '../file/file.service';
+import { PhotoService } from '../photo/photo.service';
 import { generateFileNameFromStr } from '../shared/utils/edit-file-name';
 
 @Injectable()
@@ -13,6 +14,7 @@ export class AlbumService {
   constructor(
     @InjectRepository(AlbumRepository)
     private readonly _albumRepository: AlbumRepository,
+    private readonly _photoService: PhotoService,
     private readonly _fileService: FileService
   ) {}
 
@@ -20,7 +22,10 @@ export class AlbumService {
     return await this._albumRepository.getAll(user_profile_id);
   }
 
-  async getById(user_profile_id: number, album_id: number): Promise<AlbumRoDto> {
+  async getById(
+    user_profile_id: number,
+    album_id: number
+  ): Promise<AlbumRoDto> {
     return await this._albumRepository.getById(user_profile_id, album_id);
   }
 
@@ -35,7 +40,7 @@ export class AlbumService {
     );
 
     let savedImageData: IFileData;
-    if(file) {
+    if (file) {
       const pathToAlbumPreview = `images/${user.path_id}/albums/${album.id}`;
       savedImageData = await this._fileService.saveFile(
         file,
@@ -46,7 +51,10 @@ export class AlbumService {
 
     return await this._albumRepository.updateAlbum(
       album.id,
-      { ...albumCredentials, preview: savedImageData && savedImageData.imageUrl },
+      {
+        ...albumCredentials,
+        preview: savedImageData && savedImageData.imageUrl,
+      },
       user
     );
   }
@@ -57,11 +65,14 @@ export class AlbumService {
     albumCredentials: AlbumCredentialsDto,
     user: Auth
   ): Promise<AlbumRoDto> {
-    const album = await this._albumRepository.getById(user.user_profile_id, album_id);
+    const album = await this._albumRepository.getById(
+      user.user_profile_id,
+      album_id
+    );
     let savedImageData: IFileData;
-    if(file) {
+    if (file) {
       const pathToAlbumPreview = `images/${user.path_id}/albums/${album_id}`;
-      album.preview && await this._fileService.deleteFile(album.preview);
+      album.preview && (await this._fileService.deleteFile(album.preview));
       savedImageData = await this._fileService.saveFile(
         file,
         pathToAlbumPreview,
@@ -70,17 +81,23 @@ export class AlbumService {
     }
     return this._albumRepository.updateAlbum(
       album_id,
-      { ...albumCredentials, preview: savedImageData && savedImageData.imageUrl },
+      {
+        ...albumCredentials,
+        preview: savedImageData && savedImageData.imageUrl,
+      },
       user
     );
   }
 
-  async delete(id: number, user: Auth): Promise<void> {
-    return await this._albumRepository.deleteAlbum(
-      id,
-      user /*, async (album) => {
-      await this.fileService.deleteFile(album.preview)
-    }*/
-    );
+  async delete(album_id: number, user: Auth): Promise<void> {
+    await Promise.all([
+      this._albumRepository.deleteAlbum(
+        album_id,
+        user /*, async (album) => {
+        await this.fileService.deleteFile(album.preview)
+        }*/
+      ),
+      this._photoService.deleteAlbumPhotos(album_id),
+    ]);
   }
 }

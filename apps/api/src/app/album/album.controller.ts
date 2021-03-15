@@ -10,9 +10,7 @@ import {
   Delete,
   UseInterceptors,
   UploadedFile,
-  Req,
   Patch,
-  // Res,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { memoryStorage } from 'multer';
@@ -30,7 +28,9 @@ export class AlbumController {
   constructor(private readonly _albumService: AlbumService) {}
 
   @Get('/:user_profile_id')
-  getAlbumsByUserId(@Param('user_profile_id', ParseIntPipe) user_profile_id: number): Promise<AlbumRoDto[]> {
+  getAlbumsByUserId(
+    @Param('user_profile_id', ParseIntPipe) user_profile_id: number
+  ): Promise<AlbumRoDto[]> {
     return this._albumService.getAll(user_profile_id);
   }
 
@@ -44,9 +44,11 @@ export class AlbumController {
   }
 
   @Post()
-  @UseInterceptors(FileInterceptor('preview', {
-    storage: memoryStorage()
-  }))
+  @UseInterceptors(
+    FileInterceptor('preview', {
+      storage: memoryStorage(),
+    })
+  )
   createAlbum(
     @UploadedFile() file: Express.Multer.File,
     @Body(ValidationPipe) albumCredentials: AlbumCredentialsDto,
@@ -56,16 +58,23 @@ export class AlbumController {
   }
 
   @Patch('/:album_id')
-  @UseInterceptors(FileInterceptor('preview', {
-    storage: memoryStorage()
-  }))
+  @UseInterceptors(
+    FileInterceptor('preview', {
+      storage: memoryStorage(),
+    })
+  )
   updateAlbum(
     @Param('album_id') album_id: number,
     @UploadedFile() file: Express.Multer.File,
     @Body(ValidationPipe) albumCredentials: AlbumCredentialsDto,
     @GetUser() user: Auth
   ): Promise<AlbumRoDto> {
-    return this._albumService.updateAlbum(album_id, file, albumCredentials, user);
+    return this._albumService.updateAlbum(
+      album_id,
+      file,
+      albumCredentials,
+      user
+    );
   }
 
   @Delete('/:album_id')
