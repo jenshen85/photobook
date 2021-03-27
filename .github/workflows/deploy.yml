@@ -34,9 +34,6 @@ jobs:
           echo "${{secrets.KEY}}" > "$SSH_PATH/key"
           chmod 700 "$SSH_PATH" && chmod 600 "$SSH_PATH/key"
           ssh-keyscan github.com >> $SSH_PATH/known_hosts
-        env:
-          TARGET_SERVER_HOST: ${{secrets.TARGET_SERVER_HOST}}
-          TARGET_SERVER_USER: ${{secrets.TARGET_SERVER_USER}}
       # Build
       # - run: npm ci
       #- run: npm run build:all
@@ -48,6 +45,6 @@ jobs:
       - name: Deploy
         run: |
           echo "PM2 run setup"
-          pm2 deploy ecosystem.config.js production setup 2>&1 || true
+          TARGET_SERVER_HOST=${{secrets.TARGET_SERVER_HOST}} TARGET_SERVER_USER=${{secrets.TARGET_SERVER_USER}} pm2 deploy ecosystem.config.js production setup 2>&1 || true
           echo "PM2 run deploy"
           PGPASSWORD=${{secrets.PGPASSWORD}} TARGET_SERVER_HOST=${{secrets.TARGET_SERVER_HOST}} TARGET_SERVER_USER=${{secrets.TARGET_SERVER_USER}} pm2 deploy ecosystem.config.js production
