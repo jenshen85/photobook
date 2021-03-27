@@ -13,10 +13,11 @@ module.exports = {
     production: {
       key: '~/.ssh/key',
       user: 'jenshen',
-      host: '37.77.104.228',
+      host: `${process.env.TARGET_SERVER_HOST}`,
+      // host: '37.77.104.228',
       // port: '228',
       ssh_options: 'StrictHostKeyChecking=no',
-      ref: 'origin/master',
+      ref: 'origin/main',
       repo: 'git@github.com:jenshen85/photobook.git',
       path: '/home/jenshen/photobook',
       'post-deploy': [
