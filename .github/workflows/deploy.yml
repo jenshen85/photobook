@@ -36,7 +36,7 @@ jobs:
       # Deploy
       - name: Install PM2
         run: npm i pm2
-      - run: echo "PM2 run setup"
-      - run: pm2 deploy ecosystem.config.js production setup 2>&1 || true
-      - run: echo "PM2 run deploy"
-      - run: PGPASSWORD="${{secrets.PGPASSWORD}}" pm2 deploy ecosystem.config.js production
+        run: echo "PM2 run setup"
+        run: pm2 deploy ecosystem.config.js production setup 2>&1 || true
+        run: echo "PM2 run deploy"
+        run: PGPASSWORD="${{secrets.PGPASSWORD}}" pm2 deploy ecosystem.config.js production
