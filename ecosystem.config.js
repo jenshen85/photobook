@@ -24,7 +24,7 @@ module.exports = {
       ref: 'origin/main',
       repo: 'git@github.com:jenshen85/photobook.git',
       path: `/home/jenshen/photobook`,
-      'pre-setup': 'apt-get install git',
+      // 'pre-setup': 'apt-get install git',
       'post-setup': 'ls -la',
       'post-deploy': [
         process.env.PGPASSWORD
