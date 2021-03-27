@@ -61,9 +61,10 @@ jobs:
           sudo apt-get install -y git
 
       # Deploy
-      - name: Deploy
+      - name: PM2 run setup
         run: |
-          echo "PM2 run setup"
           env $(cat .env | grep -v \"#\" | xargs) pm2 deploy ecosystem.config.js production setup 2>&1 || true
-          echo "PM2 run deploy"
+
+      - name: PM2 run deploy
+        run: |
           env $(cat .env | grep -v \"#\" | xargs) pm2 deploy ecosystem.config.js production
