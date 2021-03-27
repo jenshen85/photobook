@@ -32,12 +32,10 @@ jobs:
           mkdir -p "$SSH_PATH"
           touch "$SSH_PATH/known_hosts"
           echo "${{secrets.KEY}}" > "$SSH_PATH/key"
-          chmod 700 "$SSH_PATH" && chmod 600 "$SSH_PATH/key"
-          ssh-keyscan github.com >> $SSH_PATH/known_hosts
-      # Build
-      # - run: npm ci
-      #- run: npm run build:all
-      #- run: npm test
+          ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
+          chmod 700 "$SSH_PATH" && chmod 600 "$SSH_PATH/key" && chmod 600 "$SSH_PATH/known_hosts"
+          eval $(ssh-agent)
+          ssh-add "$SSH_PATH/key"
       # Deploy
       - name: Install PM2
         run: npm i pm2 -g
