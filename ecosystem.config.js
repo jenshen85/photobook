@@ -13,8 +13,8 @@ module.exports = {
     production: {
       key: '~/.ssh/key',
       user: 'jenshen',
-      host: `${process.env.TARGET_SERVER_HOST}`,
-      // host: '37.77.104.228',
+      // host: `${process.env.TARGET_SERVER_HOST}`,
+      host: '37.77.104.228',
       // port: '228',
       ssh_options: 'StrictHostKeyChecking=no',
       ref: 'origin/main',
