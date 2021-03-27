@@ -28,9 +28,11 @@ jobs:
       - name: Set up SSH
         run: |
           set -eu
-          mkdir "$HOME/.ssh"
-          echo "${{secrets.KEY}}" > "$HOME/.ssh/key"
-          chmod 700 "$HOME/.ssh" && chmod 600 "$HOME/.ssh/key"
+          SSH_PATH="$HOME/.ssh"
+          mkdir -p "$SSH_PATH"
+          touch "$SSH_PATH/known_hosts"
+          echo "${{secrets.KEY}}" > "> "$SSH_PATH/key"
+          chmod 700 "$SSH_PATH" && chmod 600 "$SSH_PATH/key"
           ssh-keyscan github.com >> ~/.ssh/known_hosts
         env:
           TARGET_SERVER_HOST: ${{secrets.TARGET_SERVER_HOST}}
@@ -48,8 +50,4 @@ jobs:
           echo "PM2 run setup"
           pm2 deploy ecosystem.config.js production setup 2>&1 || true
           echo "PM2 run deploy"
-          pm2 deploy ecosystem.config.js production
-        env:
-          PGPASSWORD: ${{secrets.PGPASSWORD}}
-          TARGET_SERVER_HOST: ${{secrets.TARGET_SERVER_HOST}}
-          TARGET_SERVER_USER: ${{secrets.TARGET_SERVER_USER}}
+          PGPASSWORD=${{secrets.PGPASSWORD}} TARGET_SERVER_HOST=${{secrets.TARGET_SERVER_HOST}} TARGET_SERVER_USER=${{secrets.TARGET_SERVER_USER}} pm2 deploy ecosystem.config.js production
