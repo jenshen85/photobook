@@ -1,0 +1,41 @@
+# This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+
+name: Node.js CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [14.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    # Setup key
+    - run: set -eu
+    - run: mkdir "$HOME/.ssh"
+    - run: echo "${{secrets.KEY}}" > "$HOME/.ssh/key"
+    - run: chmod 700 "$HOME/.ssh" && chmod 600 "$HOME/.ssh/key"
+    # Build
+    - run: npm ci
+    #- run: npm run build:all
+    #- run: npm test
+    # Deploy
+    - run: echo "PM2 run setup"
+    - run: pm2 deploy ecosystem.config.js production setup 2>&1 || true
+    - run: echo "PM2 run deploy"
+    - run: PGPASSWORD="${{secrets.PGPASSWORD}}" pm2 deploy ecosystem.config.js production
