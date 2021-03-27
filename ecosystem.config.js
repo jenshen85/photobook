@@ -11,7 +11,7 @@ module.exports = {
   ],
   deploy: {
     production: {
-      key: '~/.ssh/authorized_keys',
+      key: '~/.ssh/phkey.pub',
       user: 'jenshen',
       // user: `${process.env.TARGET_SERVER_USER}`,
       // host: `${process.env.TARGET_SERVER_HOST}`,

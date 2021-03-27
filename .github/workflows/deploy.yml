@@ -31,11 +31,11 @@ jobs:
           SSH_PATH="$HOME/.ssh"
           mkdir -p "$SSH_PATH"
           touch "$SSH_PATH/known_hosts"
-          echo "${{secrets.KEY}}" > "$SSH_PATH/key"
+          echo "${{secrets.KEY}}" > "$SSH_PATH/phkey"
           ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
           chmod 700 "$SSH_PATH" && chmod 600 "$SSH_PATH/key" && chmod 600 "$SSH_PATH/known_hosts"
           eval $(ssh-agent)
-          ssh-add "$SSH_PATH/key"
+          ssh-add "$SSH_PATH/phkey"
       # Deploy
       - name: Install PM2
         run: npm i pm2 -g
