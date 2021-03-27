@@ -33,6 +33,7 @@ jobs:
           chmod 700 "$HOME/.ssh" && chmod 600 "$HOME/.ssh/key"
         env:
           TARGET_SERVER_HOST: ${{secrets.TARGET_SERVER_HOST}}
+          TARGET_SERVER_USER: ${{secrets.TARGET_SERVER_USER}}
       # Build
       # - run: npm ci
       #- run: npm run build:all
@@ -48,4 +49,6 @@ jobs:
           echo "PM2 run deploy"
           pm2 deploy ecosystem.config.js production
         env:
-          TARGET_SERVER_HOST: ${{secrets.PGPASSWORD}}
+          PGPASSWORD: ${{secrets.PGPASSWORD}}
+          TARGET_SERVER_HOST: ${{secrets.TARGET_SERVER_HOST}}
+          TARGET_SERVER_USER: ${{secrets.TARGET_SERVER_USER}}
