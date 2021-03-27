@@ -48,7 +48,6 @@ jobs:
           echo "PM2 run setup"
           pm2 deploy ecosystem.config.js production setup 2>&1 || true
           echo "PM2 run deploy"
-        # PGPASSWORD="${{secrets.PGPASSWORD}}"
           pm2 deploy ecosystem.config.js production
         env:
           TARGET_SERVER_HOST: ${{secrets.PGPASSWORD}}
