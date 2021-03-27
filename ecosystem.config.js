@@ -7,20 +7,25 @@ module.exports = {
       script: 'npm',
       args: 'run start',
       log_date_format: 'HH:mm:ss.SSS YYYY-MM-DD',
+      env_production: {
+        NODE_ENV: 'production',
+      },
     },
   ],
   deploy: {
     production: {
       key: '~/.ssh/phkey',
-      user: 'jenshen',
-      // user: `${process.env.TARGET_SERVER_USER}`,
-      // host: `${process.env.TARGET_SERVER_HOST}`,
-      host: '37.77.104.228',
+      // user: 'jenshen',
+      user: `${process.env.TARGET_SERVER_USER}`,
+      host: `${process.env.TARGET_SERVER_HOST}`,
+      // host: '37.77.104.228',
       // port: '228',
       ssh_options: 'StrictHostKeyChecking=no',
       ref: 'origin/main',
       repo: 'git@github.com:jenshen85/photobook.git',
       path: `/home/jenshen/photobook`,
+      'pre-setup': 'apt-get install git',
+      'post-setup': 'ls -la',
       'post-deploy': [
         process.env.PGPASSWORD
           ? `PGPASSWORD=${process.env.PGPASSWORD} pg_dump --username=${process.env.TARGET_SERVER_USER} --no-owner photobook > ~/memory_$(date +%d_%m_%y).bak`

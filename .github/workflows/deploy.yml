@@ -24,25 +24,38 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-      # Setup key
+
+      # Setup SSH key
       - name: Set up SSH
         run: |
-          set -eu
-          SSH_PATH="$HOME/.ssh"
-          mkdir -p "$SSH_PATH"
-          touch "$SSH_PATH/known_hosts"
-          echo "${{secrets.KEY}}" > "$SSH_PATH/phkey"
-          ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
-          chmod 700 "$SSH_PATH" && chmod 600 "$SSH_PATH/phkey" && chmod 600 "$SSH_PATH/known_hosts"
+          mkdir -p ~/.ssh/
+          touch ~/.ssh/known_hosts
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/phkey
+          echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+          chmod 700 ~/.ssh && chmod 600 ~/.ssh/*
           eval $(ssh-agent)
-          ssh-add "$SSH_PATH/phkey"
-      # Deploy
+          ssh-add ~/.ssh/phkey
+        shell: bash
+        env:
+          SSH_PRIVATE_KEY: ${{secrets.SSH_PRIVATE_KEY}}
+          SSH_KNOWN_HOSTS: ${{secrets.SSH_KNOWN_HOSTS}}
+
+      # (optional - only needed if your config uses environment variables)
+      - name: Create env file
+        run: |
+          touch .env
+          echo PGPASSWORD=${{ secrets.PGPASSWORD }} >> .env
+          echo TARGET_SERVER_HOST=${{ secrets.TARGET_SERVER_HOST }} >> .env
+          echo TARGET_SERVER_USER=${{ secrets.TARGET_SERVER_USER }} >> .env
+
+      # Install PM2
       - name: Install PM2
         run: npm i pm2 -g
 
+      # Deploy
       - name: Deploy
         run: |
           echo "PM2 run setup"
-          TARGET_SERVER_HOST=${{secrets.TARGET_SERVER_HOST}} TARGET_SERVER_USER=${{secrets.TARGET_SERVER_USER}} pm2 deploy ecosystem.config.js production setup 2>&1 || true
+          env $(cat .env | grep -v \"#\" | xargs) pm2 deploy ecosystem.config.js production setup 2>&1 || true
           echo "PM2 run deploy"
-          PGPASSWORD=${{secrets.PGPASSWORD}} TARGET_SERVER_HOST=${{secrets.TARGET_SERVER_HOST}} TARGET_SERVER_USER=${{secrets.TARGET_SERVER_USER}} pm2 deploy ecosystem.config.js production
+          env $(cat .env | grep -v \"#\" | xargs) pm2 deploy ecosystem.config.js production
