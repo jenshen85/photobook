@@ -37,9 +37,9 @@ jobs:
       # - run: npm ci
       #- run: npm run build:all
       #- run: npm test
-      # Deploy
-      # - name: Install PM2
-      #   run: npm i pm2 -g
+      Deploy
+      - name: Install PM2
+        run: npm i pm2 -g
 
       - name: Deploy
         run: |
