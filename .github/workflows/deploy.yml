@@ -49,14 +49,6 @@ jobs:
           echo TARGET_SERVER_HOST=${{ secrets.TARGET_SERVER_HOST }} >> .env
           echo TARGET_SERVER_USER=${{ secrets.TARGET_SERVER_USER }} >> .env
 
-      # - name: Install git
-      #   run: |
-      #     sudo apt-get install -y software-properties-common
-      #     sudo apt-get update
-      #     sudo add-apt-repository -y ppa:git-core/ppa
-      #     sudo apt-get update
-      #     sudo apt-get install -y git
-
       # Install PM2
       - name: Install PM2
         run: npm i pm2 -g

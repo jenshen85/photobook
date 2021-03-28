@@ -15,6 +15,8 @@ import { LikeModule } from './like/like.module';
 
 const environment = process.env.NODE_ENV || 'development';
 
+console.log('env file: ', `.env.${environment}`);
+
 @Module({
   imports: [
     ServeStaticModule.forRoot({
