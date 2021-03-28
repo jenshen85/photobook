@@ -15,10 +15,10 @@ module.exports = {
   deploy: {
     production: {
       key: '~/.ssh/phkey',
-      user: 'jenshen',
-      // user: process.env.TARGET_SERVER_USER,
-      // host: process.env.TARGET_SERVER_HOST,
-      host: '37.77.104.228',
+      // user: 'jenshen',
+      user: process.env.TARGET_SERVER_USER,
+      host: process.env.TARGET_SERVER_HOST,
+      // host: '37.77.104.228',
       // port: '228',
       ssh_options: 'StrictHostKeyChecking=no',
       ref: 'origin/main',

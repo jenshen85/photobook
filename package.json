@@ -10,7 +10,7 @@
     "api:serve": "ng serve api",
     "api:build": "ng build api --configuration=production",
     "client:serve": "ng serve client --configuration=development --live-reload false --port=4200",
-    "client:build": "ng serve client --configuration=production",
+    "client:build": "ng build client --configuration=production",
     "admin:serve": "ng serve admin --port=4220",
     "admin:build": "ng build admin",
     "start:all": "concurrently \"npm run api:serve\" \"npm run client:serve\" \"npm run admin:serve\"",
