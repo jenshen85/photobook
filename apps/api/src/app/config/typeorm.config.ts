@@ -24,14 +24,23 @@ const entitiesArr = (() =>
 
 export const typeOrmConfig: typeOrmConfigType = (
   configService: ConfigService
-) => ({
-  type: 'postgres',
-  host: configService.get<string>(ConfigEnum.DB_HOST),
-  port: +configService.get<string>(ConfigEnum.DB_PORT),
-  username: configService.get<string>(ConfigEnum.DB_USERNAME),
-  password: configService.get<string>(ConfigEnum.DB_PASSWORD),
-  database: configService.get<string>(ConfigEnum.DB_DATABASE),
-  entities: [...entitiesArr],
-  synchronize: configService.get<string>(ConfigEnum.DB_SYNCHRONIZE) === 'true',
-  logging: configService.get<string>(ConfigEnum.DB_LOGING) === 'true',
-});
+) => {
+  console.log('host: ', configService.get<string>(ConfigEnum.DB_HOST));
+  console.log('port: ', +configService.get<string>(ConfigEnum.DB_PORT));
+  console.log('username: ', configService.get<string>(ConfigEnum.DB_USERNAME));
+  console.log('password: ', configService.get<string>(ConfigEnum.DB_PASSWORD));
+  console.log('database: ', configService.get<string>(ConfigEnum.DB_DATABASE));
+
+  return {
+    type: 'postgres',
+    host: configService.get<string>(ConfigEnum.DB_HOST),
+    port: +configService.get<string>(ConfigEnum.DB_PORT),
+    username: configService.get<string>(ConfigEnum.DB_USERNAME),
+    password: configService.get<string>(ConfigEnum.DB_PASSWORD),
+    database: configService.get<string>(ConfigEnum.DB_DATABASE),
+    entities: [...entitiesArr],
+    synchronize:
+      configService.get<string>(ConfigEnum.DB_SYNCHRONIZE) === 'true',
+    logging: configService.get<string>(ConfigEnum.DB_LOGING) === 'true',
+  };
+};
