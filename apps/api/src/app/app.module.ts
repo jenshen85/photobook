@@ -14,8 +14,7 @@ import { CommentModule } from './comment/comment.module';
 import { LikeModule } from './like/like.module';
 
 const environment = process.env.NODE_ENV || 'development';
-
-console.log('env file: ', `.env.${environment}`);
+console.log(process.env.NODE_ENV);
 
 @Module({
   imports: [

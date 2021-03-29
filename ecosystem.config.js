@@ -37,8 +37,6 @@ module.exports = {
         `echo DB_LOGING=false >> .env.production`,
         `echo JWT_SECRET=${process.env.JWT_SECRET} >> .env.production`,
         `echo JWT_EXPIRES_IN=${process.env.JWT_EXPIRES_IN} >> .env.production`,
-        'cat .env.production',
-        'ls -la',
         `npm run build`,
         `pm2 startOrRestart ecosystem.config.js --env production`,
       ]

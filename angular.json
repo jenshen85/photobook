@@ -234,15 +234,21 @@
                   "replace": "apps/api/src/environments/environment.ts",
                   "with": "apps/api/src/environments/environment.prod.ts"
                 }
-              ]
+              ],
+              "buildTarget": "api:build:production"
             }
           },
           "outputs": ["{options.outputPath}"]
         },
         "serve": {
           "builder": "@nrwl/node:execute",
-          "options": {
-            "buildTarget": "api:build"
+          "configurations": {
+            "production": {
+              "buildTarget": "api:build:production"
+            },
+            "development": {
+              "buildTarget": "api:build:development"
+            }
           }
         },
         "lint": {
