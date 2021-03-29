@@ -24,16 +24,21 @@ module.exports = {
       'post-setup': 'ls -la',
       'post-deploy': [
         process.env.PGPASSWORD
-          ? `PGPASSWORD=${process.env.PGPASSWORD} pg_dump --username=${process.env.TARGET_SERVER_USER} --no-owner ${process.env.DB_DATABASE} > ~/dbback/photobook_$(date +%d_%m_%y).bak`
+          ? `PGPASSWORD=${process.env.DB_PASSWORD} pg_dump --username=${process.env.DB_USERNAME} --no-owner ${process.env.DB_DATABASE} > ~/dbback/photobook_$(date +%d_%m_%y).bak`
           : false,
         `npm install`,
-        // 'touch .env.production',
-        // `echo DB_HOST=${process.env.DB_HOST} >> .env.production`,
-        // `echo DB_PORT=${process.env.DB_PORT} >> .env.production`,
-        // `echo DB_USERNAME=${process.env.TARGET_SERVER_USER} >> .env.production`,
-        // `echo DB_PASSWORD=${process.env.PGPASSWORD} >> .env.production`,
-        // `echo DB_DATABASE=${process.env.DB_DATABASE} >> .env.production`,
-        `npm run build:all`,
+        'touch .env.production',
+        `echo DB_HOST=${process.env.DB_HOST} >> .env.production`,
+        `echo DB_PORT=${process.env.DB_PORT} >> .env.production`,
+        `echo DB_USERNAME=${process.env.DB_USERNAME} >> .env.production`,
+        `echo DB_PASSWORD=${process.env.DB_PASSWORD} >> .env.production`,
+        `echo DB_DATABASE=${process.env.DB_DATABASE} >> .env.production`,
+        `echo DB_SYNCHRONIZE=false >> .env.production`,
+        `echo DB_LOGING=false >> .env.production`,
+        `echo JWT_SECRET=${process.env.JWT_SECRET} >> .env.production`,
+        `echo JWT_EXPIRES_IN=${process.env.JWT_EXPIRES_IN} >> .env.production`,
+        'cat .env.production',
+        `npm run build`,
         `pm2 startOrRestart ecosystem.config.js --env production`,
       ]
         .filter(Boolean)

@@ -45,10 +45,15 @@ jobs:
       - name: Create env file
         run: |
           touch .env
-          echo PGPASSWORD=${{ secrets.PGPASSWORD }} >> .env
           echo TARGET_SERVER_HOST=${{ secrets.TARGET_SERVER_HOST }} >> .env
           echo TARGET_SERVER_USER=${{ secrets.TARGET_SERVER_USER }} >> .env
+          echo DB_HOST=${{ secrets.DB_HOST }} >> .env
+          echo DB_PORT=${{ secrets.DB_PORT }} >> .env
+          echo DB_USERNAME=${{ secrets.DB_USERNAME }} >> .env
+          echo DB_PASSWORD=${{ secrets.DB_PASSWORD }} >> .env
           echo DB_DATABASE=${{ secrets.DB_DATABASE }} >> .env
+          echo JWT_SECRET=${{ secrets.JWT_SECRET }} >> .env
+          echo JWT_EXPIRES_IN=${{ secrets.JWT_EXPIRES_IN }} >> .env
 
       # Install PM2
       - name: Install PM2

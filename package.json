@@ -15,7 +15,7 @@
     "admin:build": "ng build admin",
     "start:all": "concurrently \"npm run api:serve\" \"npm run client:serve\" \"npm run admin:serve\"",
     "build:all": "concurrently \"npm run api:build\" \"npm run client:build\" \"npm run admin:build\"",
-    "build": "ng build",
+    "build": "npm run build:all",
     "test": "ng test",
     "lint": "nx workspace-lint && ng lint",
     "e2e": "ng e2e",
