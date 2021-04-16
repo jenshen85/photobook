@@ -40,7 +40,7 @@ module.exports = {
         `npm run api:build`,
         `npm run client:build`,
         `npm run migration:generate Update`,
-        `npm run migration:run`,
+        `npm run migration:up`,
         `pm2 startOrRestart ecosystem.config.js --env production`,
       ]
         .filter(Boolean)
