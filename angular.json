@@ -236,6 +236,9 @@
                 }
               ],
               "buildTarget": "api:build:production"
+            },
+            "development": {
+              "buildTarget": "api:build:development"
             }
           },
           "outputs": ["{options.outputPath}"]

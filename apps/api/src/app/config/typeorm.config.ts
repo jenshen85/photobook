@@ -19,8 +19,7 @@ export type typeOrmConfigType = (
   configService: ConfigService
 ) => TypeOrmModuleOptions;
 
-const entitiesArr = (() =>
-  Object.keys(entities).map((entity) => entities[entity]))();
+const entitiesArr = Object.keys(entities).map((entity) => entities[entity]);
 
 export const typeOrmConfig: typeOrmConfigType = (
   configService: ConfigService
@@ -28,10 +27,11 @@ export const typeOrmConfig: typeOrmConfigType = (
   return {
     type: 'postgres',
     host: configService.get<string>(ConfigEnum.DB_HOST),
-    port: +configService.get<string>(ConfigEnum.DB_PORT),
+    port: +configService.get<number>(ConfigEnum.DB_PORT),
     username: configService.get<string>(ConfigEnum.DB_USERNAME),
     password: configService.get<string>(ConfigEnum.DB_PASSWORD),
     database: configService.get<string>(ConfigEnum.DB_DATABASE),
+    migrationsRun: false,
     entities: [...entitiesArr],
     synchronize:
       configService.get<string>(ConfigEnum.DB_SYNCHRONIZE) === 'true',

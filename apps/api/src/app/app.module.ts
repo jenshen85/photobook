@@ -14,7 +14,7 @@ import { CommentModule } from './comment/comment.module';
 import { LikeModule } from './like/like.module';
 
 const environment = process.env.NODE_ENV || 'development';
-console.log(process.env.NODE_ENV);
+console.log(environment);
 
 @Module({
   imports: [
@@ -22,6 +22,11 @@ console.log(process.env.NODE_ENV);
       rootPath: join(__dirname, '..', 'client'),
       exclude: ['/api*'],
     }),
+    // ServeStaticModule.forRoot({
+    //   rootPath: join(__dirname, '..', 'admin'),
+    //   serveRoot: '/admin',
+    //   exclude: ['/api*'],
+    // }),
     ConfigModule.forRoot({
       envFilePath: `.env.${environment}`,
       isGlobal: true,

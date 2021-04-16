@@ -7,8 +7,9 @@
     "nx": "nx",
     "postinstall": "node ./decorate-angular-cli.js && ngcc --properties es2015 browser module main --first-only --create-ivy-entry-points",
     "start": "ng serve api --configuration=production",
-    "api:serve": "ng serve api",
+    "api:serve": "ng serve api --configuration=development",
     "api:build": "ng build api --configuration=production",
+    "api:start": "node dist/apps/api/main.js",
     "client:serve": "ng serve client --configuration=development --live-reload false --port=4200",
     "client:build": "ng build client --configuration=production",
     "admin:serve": "ng serve admin --port=4220",
@@ -33,7 +34,12 @@
     "update": "nx migrate latest",
     "workspace-schematic": "nx workspace-schematic",
     "dep-graph": "nx dep-graph",
-    "help": "nx help"
+    "help": "nx help",
+    "typeorm": "ts-node -r tsconfig-paths/register --project ./apps/api/tsconfig.app.json ./node_modules/typeorm/cli.js",
+    "migration:generate": "npm run typeorm -- migration:generate --config ./apps/api/orm-config.ts --name ",
+    "migration:create": "npm run typeorm -- migration:create --config ./apps/api/orm-config.ts --name ",
+    "migration:up": "npm run typeorm -- migration:run --config ./apps/api/orm-config.ts",
+    "migration:down": "npm run typeorm -- migration:revert --config ./apps/api/orm-config.ts"
   },
   "private": true,
   "dependencies": {

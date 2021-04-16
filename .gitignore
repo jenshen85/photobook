@@ -2,6 +2,7 @@
 
 # compiled output
 /dist
+/migration
 /tmp
 /out-tsc
 

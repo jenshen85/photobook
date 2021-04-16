@@ -5,7 +5,7 @@ module.exports = {
     {
       name: 'phapp',
       script: 'npm',
-      args: 'run start',
+      args: 'run api:start',
       log_date_format: 'HH:mm:ss.SSS YYYY-MM-DD',
       env_production: {
         NODE_ENV: 'production',
@@ -38,6 +38,8 @@ module.exports = {
         `echo JWT_SECRET=${process.env.JWT_SECRET} >> .env.production`,
         `echo JWT_EXPIRES_IN=${process.env.JWT_EXPIRES_IN} >> .env.production`,
         `npm run build`,
+        `npm run migration:generate Update`,
+        `npm run migration:run`,
         `pm2 startOrRestart ecosystem.config.js --env production`,
       ]
         .filter(Boolean)
