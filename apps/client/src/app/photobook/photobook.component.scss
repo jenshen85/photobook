@@ -1,12 +1,13 @@
-@import "../../sass/variables.scss";
-@import "../../sass/mixins.scss";
+@import '../../sass/variables.scss';
+@import '../../sass/mixins.scss';
 
 .photobook-photo-book {
   height: 100%;
 }
 
-photobook-footer,
-photobook-header {
+.top-bar,
+.photobook-footer,
+.photobook-header {
   flex: 0 0 auto;
 }
 

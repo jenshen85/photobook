@@ -1,7 +1,12 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
-import { AlbumRoI, PhotoCredentialsI, SpriteIconEnum, UserProfileRoI } from '@photobook/data';
+import {
+  AlbumRoI,
+  PhotoCredentialsI,
+  SpriteIconEnum,
+  UserProfileRoI,
+} from '@photobook/data';
 import { Dialog } from '@photobook/ui';
 
 import { toFormData, userName } from 'apps/client/src/app/shared/utils/utils';
@@ -14,11 +19,12 @@ import { fadeAnimations } from 'apps/client/src/app/shared/utils/animations';
   templateUrl: './header-album.component.html',
   styleUrls: ['./header-album.component.scss'],
   host: {
-    class: 'header photobook-header-album',
+    class: 'photobook-header photobook-header-album',
     '[class]': 'isEdit ? "user-edit" : ""',
-    '[style.backgroundImage]': 'album.preview ? "url(" + album.preview + ")" : "url(assets/images/default-bg.jpg)"'
+    '[style.backgroundImage]':
+      'album.preview ? "url(" + album.preview + ")" : "url(assets/images/default-bg.jpg)"',
   },
-  animations: [ fadeAnimations.fadeIn(), fadeAnimations.fadeOut() ],
+  animations: [fadeAnimations.fadeIn(), fadeAnimations.fadeOut()],
 })
 export class HeaderAlbumComponent implements OnInit {
   subs = new SubSink();
@@ -30,8 +36,8 @@ export class HeaderAlbumComponent implements OnInit {
   savePending: boolean;
   albumForm: FormGroup;
 
-  @Output() onEditHandler: EventEmitter<boolean> = new EventEmitter()
-  @Output() onAddPhotoHandler: EventEmitter<boolean> = new EventEmitter()
+  @Output() onEditHandler: EventEmitter<boolean> = new EventEmitter();
+  @Output() onAddPhotoHandler: EventEmitter<boolean> = new EventEmitter();
 
   editIcon: SpriteIconEnum = SpriteIconEnum.edit;
   albumIcon: SpriteIconEnum = SpriteIconEnum.album;
@@ -40,14 +46,14 @@ export class HeaderAlbumComponent implements OnInit {
 
   constructor(
     private readonly dialog: Dialog,
-    private readonly _photoService: PhotobookService,
+    private readonly _photoService: PhotobookService
   ) {}
 
   ngOnInit(): void {
     this.albumForm = new FormGroup({
       title: new FormControl(this.album.title, [
         Validators.required,
-        Validators.maxLength(20)
+        Validators.maxLength(20),
       ]),
       description: new FormControl(this.album.description, [
         Validators.maxLength(20),
@@ -59,26 +65,28 @@ export class HeaderAlbumComponent implements OnInit {
   updateProfileHandler() {
     const data = toFormData<PhotoCredentialsI>(this.albumForm.value);
     this.savePending = true;
-    this.subs.sink = this._photoService.updateAlbum(this.album.id, data).subscribe(
-      (album: AlbumRoI) => {
-        this.album = album;
-        this.albumForm.patchValue({
-          title: album.title,
-          description: album.description
-        });
-        this.savePending = false;
-        this.onEditHandler.emit(false);
-      },
-      (error) => {
-        // TODO: error handling
-        console.log(error);
-        this.savePending = false;
-      }
-    );
+    this.subs.sink = this._photoService
+      .updateAlbum(this.album.id, data)
+      .subscribe(
+        (album: AlbumRoI) => {
+          this.album = album;
+          this.albumForm.patchValue({
+            title: album.title,
+            description: album.description,
+          });
+          this.savePending = false;
+          this.onEditHandler.emit(false);
+        },
+        (error) => {
+          // TODO: error handling
+          console.log(error);
+          this.savePending = false;
+        }
+      );
   }
 
   get getName() {
-    const {first_name, last_name } = this.currentUserProfile;
+    const { first_name, last_name } = this.currentUserProfile;
     return userName({ first_name, last_name });
   }
 }
