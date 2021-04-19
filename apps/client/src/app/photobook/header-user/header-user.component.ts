@@ -15,7 +15,7 @@ import { toFormData } from '../../shared/utils/utils';
   templateUrl: './header-user.component.html',
   styleUrls: ['./header-user.component.scss'],
   host: {
-    class: 'photobook-header-user',
+    class: 'photobook-header photobook-header-user',
     '[class]': 'isEdit ? "user-edit" : ""',
     '[style.backgroundImage]':
       'currentUserProfile.cover ? "url(" + currentUserProfile.cover + ")" : "url(assets/images/welcom-bg.png)"',
