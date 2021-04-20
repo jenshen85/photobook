@@ -48,12 +48,18 @@ export class UserProfileRepository extends Repository<UserProfile> {
     if (profile) {
       throw new ConflictException('Profile exist for this user');
     } else {
-      const { first_name, last_name, description } = userProfileCredentials;
+      const {
+        first_name,
+        last_name,
+        description,
+        language_code,
+      } = userProfileCredentials;
       profile = new UserProfile();
       profile.user_id = user.id;
       first_name && (profile.first_name = first_name);
       last_name && (profile.last_name = last_name);
       description && (profile.description = description);
+      language_code && (profile.language_code = language_code);
 
       try {
         await profile.save();
@@ -70,7 +76,12 @@ export class UserProfileRepository extends Repository<UserProfile> {
     user: Auth
   ): Promise<UserProfileRODto> {
     const { avatarUrl, coverUrl } = profileImages;
-    const { first_name, last_name, description } = userProfileCredentials;
+    const {
+      first_name,
+      last_name,
+      description,
+      language_code,
+    } = userProfileCredentials;
     const profile = await this.findOne({ where: { user_id: user.id } });
 
     if (!profile) {
@@ -80,6 +91,7 @@ export class UserProfileRepository extends Repository<UserProfile> {
     first_name && (profile.first_name = first_name);
     last_name && (profile.last_name = last_name);
     description && (profile.description = description);
+    language_code && (profile.language_code = language_code);
     avatarUrl && (profile.avatar = avatarUrl);
     coverUrl && (profile.cover = coverUrl);
 

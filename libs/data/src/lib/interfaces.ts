@@ -1,4 +1,4 @@
-import { UserRoleEnum, LikeEnum } from './enums';
+import { UserRoleEnum, LikeEnum, LanguageEnum } from './enums';
 
 export interface JwtPayload {
   id: number;
@@ -42,6 +42,7 @@ export interface UserProfileCredentialsI {
   first_name: string;
   last_name: string;
   description: string;
+  language_code?: LanguageEnum;
 }
 
 export interface UserProfileRoI {
@@ -57,6 +58,7 @@ export interface UserProfileRoI {
   deleted_at: Date;
   user: UserRoI;
   albums: AlbumRoI[];
+  language_code: LanguageEnum;
 }
 
 export interface AlbumCredentialsI {
