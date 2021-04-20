@@ -12,7 +12,12 @@ import { AlbumCredentialsDto, AlbumRoDto } from '@photobook/dto';
 @EntityRepository(Album)
 export class AlbumRepository extends Repository<Album> {
   async getAll(user_profile_id: number): Promise<AlbumRoDto[]> {
-    const albums = await this.find({ where: { user_profile_id } });
+    const albums = await this.createQueryBuilder('album')
+      .where('album.deleted_at IS NULL')
+      .where('album.user_profile_id = :user_profile_id', { user_profile_id })
+      .leftJoinAndSelect('album.photos', 'photo', 'photo.deleted_at IS NULL')
+      .getMany();
+
     return albums.map((album) => plainToClass(AlbumRoDto, album));
   }
 
