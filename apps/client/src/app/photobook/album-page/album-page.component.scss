@@ -29,4 +29,31 @@
   top: 0;
   left: 0;
   right: 0;
+
+  // font-size: rem(21);
+  // font-family: "Proxima Nova";
+  // color: $text-color;
+  // line-height: 1.4;
+}
+
+.header-user {
+  display: flex;
+  align-items: center;
+
+  &__name {
+    @include panton;
+    font-size: rem(14);
+    font-weight: 700;
+    color: $text-color;
+  }
+
+  &__ava {
+    margin-right: rem(10);
+    color: $blue;
+    background-color: $white;
+    border-radius: 50%;
+    overflow: hidden;
+    width: rem(48);
+    height: rem(48);
+  }
 }
