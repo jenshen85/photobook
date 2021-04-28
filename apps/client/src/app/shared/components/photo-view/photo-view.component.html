@@ -1,4 +1,4 @@
-<div class="photo-view">
+<div class="photo-view" *transloco="let t">
   <div class="photo-view__top">
     <button
       class="photo-view__arrow photo-view__prev"
@@ -45,7 +45,7 @@
           {{ userName }}
         </a>
         <div class="photo-view__date">
-          добавлено {{ photoDate | date: 'd.MM.YYYY' }}
+          {{ t('added') }} {{ photoDate | date: 'd.MM.YYYY' }}
         </div>
       </div>
     </div>
@@ -86,7 +86,7 @@
     </div>
     <div class="photo-view__comments">
       <div class="photo-view__comments-label">
-        Комментарии
+        {{ t('comments') }}
       </div>
       <div class="comments">
         <div class="comments__row">
@@ -111,12 +111,12 @@
                 <textarea
                   formControlName="text"
                   class="comment-form__control"
-                  placeholder="Оставьте отзыв"
+                  placeholder="{{ t('commentLeave') }}"
                   #commentControl
                 ></textarea>
               </label>
               <button type="submit" class="button button-border">
-                Комментировать
+                {{ t('commentOn') }}
               </button>
             </form>
           </div>
@@ -158,7 +158,7 @@
               }}
             </div>
             <div class="comments__date">
-              добавлен {{ comment.created_at | date: 'd.MM.YYYY' }}
+              {{ t('added') }} {{ comment.created_at | date: 'd.MM.YYYY' }}
             </div>
 
             <div class="comments__text">
@@ -186,7 +186,7 @@
                   *ngIf="editComment === i"
                   (click)="updateComment(comment)"
                   class="comments__btn comments__btn--edit"
-                  title="обновить"
+                  [attr.aria-label]="t('buttons.added')"
                 >
                   <span photobook-app-icon [icon]="sendIcon"></span>
                 </button>
@@ -194,7 +194,7 @@
                   *ngIf="editComment === i"
                   (click)="onEditClick(null)"
                   class="comments__btn comments__btn--edit"
-                  title="отменить"
+                  [attr.aria-label]="t('buttons.cancel')"
                 >
                   <span photobook-app-icon [icon]="closeIcon"></span>
                 </button>
@@ -202,14 +202,14 @@
                   *ngIf="editComment !== i"
                   (click)="onEditClick(i)"
                   class="comments__btn comments__btn--edit"
-                  title="редактировать"
+                  [attr.aria-label]="t('buttons.edit')"
                 >
                   <span photobook-app-icon [icon]="editIcon"></span>
                 </button>
                 <button
                   (click)="removeComment(comment.id)"
                   class="comments__btn comments__btn--delete"
-                  title="удалить"
+                  [attr.aria-label]="t('buttons.remove')"
                 >
                   <span photobook-app-icon [icon]="removeIcon"></span>
                 </button>

@@ -11,9 +11,9 @@
   ></header>
 
   <div class="top-bar">
-    <div class="container top-bar__container">
+    <div class="container top-bar__container" *transloco="let t">
       <photobook-search-control
-        placeholder="Исследовать мир"
+        placeholder="{{ t('') }}"
       ></photobook-search-control>
     </div>
   </div>
@@ -21,8 +21,10 @@
   <main class="photobook-main">
     <section class="photobook-section albums">
       <div class="container">
-        <div class="photobook-head">
-          <h2 class="photobook-main-title">Альбомы</h2>
+        <div class="photobook-head" *transloco="let t">
+          <h2 class="photobook-main-title">
+            {{ t('photobook.userTitle') }}
+          </h2>
           <button
             *ngIf="currentUserProfile.id === authUserProfile.id"
             type="button"
@@ -30,7 +32,7 @@
             [icon]="addIcon"
             photobook-ph-button
           >
-            Добавить
+            {{ t('buttons.add') }}
           </button>
         </div>
 

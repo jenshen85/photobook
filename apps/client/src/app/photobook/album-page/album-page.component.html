@@ -13,19 +13,25 @@
     *ngIf="!pendingLoadAlbum"
   ></header>
 
-  <div class="top-bar">
+  <div class="top-bar" *transloco="let t">
     <div class="container top-bar__container">
       <div class="photo-stat">
-        <div class="photo-stat__item">{{ photosLength }} Фотографий</div>
+        <div class="photo-stat__item">
+          {{ photosLength }} {{ t('stat.photo') }}
+        </div>
 
-        <div class="photo-stat__item">{{ likesLength }} Лайков</div>
+        <div class="photo-stat__item">
+          {{ likesLength }} {{ t('stat.like') }}
+        </div>
 
-        <div class="photo-stat__item">{{ commentsLength }} Комментария</div>
+        <div class="photo-stat__item">
+          {{ commentsLength }} {{ t('stat.comment') }}
+        </div>
       </div>
     </div>
   </div>
 
-  <main class="photobook-main">
+  <main class="photobook-main" *transloco="let t">
     <section class="photobook-section photos">
       <div class="container">
         <div class="photo-cards">
@@ -52,7 +58,7 @@
             type="button"
             class="button button-border"
           >
-            Показать еще
+            {{ t('buttons.showMore') }}
           </button>
         </div>
       </div>
@@ -70,14 +76,33 @@
   ></footer>
 
   <!-- <div class="top-bar top-bar--fixed">
-    <div class="container top-bar__container">
-      <div class="header-user" *ngIf="currentUserProfile">
-        <a photobook-small-ava
-          [routerLink]="['/photobook', currentUserProfile.id]"
-          [avatar]="currentUserProfile.avatar ? currentUserProfile.avatar : null"
-          [userName]="getName"></a>
-        <span class="header-user__name">{{currentUserProfile.first_name}}</span>
-      </div>
+    <div class="container top-bar__container" *transloco="let t">
+      <a
+        class="header-user"
+        [routerLink]="['/photobook', currentUserProfile.id]"
+      >
+        <span
+          class="header-user__ava"
+          photobook-small-ava
+          [avatar]="
+            currentUserProfile.avatar ? currentUserProfile.avatar : null
+          "
+          [userName]="getName"
+        >
+          <span class="header-user__name">{{ getName }}</span>
+        </span>
+        <span class="header-user__name">{{ getName }}</span>
+      </a>
+
+      {{ album.title }}
+
+      <a
+        [routerLink]="['/', 'photobook']"
+        [icon]="homeIcon"
+        photobook-ph-button
+      >
+        {{ t('buttons.home') }}
+      </a>
     </div>
   </div> -->
 </ng-template>

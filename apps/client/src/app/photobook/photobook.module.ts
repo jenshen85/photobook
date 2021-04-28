@@ -27,7 +27,7 @@ import { AutoFocusDirective } from '../shared/directives/autofocus.directive';
 import { EditPhotoComponent } from './album-page/components/edit-photo/edit-photo.component';
 import { UserPageComponent } from './user-page/user-page.component';
 import { ConfirmComponent } from './components/confirm/confirm.component';
-import { TranslocoModule } from '@ngneat/transloco';
+import { TranslocoModule, TRANSLOCO_SCOPE } from '@ngneat/transloco';
 
 @NgModule({
   declarations: [
@@ -54,7 +54,12 @@ import { TranslocoModule } from '@ngneat/transloco';
     ConfirmComponent,
   ],
   imports: [CommonModule, PhotobookRoutingModule, UiModule, TranslocoModule],
-  providers: [PhotobookService, DragNDropDirective, AutoFocusDirective],
+  providers: [
+    PhotobookService,
+    DragNDropDirective,
+    AutoFocusDirective,
+    { provide: TRANSLOCO_SCOPE, useValue: 'photobook' },
+  ],
   entryComponents: [
     PhotoViewComponent,
     AddAlbumComponent,

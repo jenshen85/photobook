@@ -1,21 +1,25 @@
-<div class="common-dialog-content">
+<div class="common-dialog-content" *transloco="let t">
   <div class="common-dialog-head">
-    <span *ngIf="action === actionCreate; else editTitle">Добавить альбом</span>
+    <span *ngIf="action === actionCreate; else editTitle">
+      {{ t('photobook.dialogs.addAlbum.title') }}
+    </span>
     <ng-template #editTitle>
-      <span>Редактировать альбом</span>
+      <span>
+        {{ t('photobook.dialogs.editAlbum.title') }}
+      </span>
     </ng-template>
   </div>
   <form class="add-album-form" [formGroup]="form" (submit)="submitHandler()">
     <div class="common-dialog-body">
       <label class="add-album-form__field">
-        <span class="add-album-form__label">Название</span>
+        <span class="add-album-form__label">{{ t('controls.name') }}</span>
         <input
           [ngClass]="
             form.get('title').invalid && form.get('title').touched && 'error'
           "
           class="form-control"
           type="text"
-          placeholder="Название"
+          placeholder="{{ t('controls.name') }}"
           formControlName="title"
         />
         <span
@@ -23,20 +27,24 @@
           *ngIf="form.get('title').invalid && form.get('title').touched"
           [@fadeIn]
         >
-          <small *ngIf="form.get('title').errors.required"
-            >Поле должно быть заполнено</small
-          >
+          <small *ngIf="form.get('title').errors.required">
+            {{ t('errors.required') }}
+          </small>
           <small *ngIf="form.get('title').errors.maxlength">
-            Превышена максимальная длина описания ({{
-              form.get('title').errors.maxlength.requiredLength
+            {{
+              t('errors.maxlength', {
+                requiredLength: form.get('title').errors.maxlength
+                  .requiredLength
+              })
             }}
-            символов)
           </small>
         </span>
       </label>
 
       <label class="add-album-form__field">
-        <span class="add-album-form__label">Описание</span>
+        <span class="add-album-form__label">{{
+          t('controls.description')
+        }}</span>
         <textarea
           [ngClass]="
             form.get('description').invalid &&
@@ -45,7 +53,7 @@
           "
           class="form-control"
           formControlName="description"
-          placeholder="Описание"
+          placeholder="{{ t('controls.description') }}"
         ></textarea>
         <span
           class="add-album-form__error"
@@ -55,10 +63,12 @@
           [@fadeIn]
         >
           <small *ngIf="form.get('description').errors.maxlength">
-            Превышена максимальная длина описания ({{
-              form.get('description').errors.maxlength.requiredLength
+            {{
+              t('errors.maxlength', {
+                requiredLength: form.get('description').errors.maxlength
+                  .requiredLength
+              })
             }}
-            символов)
           </small>
         </span>
       </label>
@@ -94,12 +104,14 @@
           *ngIf="form.get('preview').invalid"
           [@fadeIn]
         >
-          <small *ngIf="form.get('preview').errors.maxFileSize"
-            >(файл должен быть размером не более 5mb)</small
-          >
-          <small *ngIf="form.get('preview').errors.requiredFileType"
-            >неверное расширение файла, только png, jpg, jpeg</small
-          >
+          <small *ngIf="form.get('preview').errors.maxFileSize">{{
+            t('errors.size', {
+              fileMaxSize: form.get('preview').errors.maxFileSize.requiredLength
+            })
+          }}</small>
+          <small *ngIf="form.get('preview').errors.requiredFileType">{{
+            t('errors.type')
+          }}</small>
         </span>
       </div>
     </div>
@@ -110,10 +122,10 @@
         [disabled]="form.invalid && form.touched"
         class="button button-bg-blue"
       >
-        Сохранить
+        {{ t('buttons.save') }}
       </button>
       <button type="button" dialogClose class="button btn-white">
-        Отменить
+        {{ t('buttons.cancel') }}
       </button>
       <button
         type="button"
@@ -122,7 +134,7 @@
         class="button button-remove"
       >
         <span photobook-app-icon [icon]="removeIcon"></span>
-        Удалить
+        {{ t('buttons.remove') }}
       </button>
     </div>
   </form>

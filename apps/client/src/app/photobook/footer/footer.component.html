@@ -1,12 +1,8 @@
-<div class="container footer-container">
+<div class="container footer-container" *transloco="let t">
   <div class="footer-left">
-    Перед вами сервис, который поможет вам организовать свои фотографии в
-    альбомы и поделиться ими со всем миром!
+    {{ t('photobook.footer.left') }}
   </div>
-  <div class="footer-right">
-    2019 | Проект создан в учебных целях и не предполагает получение прибыли и
-    финансовой выгоды
-  </div>
+  <div class="footer-right">2019 | {{ t('photobook.footer.right') }}</div>
   <button class="button-top">
     <span class="button-top-ico" photobook-app-icon [icon]="topIcon"></span>
   </button>

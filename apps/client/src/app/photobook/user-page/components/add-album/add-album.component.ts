@@ -19,6 +19,7 @@ import {
 } from '../../../../shared/utils/utils';
 import { fadeAnimations } from 'apps/client/src/app/shared/utils/animations';
 import { ConfirmComponent } from '../../../components/confirm/confirm.component';
+import { TranslocoService } from '@ngneat/transloco';
 
 export type addAlbumOutDataType = {
   action: ActionEnum;
@@ -54,7 +55,8 @@ export class AddAlbumComponent implements OnInit {
     private photobookService: PhotobookService,
     private readonly dialogRef: DialogRef<AddAlbumComponent>,
     private readonly _dialog: Dialog,
-    @Inject(DIALOG_DATA) private data: addAlbumInDataType
+    @Inject(DIALOG_DATA) private data: addAlbumInDataType,
+    private _translocoService: TranslocoService
   ) {}
 
   ngOnInit(): void {
@@ -144,8 +146,13 @@ export class AddAlbumComponent implements OnInit {
   removeAlbum(album_id: number): void {
     const confirm = this._dialog.open(ConfirmComponent, {
       data: {
-        title: 'Удалить альбом',
-        message: `Вы действительно хотите удалить альбом "${this.album.title}" и его фото (${this.album.photos.length})?`,
+        title: this._translocoService.translate(
+          'photobook.dialogs.addAlbum.confirm.title'
+        ),
+        message: this._translocoService.translate(
+          'photobook.dialogs.addAlbum.confirm.message',
+          { title: this.album.title, length: this.album.photos.length }
+        ),
       },
       isScrolled: true,
       autoFocus: false,

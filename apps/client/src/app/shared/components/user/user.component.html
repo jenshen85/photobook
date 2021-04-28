@@ -1,5 +1,5 @@
 <div class="user" *ngIf="profile">
-  <div class="user__inner">
+  <div class="user__inner" *transloco="let t">
     <div class="user__ava" *ngIf="profile">
       <img
         *ngIf="profile.avatar; else fallbackImg"
@@ -11,7 +11,7 @@
       </ng-template>
       <div class="user__change-photo" *ngIf="isEdit">
         <photobook-upload-image formControlName="{{ avatarControl }}">
-          Изменить фото
+          {{ t('changePhoto') }}
         </photobook-upload-image>
       </div>
     </div>
@@ -25,13 +25,13 @@
               class="user__control"
               type="text"
               formControlName="{{ firstNameControl }}"
-              placeholder="Имя"
+              placeholder="{{ t('controls.firstName') }}"
             />
             <input
               class="user__control"
               type="text"
               formControlName="{{ lastNameControl }}"
-              placeholder="Фамилия"
+              placeholder="{{ t('controls.lastName') }}"
             />
           </span>
         </ng-template>
@@ -42,7 +42,7 @@
           <span class="user__field">
             <textarea
               class="user__control"
-              placeholder="описание"
+              placeholder="{{ t('controls.description') }}"
               formControlName="{{ descriptionControl }}"
             ></textarea>
           </span>

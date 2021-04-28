@@ -1,3 +1,42 @@
 {
-  "home-title": "New"
+  "changeBg": "Change background",
+  "changePhoto": "Change photo",
+  "addName": "Add name",
+  "noName": "No name",
+  "added": "added",
+  "comments": "Comments",
+  "commentOn": "Comment on",
+  "commentLeave": "Leave a comment",
+  "search": {
+    "placeholder": "Explore the world"
+  },
+  "stat": {
+    "photo": "Photos",
+    "like": "Likes",
+    "comment": "Comments"
+  },
+  "controls": {
+    "name": "Name",
+    "description": "Description",
+    "firstName": "Firstname",
+    "lastName": "Lastname"
+  },
+  "errors": {
+    "required": "The field must be filled",
+    "maxlength": "Exceeded maximum description length ({{requiredLength}} characters)",
+    "size": "The file must be no more than {{ fileMaxSize }}mb",
+    "type": "Wrong image format selected. (*.jpeg/*.png)"
+  },
+  "buttons": {
+    "showMore": "Show more",
+    "edit": "Edit",
+    "logout": "Logout",
+    "home": "Home",
+    "add": "Add",
+    "remove": "Remove",
+    "albums": "Albums",
+    "cancel": "Cancel",
+    "save": "Save",
+    "update": "Update"
+  }
 }

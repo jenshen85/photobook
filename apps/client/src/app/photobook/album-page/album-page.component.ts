@@ -48,6 +48,7 @@ export class AlbumPageComponent implements OnInit {
   photos: PhotoRoI[] = [];
 
   addIcon: SpriteIconEnum = SpriteIconEnum.add;
+  homeIcon: SpriteIconEnum = SpriteIconEnum.home;
 
   isEdit: boolean;
   pending: boolean;

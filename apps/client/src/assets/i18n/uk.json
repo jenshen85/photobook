@@ -1,3 +1,42 @@
 {
-  "home-title": "Нове"
+  "changeBg": "Змінити фон",
+  "changePhoto": "Змінити фото",
+  "addName": "Додати назву",
+  "noName": "Немає назви",
+  "added": "додано",
+  "comments": "Коментарі",
+  "commentOn": "Коментувати",
+  "commentLeave": "Залиште відгук",
+  "search": {
+    "placeholder": "Досліджувати світ"
+  },
+  "stat": {
+    "photo": "Фотографій",
+    "like": "Лайків",
+    "comment": "Коментаря"
+  },
+  "controls": {
+    "name": "Назва",
+    "description": "Опис",
+    "firstName": "Ім'я",
+    "lastName": "Прізвищє"
+  },
+  "errors": {
+    "required": "Поле має бути заповнено",
+    "maxlength": "Перевищена максимальна довжина опису ({{requiredLength}} символів)",
+    "size": "файл повинен бути розміром не більше {{ fileMaxSize }}mb",
+    "type": "Обраний невірний формат зображень. (*.jpeg/*.png)"
+  },
+  "buttons": {
+    "showMore": "Показаті ще",
+    "edit": "Редагуваті",
+    "logout": "Вийти",
+    "home": "На головну",
+    "add": "Додати",
+    "remove": "Вилучити",
+    "albums": "Альбоми",
+    "cancel": "Скасувати",
+    "save": "Зберегти",
+    "update": "Оновити"
+  }
 }
