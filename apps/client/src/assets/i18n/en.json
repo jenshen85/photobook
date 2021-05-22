@@ -19,24 +19,49 @@
     "name": "Name",
     "description": "Description",
     "firstName": "Firstname",
-    "lastName": "Lastname"
+    "lastName": "Lastname",
+    "email": "Email",
+    "password": "Password"
   },
   "errors": {
     "required": "The field must be filled",
     "maxlength": "Exceeded maximum description length ({{requiredLength}} characters)",
+    "minlength": "The password is short, minimum length: ({{requiredLength}} characters)",
     "size": "The file must be no more than {{ fileMaxSize }}mb",
-    "type": "Wrong image format selected. (*.jpeg/*.png)"
+    "type": "Wrong image format selected. (*.jpeg/*.png)",
+    "email": "Email not valid"
   },
   "buttons": {
     "showMore": "Show more",
     "edit": "Edit",
     "logout": "Logout",
+    "login": "Sign In",
+    "register": "Register now",
     "home": "Home",
     "add": "Add",
     "remove": "Remove",
     "albums": "Albums",
     "cancel": "Cancel",
     "save": "Save",
-    "update": "Update"
+    "update": "Update",
+    "member": "Forgot your password?",
+    "restore": "Restore password"
+  },
+  "notfound": {
+    "title": "Page not found"
+  },
+  "restore": {
+    "title": "Password recovery"
+  },
+  "register": {
+    "title": "Sign Up"
+  },
+  "login": {
+    "title": "Welcome",
+    "description": "Here is a service that will help you organize your photos into albums and share them with the whole world!"
+  },
+  "profile": {
+    "title": "Welcome",
+    "description": "Fill out your profile"
   }
 }
