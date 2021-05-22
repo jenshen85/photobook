@@ -1,7 +1,6 @@
-<photobook-fade>
+<photobook-fade *transloco="let t">
   <div class="big-title big-title-white">
-    Восстановление <br />
-    пароля
+    {{ t('restore.title') }}
   </div>
   <div class="entry-form-out">
     <form [formGroup]="form" (ngSubmit)="submit($event)" class="entry-form">
@@ -15,17 +14,19 @@
         [className]="'form-control'"
         [icon]="envelopeIcon"
         [iconPrefix]="true"
-        [label]="'Электронная почта*'"
+        [label]="t('controls.email') + '*'"
         [type]="'email'"
       >
         <span
           *ngIf="form.get('email').invalid && form.get('email').touched"
           class="form-control__error"
         >
-          <small *ngIf="form.get('email').errors.required"
-            >This field is required</small
-          >
-          <small *ngIf="form.get('email').errors.email">Email not valid</small>
+          <small *ngIf="form.get('email').errors.required">{{
+            t('errors.required')
+          }}</small>
+          <small *ngIf="form.get('email').errors.email">{{
+            t('errors.email')
+          }}</small>
         </span>
       </photobook-form-control>
 
@@ -36,7 +37,7 @@
             [disabled]="form.invalid && form.touched"
             class="button button-bg-blue"
           >
-            Восстановить пароль
+            {{ t('buttons.restore') }}
           </button>
 
           <button
@@ -44,7 +45,7 @@
             [routerLink]="['/']"
             class="button button-white"
           >
-            Войти
+            {{ t('buttons.login') }}
           </button>
         </div>
       </div>

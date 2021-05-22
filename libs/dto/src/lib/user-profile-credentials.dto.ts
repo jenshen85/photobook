@@ -1,5 +1,5 @@
 import { IsString, IsNotEmpty, MaxLength, IsOptional } from 'class-validator';
-import { UserProfileCredentialsI } from '@photobook/data';
+import { LanguageEnum, UserProfileCredentialsI } from '@photobook/data';
 
 export class UserProfileCredentialsDto implements UserProfileCredentialsI {
   @IsString()
@@ -14,4 +14,7 @@ export class UserProfileCredentialsDto implements UserProfileCredentialsI {
   @IsOptional()
   @MaxLength(300)
   description: string;
+
+  @IsOptional()
+  language_code: LanguageEnum;
 }

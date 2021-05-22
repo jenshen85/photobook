@@ -4,6 +4,7 @@ import { Album } from './album.entity';
 import { Auth } from './auth.entity';
 import { Photo } from './photo.entity';
 import { Comment } from './comment.entity';
+import { LanguageEnum } from '@photobook/data';
 
 @Entity()
 export class UserProfile extends AbstractEntity {
@@ -21,6 +22,14 @@ export class UserProfile extends AbstractEntity {
 
   @Column({ nullable: true })
   description: string;
+
+  @Column({
+    nullable: false,
+    type: 'enum',
+    enum: LanguageEnum,
+    default: LanguageEnum.English,
+  })
+  language_code: LanguageEnum;
 
   @Column({ nullable: true })
   user_id: number;

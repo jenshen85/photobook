@@ -8,6 +8,7 @@ import { RegisterComponent } from './register/register.component';
 import { LoginComponent } from './login/login.component';
 import { RestoreComponent } from './restore/restore.component';
 import { ProfileComponent } from './profile/profile.component';
+import { TranslocoModule } from '@ngneat/transloco';
 
 const routes: Routes = [
   {
@@ -42,6 +43,11 @@ const routes: Routes = [
     RestoreComponent,
     ProfileComponent,
   ],
-  imports: [CommonModule, RouterModule.forChild(routes), UiModule],
+  imports: [
+    CommonModule,
+    RouterModule.forChild(routes),
+    UiModule,
+    TranslocoModule,
+  ],
 })
 export class EntryModule {}

@@ -1,5 +1,12 @@
 # Photobook
 
+### Link to site: [Photobook](https://photo-book.site)
+
+#### Test User data:
+
+login: `testuser@gmail.com`  
+password: `test#32=Test`
+
 This project was generated using [Nx](https://nx.dev).
 
 <p align="center"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="450"></p>

@@ -1,7 +1,13 @@
 export enum UserRoleEnum {
-  admin = "admin",
-  moderator = "moderator",
-  user = "user",
+  admin = 'admin',
+  moderator = 'moderator',
+  user = 'user',
+}
+
+export enum LanguageEnum {
+  English = 'en',
+  Russian = 'ru',
+  Ukrainian = 'uk',
 }
 
 export const enum SpriteIconEnum {
@@ -35,16 +41,16 @@ export const enum SpriteIconEnum {
   top = 'top',
   user = 'user',
   send = 'send',
-  heart_stroke = 'heart-stroke'
+  heart_stroke = 'heart-stroke',
 }
 
 export const enum ActionEnum {
   create = 'create',
   update = 'update',
-  delete = 'delete'
+  delete = 'delete',
 }
 
 export enum LikeEnum {
-  liked = "liked",
-  unliked = "unliked"
+  liked = 'liked',
+  unliked = 'unliked',
 }

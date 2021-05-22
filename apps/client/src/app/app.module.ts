@@ -14,6 +14,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AuthService, tokenGetter } from './auth/auth.service';
 import { AppComponent } from './app.component';
 import { NotfoundComponent } from './notfound/notfound.component';
+import { TranslocoRootModule } from './transloco/transloco-root.module';
 
 @NgModule({
   declarations: [AppComponent, NotfoundComponent],
@@ -30,6 +31,7 @@ import { NotfoundComponent } from './notfound/notfound.component';
     }),
     FormsModule,
     ReactiveFormsModule,
+    TranslocoRootModule,
   ],
   providers: [AuthService, FormControlDirective],
   bootstrap: [AppComponent],

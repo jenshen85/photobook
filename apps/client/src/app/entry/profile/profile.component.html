@@ -1,8 +1,10 @@
-<photobook-fade>
-  <div class="big-title big-title-white">Добро пожаловать</div>
+<photobook-fade *transloco="let t">
+  <div class="big-title big-title-white">
+    {{ t('profile.title') }}
+  </div>
 
   <div class="entry-description">
-    Заполните профиль
+    {{ t('profile.description') }}
   </div>
 
   <div class="entry-form-out">
@@ -17,7 +19,7 @@
         [className]="'form-control'"
         [icon]="userIcon"
         [iconPrefix]="true"
-        [label]="'Имя*'"
+        [label]="t('controls.firstName') + '*'"
       >
         <span
           *ngIf="
@@ -25,9 +27,9 @@
           "
           class="form-control__error"
         >
-          <small *ngIf="form.get('first_name').errors.required"
-            >This field is required</small
-          >
+          <small *ngIf="form.get('first_name').errors.required">{{
+            t('errors.required')
+          }}</small>
         </span>
       </photobook-form-control>
 
@@ -41,22 +43,22 @@
         [className]="'form-control'"
         [icon]="userIcon"
         [iconPrefix]="true"
-        [label]="'Фамилия*'"
+        [label]="t('controls.lastName') + '*'"
       >
         <span
           *ngIf="form.get('last_name').invalid && form.get('last_name').touched"
           class="form-control__error"
         >
-          <small *ngIf="form.get('last_name').errors.required"
-            >This field is required</small
-          >
+          <small *ngIf="form.get('last_name').errors.required">{{
+            t('errors.required')
+          }}</small>
         </span>
       </photobook-form-control>
 
       <photobook-form-textarea
         inputName="description"
         [className]="'form-control'"
-        [label]="'О себе'"
+        [label]="t('controls.description')"
       >
       </photobook-form-textarea>
 
@@ -67,7 +69,7 @@
             [disabled]="form.invalid && form.touched"
             class="button button-bg-blue"
           >
-            Сохранить
+            {{ t('buttons.save') }}
           </button>
         </div>
       </div>

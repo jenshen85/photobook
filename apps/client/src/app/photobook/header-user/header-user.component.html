@@ -1,4 +1,4 @@
-<div class="container header__container">
+<div class="container header__container" *transloco="let t">
   <div class="header__inner" [formGroup]="profileForm">
     <photobook-user
       firstNameControl="first_name"
@@ -18,7 +18,7 @@
           [icon]="editIcon"
           photobook-ph-button
         >
-          Редактировать
+          {{ t('buttons.edit') }}
         </button>
         <button
           type="button"
@@ -26,48 +26,50 @@
           [icon]="logOutIcon"
           photobook-ph-button
         >
-          Выйти
+          {{ t('buttons.logout') }}
         </button>
         <a
           *ngIf="!isAlbums"
           [routerLink]="[authUserProfile.id]"
           [icon]="albumIcon"
           photobook-ph-button
-          >Альбомы</a
         >
+          {{ t('buttons.albums') }}
+        </a>
         <a
           *ngIf="isAlbums"
           [routerLink]="['/']"
           [icon]="homeIcon"
           photobook-ph-button
-          >Домой</a
         >
+          {{ t('buttons.home') }}
+        </a>
       </span>
     </div>
     <ng-template #userBg>
       <photobook-upload-image formControlName="cover" [@fadeIn]>
-        Изменить фон
+        {{ t('changeBg') }}
       </photobook-upload-image>
     </ng-template>
   </div>
 </div>
 <div class="edit-bar" *ngIf="isEdit" [@fadeIn]>
   <div class="container">
-    <div class="edit-bar__content">
+    <div class="edit-bar__content" *transloco="let t">
       <div class="edit-bar__actions">
         <button
           type="button"
           (click)="editHandler(false)"
           class="button btn-white"
         >
-          Отменить
+          {{ t('buttons.cancel') }}
         </button>
         <button
           type="button"
           (click)="updateProfileHandler()"
           class="button button-bg-blue"
         >
-          Сохранить
+          {{ t('buttons.save') }}
         </button>
       </div>
     </div>

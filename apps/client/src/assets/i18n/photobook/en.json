@@ -1,0 +1,35 @@
+{
+  "homeTitle": "New",
+  "userTitle": "Albums",
+  "dialogs": {
+    "addPhotos": {
+      "title": "Add Photos",
+      "fileText": {
+        "part_1": "Drag a photo here or",
+        "part_2": "select a file"
+      }
+    },
+    "editPhotos": {
+      "title": "Edit photo",
+      "confirm": {
+        "title": "Remove photo",
+        "message": "Are you sure you want to delete this photo?"
+      }
+    },
+    "addAlbum": {
+      "title": "Add album",
+      "confirm": {
+        "title": "Remove album",
+        "message": "Are you sure you want to delete the {{title}} album and its photo ({{length}})?"
+      }
+    },
+    "editAlbum": {
+      "title": "Edit album"
+    }
+  },
+  "header": {},
+  "footer": {
+    "left": "Here is a service that will help you organize your photos into albums and share them with the whole world!",
+    "right": "The project was created for educational purposes and does not imply profit and financial benefits"
+  }
+}

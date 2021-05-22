@@ -1,8 +1,9 @@
-<photobook-fade>
-  <div class="big-title big-title-white">Добро пожаловать</div>
+<photobook-fade *transloco="let t">
+  <div class="big-title big-title-white">
+    {{ t('login.title') }}
+  </div>
   <div class="entry-description">
-    Перед вами сервис, который поможет вам организовать свои фотографии в
-    альбомы и поделиться ими со всем миром!
+    {{ t('login.description') }}
   </div>
 
   <div class="entry-form-out">
@@ -17,17 +18,19 @@
         [className]="'form-control'"
         [icon]="envelopeIcon"
         [iconPrefix]="true"
-        [label]="'Электронная почта*'"
+        [label]="t('controls.email') + '*'"
         [type]="'email'"
       >
         <span
           *ngIf="form.get('email').invalid && form.get('email').touched"
           class="form-control__error"
         >
-          <small *ngIf="form.get('email').errors.required"
-            >This field is required</small
-          >
-          <small *ngIf="form.get('email').errors.email">Email not valid</small>
+          <small *ngIf="form.get('email').errors.required">{{
+            t('errors.required')
+          }}</small>
+          <small *ngIf="form.get('email').errors.email">{{
+            t('errors.email')
+          }}</small>
         </span>
       </photobook-form-control>
 
@@ -41,19 +44,23 @@
         [className]="'form-control'"
         [icon]="passwordIcon"
         [iconPrefix]="true"
-        [label]="'Пароль*'"
+        [label]="t('controls.password') + '*'"
         [type]="'password'"
       >
         <span
           *ngIf="form.get('password').invalid && form.get('password').touched"
           class="form-control__error"
         >
-          <small *ngIf="form.get('password').errors.required"
-            >This field is required</small
-          >
+          <small *ngIf="form.get('password').errors.required">{{
+            t('errors.required')
+          }}</small>
           <small *ngIf="form.get('password').errors.minlength">
-            Password where short, min length:
-            {{ form.get('password').errors.minlength.requiredLength }}
+            {{
+              t('errors.minlength', {
+                requiredLength: form.get('password').errors.minlength
+                  .requiredLength
+              })
+            }}
           </small>
         </span>
       </photobook-form-control>
@@ -65,7 +72,7 @@
             [disabled]="form.invalid && form.touched"
             class="button button-bg-blue"
           >
-            Войти
+            {{ t('buttons.login') }}
           </button>
 
           <button
@@ -73,13 +80,13 @@
             [routerLink]="['/register']"
             class="button button-white"
           >
-            Зарегистрироваться
+            {{ t('buttons.register') }}
           </button>
         </div>
 
         <div class="entry-form-info">
           <a [routerLink]="['/restore']" class="welcome__form-recovery">
-            Забыли пароль?
+            {{ t('buttons.member') }}
           </a>
         </div>
       </div>

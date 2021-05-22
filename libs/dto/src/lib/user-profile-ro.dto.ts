@@ -1,5 +1,10 @@
 import { Exclude, Expose, Type } from 'class-transformer';
-import { AlbumRoI, UserProfileRoI, UserRoI } from '@photobook/data';
+import {
+  AlbumRoI,
+  LanguageEnum,
+  UserProfileRoI,
+  UserRoI,
+} from '@photobook/data';
 import { UserRoDto } from './user-ro.dto';
 import { AlbumRoDto } from './album-ro.dto';
 
@@ -31,6 +36,9 @@ export class UserProfileRODto implements UserProfileRoI {
 
   @Expose()
   updated_at: Date;
+
+  @Expose()
+  language_code: LanguageEnum;
 
   deleted_at: Date;
 

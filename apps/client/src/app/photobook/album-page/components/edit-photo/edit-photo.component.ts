@@ -5,6 +5,7 @@ import {
   Inject,
 } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { TranslocoService } from '@ngneat/transloco';
 import {
   ActionEnum,
   PhotoRoI,
@@ -50,7 +51,8 @@ export class EditPhotoComponent implements OnInit {
     private readonly _photoBookService: PhotobookService,
     private readonly dialogRef: DialogRef<EditPhotoComponent>,
     private readonly _dialog: Dialog,
-    @Inject(DIALOG_DATA) private data: editPhotoInDataType
+    @Inject(DIALOG_DATA) private data: editPhotoInDataType,
+    private _translocoService: TranslocoService
   ) {}
 
   ngOnInit(): void {
@@ -101,8 +103,12 @@ export class EditPhotoComponent implements OnInit {
   removePhoto(album_id: number, photo_id: number): void {
     const confirm = this._dialog.open(ConfirmComponent, {
       data: {
-        title: 'Удалить фотографию',
-        message: 'Вы действительно хотите удалить этот фото?',
+        title: this._translocoService.translate(
+          'photobook.dialogs.editPhotos.confirm.title'
+        ),
+        message: this._translocoService.translate(
+          'photobook.dialogs.editPhotos.confirm.message'
+        ),
       },
       isScrolled: true,
       autoFocus: false,
