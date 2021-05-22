@@ -1,4 +1,4 @@
-<div class="common-dialog-content">
+<div class="common-dialog-content" *transloco="let t">
   <div class="common-dialog-head">
     <span>{{ title }}</span>
   </div>
@@ -7,11 +7,11 @@
   </div>
   <div class="common-dialog-footer">
     <button type="button" [dialogClose]="false" class="button btn-white">
-      Отменить
+      {{ t('buttons.cancel') }}
     </button>
     <button type="button" [dialogClose]="true" class="button button-remove">
       <span photobook-app-icon [icon]="removeIcon"></span>
-      Удалить
+      {{ t('buttons.remove') }}
     </button>
   </div>
 </div>

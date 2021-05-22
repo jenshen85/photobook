@@ -1,59 +1,90 @@
-<div class="common-dialog-content">
+<div class="common-dialog-content" *transloco="let t">
   <div class="common-dialog-head">
-    <span>Добавить фотографии</span>
+    <span>{{ t('photobook.dialogs.addPhotos.title') }}</span>
   </div>
   <form class="add-album-form" [formGroup]="form" (submit)="submitHandler()">
     <div class="common-dialog-body">
       <div class="files-area" dragNdrop (fileDropped)="onFilesDrop($event)">
         <div class="files-area-files">
           <div class="files-area-files__inner">
-
-            <div class="files-area-file"
-              *ngFor="let image of loadedPreviewImages; let i = index">
-              <div class="files-area-file__inner" [ngClass]="image.maxFileSize ? 'error' : null">
-                <img *ngIf="!image.allowedType" src="{{image.file}}" alt="">
+            <div
+              class="files-area-file"
+              *ngFor="let image of loadedPreviewImages; let i = index"
+            >
+              <div
+                class="files-area-file__inner"
+                [ngClass]="image.maxFileSize ? 'error' : null"
+              >
+                <img *ngIf="!image.allowedType" src="{{ image.file }}" alt="" />
                 <button class="files-area-file__close" (click)="removeImage(i)">
                   <span photobook-app-icon [icon]="closeIcon"></span>
                 </button>
-                <span class="files-area-file__progress" [style.width]="image.progress + '%'"></span>
-                <span class="files-area-file__size"
-                  *ngIf="image.maxFileSize || image.allowedType">
-                  <span *ngIf="image.maxFileSize">{{image.size}}</span>
-                  <span *ngIf="image.allowedType">{{image.type}}</span>
+                <span
+                  class="files-area-file__progress"
+                  [style.width]="image.progress + '%'"
+                ></span>
+                <span
+                  class="files-area-file__size"
+                  *ngIf="image.maxFileSize || image.allowedType"
+                >
+                  <span *ngIf="image.maxFileSize">{{ image.size }}</span>
+                  <span *ngIf="image.allowedType">{{ image.type }}</span>
                 </span>
               </div>
             </div>
-
           </div>
         </div>
 
-        <label class="files-area-control" [ngClass]="loadedPreviewImages.length && 'files-area-control--hide'">
+        <label
+          class="files-area-control"
+          [ngClass]="loadedPreviewImages.length && 'files-area-control--hide'"
+        >
           <span photobook-app-icon [icon]="cameraIcon"></span>
           <photobook-file-control
             (change)="onFilesDrop($event)"
             class="files-area-control__input"
             formControlName="files"
-            [isMultiple]="true">
-          </photobook-file-control>
-          <span class="files-area-control__label">Перетащите фото сюда или <span>выберите файл</span></span>
+            [isMultiple]="true"
+          ></photobook-file-control>
+          <span class="files-area-control__label">
+            {{ t('photobook.dialogs.addPhotos.fileText.part_1') }}
+            <span>{{ t('photobook.dialogs.addPhotos.fileText.part_2') }}</span>
+          </span>
         </label>
       </div>
 
-      <span *ngIf="invalidateImages || invalidateImagesTypes" class="files-area-error">
+      <span
+        *ngIf="invalidateImages || invalidateImagesTypes"
+        class="files-area-error"
+      >
         <small *ngIf="invalidateImages">
-          файл должен быть размером не более {{fileMaxSize}}mb
+          {{
+            t('errors.size', {
+              fileMaxSize: fileMaxSize
+            })
+          }}
         </small>
         <small *ngIf="invalidateImagesTypes">
-          Выбран неверный формат изображений. (*.jpeg/*.png)
+          {{ t('errors.type') }}
         </small>
       </span>
     </div>
 
     <div class="common-dialog-footer">
-      <button type="submit"
-        [disabled]="!loadedPreviewImages.length || invalidateImages || invalidateImagesTypes"
-        class="button button-bg-blue">Сохранить</button>
-      <button type="button" dialogClose class="button btn-white">Отменить</button>
+      <button
+        type="submit"
+        [disabled]="
+          !loadedPreviewImages.length ||
+          invalidateImages ||
+          invalidateImagesTypes
+        "
+        class="button button-bg-blue"
+      >
+        {{ t('buttons.save') }}
+      </button>
+      <button type="button" dialogClose class="button btn-white">
+        {{ t('buttons.cancel') }}
+      </button>
     </div>
   </form>
   <photobook-spinner *ngIf="pending"></photobook-spinner>

@@ -1,49 +1,87 @@
-<div class="container header__container">
+<div class="container header__container" *transloco="let t">
   <div class="header__inner" [formGroup]="albumForm">
-
-    <a class="header-user"
+    <a
+      class="header-user"
       [routerLink]="['/photobook', currentUserProfile.id]"
-      *ngIf="!isEdit" [@fadeIn]>
-      <span class="header-user__ava"
+      *ngIf="!isEdit"
+      [@fadeIn]
+    >
+      <span
+        class="header-user__ava"
         photobook-small-ava
         [avatar]="currentUserProfile.avatar ? currentUserProfile.avatar : null"
-        [userName]="getName">
-        <span class="header-user__name">{{getName}}</span>
+        [userName]="getName"
+      >
+        <span class="header-user__name">{{ getName }}</span>
       </span>
-      <span class="header-user__name">{{getName}}</span>
+      <span class="header-user__name">{{ getName }}</span>
     </a>
 
     <div class="header__content">
-      <div class="header__title" *ngIf="!isEdit; else editTitle" [@fadeIn]>{{album.title}}</div>
+      <div class="header__title" *ngIf="!isEdit; else editTitle" [@fadeIn]>
+        {{ album.title }}
+      </div>
       <ng-template #editTitle>
         <photobook-app-control
           type="text"
           formControlName="title"
-          placeholder="Название альбома"
-          [@fadeIn]></photobook-app-control>
+          placeholder="{{ t('controls.name') }}"
+          [@fadeIn]
+        ></photobook-app-control>
       </ng-template>
-      <div class="header__desc" *ngIf="!isEdit; else editDesc" [@fadeIn]>{{album.description}}</div>
+      <div class="header__desc" *ngIf="!isEdit; else editDesc" [@fadeIn]>
+        {{ album.description }}
+      </div>
       <ng-template #editDesc>
         <photobook-app-control
           [isTextarea]="true"
           type="text"
           formControlName="description"
-          placeholder="Описание альбома"
-          [@fadeIn]></photobook-app-control>
+          placeholder="{{ t('controls.description') }}"
+          [@fadeIn]
+        ></photobook-app-control>
       </ng-template>
     </div>
 
     <div class="header-actions" *ngIf="!isEdit; else albumPreview" [@fadeIn]>
       <span class="header-actions__inner">
-        <button *ngIf="isAuthUser" type="button" (click)="onEditHandler.emit(true)" [icon]="editIcon" photobook-ph-button>Редактировать</button>
-        <a [routerLink]="['/', 'photobook']" [icon]="homeIcon" photobook-ph-button>Домой</a>
-        <a [routerLink]="['/photobook', currentUserProfile.id]" [icon]="albumIcon" photobook-ph-button>Альбомы</a>
-        <button *ngIf="isAuthUser" type="button" (click)="onAddPhotoHandler.emit()" [icon]="addIcon" photobook-ph-button>Добавить</button>
+        <button
+          *ngIf="isAuthUser"
+          type="button"
+          (click)="onEditHandler.emit(true)"
+          [icon]="editIcon"
+          photobook-ph-button
+        >
+          {{ t('buttons.edit') }}
+        </button>
+        <a
+          [routerLink]="['/', 'photobook']"
+          [icon]="homeIcon"
+          photobook-ph-button
+        >
+          {{ t('buttons.home') }}
+        </a>
+        <a
+          [routerLink]="['/photobook', currentUserProfile.id]"
+          [icon]="albumIcon"
+          photobook-ph-button
+        >
+          {{ t('buttons.albums') }}
+        </a>
+        <button
+          *ngIf="isAuthUser"
+          type="button"
+          (click)="onAddPhotoHandler.emit()"
+          [icon]="addIcon"
+          photobook-ph-button
+        >
+          {{ t('buttons.add') }}
+        </button>
       </span>
     </div>
     <ng-template #albumPreview>
       <photobook-upload-image formControlName="preview" [@fadeIn]>
-        Изменить фон
+        {{ t('changeBg') }}
       </photobook-upload-image>
     </ng-template>
   </div>
@@ -51,10 +89,22 @@
 
 <div class="edit-bar" *ngIf="isEdit" [@fadeIn]>
   <div class="container">
-    <div class="edit-bar__content">
+    <div class="edit-bar__content" *transloco="let t">
       <div class="edit-bar__actions">
-        <button type="button" (click)="onEditHandler.emit(false)" class="button btn-white">Отменить</button>
-        <button type="button" (click)="updateProfileHandler()" class="button button-bg-blue">Сохранить</button>
+        <button
+          type="button"
+          (click)="onEditHandler.emit(false)"
+          class="button btn-white"
+        >
+          {{ t('buttons.cancel') }}
+        </button>
+        <button
+          type="button"
+          (click)="updateProfileHandler()"
+          class="button button-bg-blue"
+        >
+          {{ t('buttons.save') }}
+        </button>
       </div>
     </div>
   </div>

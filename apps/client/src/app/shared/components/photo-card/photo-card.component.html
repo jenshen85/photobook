@@ -1,4 +1,4 @@
-<div class="photo-card">
+<div class="photo-card" *transloco="let t">
   <div class="photo-card__top">
     <a href="#" class="photo-card__img" (click)="onPhotoClickHandler($event)">
       <img [src]="photo.image" [alt]="photo.title" />
@@ -73,7 +73,7 @@
           photobook-app-icon
           [icon]="albumIcon"
         ></span>
-        добавить название
+        {{ t('addName') }}
       </a>
     </ng-template>
 
@@ -99,7 +99,7 @@
           photobook-app-icon
           [icon]="albumIcon"
         ></span>
-        Нет названия
+        {{ t('noName') }}
       </span>
     </ng-template>
   </div>
