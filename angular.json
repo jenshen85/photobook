@@ -88,7 +88,6 @@
             "main": "apps/client/src/main.ts",
             "polyfills": "apps/client/src/polyfills.ts",
             "tsConfig": "apps/client/tsconfig.app.json",
-            "aot": true,
             "assets": [
               "apps/client/src/favicon.ico",
               "apps/client/src/assets"
@@ -99,7 +98,13 @@
             "scripts": [],
             "allowedCommonJsDependencies": [
               "subsink"
-            ]
+            ],
+            "vendorChunk": true,
+            "extractLicenses": false,
+            "buildOptimizer": false,
+            "sourceMap": true,
+            "optimization": false,
+            "namedChunks": true
           },
           "configurations": {
             "production": {
