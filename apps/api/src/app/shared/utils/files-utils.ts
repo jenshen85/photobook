@@ -2,7 +2,6 @@ import * as path from 'path';
 import * as fs from 'fs';
 import { promisify } from 'util';
 import * as mkdirp from 'mkdirp';
-import { editFileName } from './edit-file-name';
 
 const readdir = promisify(fs.readdir);
 const lstat = promisify(fs.lstat);
