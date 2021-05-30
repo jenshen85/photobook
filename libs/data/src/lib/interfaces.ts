@@ -91,7 +91,12 @@ export interface PhotoRoI {
   user_profile_id: number;
   album_id: number;
   image: string;
-  image_name: string;
+  filename: string;
+  width: number;
+  height: number;
+  ratio: number;
+  dimension: string;
+  preview: string;
   title: string;
   description: string;
   created_at: Date;

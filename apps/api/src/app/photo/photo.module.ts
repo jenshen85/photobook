@@ -11,4 +11,8 @@ import { FileModule } from '../file/file.module';
   controllers: [PhotoController],
   exports: [PhotoService],
 })
-export class PhotoModule {}
+export class PhotoModule {
+  constructor(private readonly _photoService: PhotoService) {
+    this._photoService.patchPhotosInfo();
+  }
+}

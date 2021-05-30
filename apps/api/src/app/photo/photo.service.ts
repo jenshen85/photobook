@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { Photo, Auth } from '../entities';
@@ -51,18 +51,25 @@ export class PhotoService {
     file: Express.Multer.File,
     user: Auth
   ): Promise<PhotoRoDto> {
+    const photoPath = `images/${user.path_id}/albums/${album_id}/photos`;
+    const photoName = generateFileName(file);
     const imageData = await this._fileService.saveFile(
       file,
-      `images/${user.path_id}/albums/${album_id}/photos`,
-      generateFileName(file)
+      photoPath,
+      photoName
+    );
+
+    const imagePreview = await this._fileService.savePreview(
+      photoPath,
+      imageData.fileName
     );
 
     const photo = await this._photoRepository.createPhoto(
       imageData,
+      imagePreview,
       album_id,
       user
     );
-
     return photo;
   }
 
@@ -73,20 +80,9 @@ export class PhotoService {
   ): Promise<PhotoRoDto[]> {
     const photos = await Promise.all(
       files.map(async (file) => {
-        const imageData = await this._fileService.saveFile(
-          file,
-          `images/${user.path_id}/albums/${album_id}/photos`,
-          generateFileName(file)
-        );
-        const photo = await this._photoRepository.createPhoto(
-          imageData,
-          album_id,
-          user
-        );
-        return photo;
+        return await this.createPhoto(album_id, file, user);
       })
     );
-
     return photos;
   }
 
@@ -108,5 +104,45 @@ export class PhotoService {
 
   async deleteAlbumPhotos(album_id: number): Promise<void> {
     await this._photoRepository.deleteAlbumPhotos(album_id);
+  }
+
+  async patchPhotosInfo(): Promise<void> {
+    const photos = await this._photoRepository.find({ withDeleted: true });
+    try {
+      await Promise.all(
+        photos.map(async (photo) => {
+          const needPatch = !(
+            photo.filename &&
+            photo.preview &&
+            photo.width &&
+            photo.height &&
+            photo.ratio &&
+            photo.dimension
+          );
+
+          if (needPatch) {
+            const photoInfo = await this._fileService.getPhotoInfo(photo.image);
+            const filename = photo.image.split('/').pop();
+            let imagePreview = null;
+
+            if (!photo.preview) {
+              imagePreview = await this._fileService.savePreview(
+                photo.image.replace(`/${filename}`, ''),
+                filename
+              );
+            }
+
+            await this._photoRepository.patchPhotoInfo(
+              photo,
+              photoInfo,
+              filename,
+              imagePreview
+            );
+          }
+        })
+      );
+    } catch (error) {
+      throw new InternalServerErrorException(error);
+    }
   }
 }

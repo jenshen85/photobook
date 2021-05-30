@@ -276,7 +276,7 @@ export class AlbumPageComponent implements OnInit {
     dialogRef
       .afterClosed()
       .subscribe((data: editPhotoOutDataType | deletePhotoOutDataType) => {
-        if (data.action === ActionEnum.update) {
+        if (data?.action === ActionEnum.update) {
           if (data.photo) {
             const index = this.photos.findIndex(
               (photo) => photo.id === data.photo.id
@@ -287,7 +287,7 @@ export class AlbumPageComponent implements OnInit {
               ...this.photos.slice(index + 1),
             ];
           }
-        } else if (data.action === ActionEnum.delete) {
+        } else if (data?.action === ActionEnum.delete) {
           const index = this.photos.findIndex(
             (photo) => photo.id === data.photo_id
           );

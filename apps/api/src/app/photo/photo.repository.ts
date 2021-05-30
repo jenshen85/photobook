@@ -1,7 +1,6 @@
 import { Repository, EntityRepository } from 'typeorm';
 import {
   NotFoundException,
-  ConflictException,
   InternalServerErrorException,
 } from '@nestjs/common';
 import { plainToClass } from 'class-transformer';
@@ -9,7 +8,7 @@ import { plainToClass } from 'class-transformer';
 import { Photo, Auth } from '../entities';
 import { PhotoCredentialsDto, PhotoRoDto } from '@photobook/dto';
 
-import { IFileData } from '../file/file.service';
+import { IFileData, PhotoInfoType } from '../file/file.service';
 import { GetPhotosQueryDto, PhotoQueryDto } from './dto/get-photo-query.dto';
 import { LikeEnum, PhotoRoI } from '@photobook/data';
 
@@ -187,6 +186,7 @@ export class PhotoRepository extends Repository<Photo> {
 
   async createPhoto(
     imageData: IFileData,
+    imagePreview: string,
     album_id: number,
     user: Auth
   ): Promise<PhotoRoDto> {
@@ -195,18 +195,17 @@ export class PhotoRepository extends Repository<Photo> {
     newPhoto.album_id = album_id;
     newPhoto.user_profile_id = user.user_profile_id;
     newPhoto.image = imageData.imageUrl;
-    newPhoto.image_name = imageData.fileName;
+    newPhoto.filename = imageData.fileName;
+    newPhoto.width = imageData.width;
+    newPhoto.height = imageData.height;
+    newPhoto.ratio = imageData.ratio;
+    newPhoto.dimension = imageData.dimension;
+    newPhoto.preview = imagePreview;
 
     try {
       await newPhoto.save();
     } catch (error) {
-      if (error.code === '23505') {
-        throw new ConflictException(
-          `Photo with name "${imageData.fileName}" already exists`
-        );
-      } else {
-        throw new InternalServerErrorException(error);
-      }
+      throw new InternalServerErrorException(error);
     }
 
     return await this.getOne(newPhoto.id);
@@ -269,5 +268,41 @@ export class PhotoRepository extends Repository<Photo> {
         }
       })
     );
+  }
+
+  async patchPhotoInfo(
+    photo: Photo,
+    photoInfo: PhotoInfoType,
+    filename: string,
+    imagePreview?: string
+  ): Promise<void> {
+    if (!photo.height) {
+      photo.height = photoInfo.height;
+    }
+    if (!photo.width) {
+      photo.width = photoInfo.width;
+    }
+    if (!photo.ratio) {
+      photo.ratio = photoInfo.ratio;
+    }
+    if (!photo.dimension) {
+      photo.dimension = photoInfo.dimension;
+    }
+
+    if (!photo.preview) {
+      photo.preview = imagePreview;
+    }
+
+    if (!photo.filename) {
+      photo.filename = filename;
+    }
+
+    try {
+      await photo.save();
+      console.log(photo.id, ': image info updated successfully');
+    } catch (error) {
+      console.log(photo.id, ': image info updated falure');
+      throw new InternalServerErrorException(error);
+    }
   }
 }

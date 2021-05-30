@@ -1,9 +1,17 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import * as sharp from 'sharp';
 
-import { saveFile, removeDir, removeFile } from '../shared/utils/files-utils';
+import { removeDir, removeFile } from '../shared/utils/files-utils';
 import { editFileName } from '../shared/utils/edit-file-name';
 
-export interface IFileData {
+export interface PhotoInfoType {
+  width: number;
+  height: number;
+  dimension: string;
+  ratio: number;
+}
+
+export interface IFileData extends PhotoInfoType {
   imageUrl: string;
   fileName: string;
 }
@@ -15,13 +23,67 @@ export class FileService {
   async saveFile(
     file: Express.Multer.File,
     dirPath: string,
-    fileName?: string
+    fName?: string
   ): Promise<IFileData> {
-    const fName = editFileName(file, fileName);
-    const imageUrl = `${dirPath}/${fName}`;
+    const fileName = editFileName(file, fName);
+    const imageUrl = `${dirPath}/${fileName}`;
     const url = `${uploadsRoot}/${dirPath}`;
-    await saveFile(file, url, fName);
-    return { imageUrl, fileName: fName };
+    try {
+      const f = sharp(file.buffer);
+      const meta = await f.metadata();
+      await f.toFile(`${url}/${fileName}`);
+
+      const width = meta.width;
+      const height = meta.height;
+      const ratio = Math.round((height / width) * 100) / 100;
+      const dimension = `${meta.width}x${meta.height}`;
+
+      return {
+        imageUrl,
+        fileName,
+        width,
+        height,
+        dimension,
+        ratio,
+      };
+    } catch (error) {
+      throw new InternalServerErrorException(error);
+    }
+  }
+
+  async savePreview(photoPath: string, photoName: string): Promise<string> {
+    const imgPath = `${uploadsRoot}/${photoPath}/${photoName}`;
+    const previewPath = `${photoPath}/preview_${photoName}`;
+    const previewPathToPhoto = `${uploadsRoot}/${previewPath}`;
+
+    try {
+      const f = sharp(imgPath);
+      await f.resize({ width: 300 }).toFile(previewPathToPhoto);
+      return previewPath;
+    } catch (error) {
+      throw new InternalServerErrorException(error);
+    }
+  }
+
+  async getPhotoInfo(photoPath: string): Promise<PhotoInfoType> {
+    const imgPath = `${uploadsRoot}/${photoPath}`;
+    try {
+      const f = sharp(imgPath);
+      const meta = await f.metadata();
+      const width = meta.width;
+      const height = meta.height;
+      const ratio = Math.round((height / width) * 100) / 100;
+      const dimension = `${meta.width}x${meta.height}`;
+
+      return {
+        width,
+        height,
+        dimension,
+        ratio,
+      };
+    } catch (error) {
+      throw new InternalServerErrorException(error);
+    }
   }
 
   async deleteFile(pathtoFile: string): Promise<void> {

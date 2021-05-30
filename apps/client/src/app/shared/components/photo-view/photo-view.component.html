@@ -7,13 +7,15 @@
     >
       <span photobook-app-icon [icon]="leftIcon"></span>
     </button>
-    <div class="photo-view__image">
-      <img
-        *ngIf="photo"
-        [attr.alt]="photo.description && photo.description"
-        [src]="photo.image"
-        (load)="onloadImage($event)"
-      />
+    <div class="photo-view__image" [style.maxWidth]="width">
+      <div class="photo-view__image-inner" [style.paddingTop]="ratio">
+        <img
+          *ngIf="photo"
+          [attr.alt]="photo.description && photo.description"
+          [src]="photo.image"
+          (load)="onloadImage($event, photo)"
+        />
+      </div>
       <photobook-spinner
         position="absolute"
         *ngIf="loadPhoto"
@@ -25,6 +27,9 @@
       [disabled]="loadPhoto"
     >
       <span photobook-app-icon [icon]="rightIcon"></span>
+    </button>
+    <button type="button" class="photo-view__close" dialogClose>
+      <span photobook-app-icon [icon]="closeIcon"></span>
     </button>
   </div>
 

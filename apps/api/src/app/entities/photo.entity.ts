@@ -19,8 +19,23 @@ export class Photo extends AbstractEntity {
   @Column()
   image: string;
 
-  @Column()
-  image_name: string;
+  @Column({ nullable: true })
+  filename: string;
+
+  @Column({ nullable: true })
+  width: number;
+
+  @Column({ nullable: true })
+  height: number;
+
+  @Column({ nullable: true, type: 'float8' })
+  ratio: number;
+
+  @Column({ nullable: true })
+  dimension: string;
+
+  @Column({ nullable: true })
+  preview: string;
 
   @Column({ nullable: true })
   title: string;

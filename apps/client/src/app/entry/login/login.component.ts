@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthCredentialsI, SpriteIconEnum } from '@photobook/data';
+import { of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { AuthService } from '../../auth/auth.service';
 
 @Component({
@@ -30,13 +32,22 @@ export class LoginComponent implements OnInit {
     if (this.form.valid) {
       this.pending = true;
       const data: AuthCredentialsI = this.form.value;
-      this._authService.login(data).subscribe(
-        (userdata) => {},
-        (error) => {
-          /* TODO: error handling */
-        },
-        () => (this.pending = false)
-      );
+      this._authService
+        .login(data)
+        .pipe(
+          catchError((err, caught) => {
+            return of(err);
+          })
+        )
+        .subscribe(
+          (userdata) => {},
+          (error) => {
+            console.log(error);
+
+            /* TODO: error handling */
+          },
+          () => (this.pending = false)
+        );
     } else {
       this.form.markAsTouched();
     }

@@ -102,9 +102,9 @@ export class AuthRepository extends Repository<Auth> {
   ): Promise<JwtPayload> {
     const { email, password } = authCredentials;
     const user = await this.findOne({ email });
-    const hasProfile = user.has_profile;
 
     if (user && (await user.validatePassword(password))) {
+      const hasProfile = user.has_profile;
       return { id: user.id, email, username: user.username, hasProfile };
     } else {
       return null;
