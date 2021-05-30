@@ -1,7 +1,7 @@
 <div class="photo-card" *transloco="let t">
   <div class="photo-card__top">
     <a href="#" class="photo-card__img" (click)="onPhotoClickHandler($event)">
-      <img [src]="photo.image" [alt]="photo.title" />
+      <img [src]="photo.preview" [alt]="photo.title" />
       <span
         class="photo-card__img-zoom"
         photobook-app-icon

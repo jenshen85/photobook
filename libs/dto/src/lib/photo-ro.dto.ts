@@ -1,6 +1,12 @@
 import 'reflect-metadata';
 import { Exclude, Expose, Type } from 'class-transformer';
-import { AlbumRoI, CommentRoI, LikeRoI, PhotoRoI, UserProfileRoI } from '@photobook/data';
+import {
+  AlbumRoI,
+  CommentRoI,
+  LikeRoI,
+  PhotoRoI,
+  UserProfileRoI,
+} from '@photobook/data';
 import { AlbumRoDto } from './album-ro.dto';
 import { UserProfileRODto } from './user-profile-ro.dto';
 import { LikeRoDto } from './like-ro.dto';
@@ -24,7 +30,22 @@ export class PhotoRoDto implements PhotoRoI {
   image: string;
 
   @Expose()
-  image_name: string;
+  filename: string;
+
+  @Expose()
+  width: number;
+
+  @Expose()
+  height: number;
+
+  @Expose()
+  ratio: number;
+
+  @Expose()
+  dimension: string;
+
+  @Expose()
+  preview: string;
 
   @Expose()
   title: string;

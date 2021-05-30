@@ -7,6 +7,7 @@ import {
   Output,
   ViewChild,
 } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import {
   ActionEnum,
@@ -17,6 +18,8 @@ import {
   UserProfileRoI,
 } from '@photobook/data';
 import { Dialog, DialogRef, DIALOG_DATA } from '@photobook/ui';
+// import { of } from 'rxjs';
+// import { catchError } from 'rxjs/operators';
 import { ConfirmComponent } from '../../../photobook/components/confirm/confirm.component';
 
 import { PhotobookService } from '../../../photobook/photobook.service';
@@ -48,8 +51,9 @@ export class PhotoViewComponent implements OnInit {
     photo_id: number;
     action: ActionEnum;
   }> = new EventEmitter();
-
+  window: Window;
   photo: PhotoRoI;
+  data: openPhotoInDataType;
   authUserProfile: UserProfileRoI;
   photoUserProfile: UserProfileRoI;
   loadPhoto: boolean;
@@ -70,6 +74,8 @@ export class PhotoViewComponent implements OnInit {
   likePending: boolean;
   activeActions: number | null = null;
   editComment: number | null = null;
+  ratio: string = '56%';
+  width: string = '100%';
 
   @ViewChild('commentControl') commentControl: ElementRef;
 
@@ -77,18 +83,22 @@ export class PhotoViewComponent implements OnInit {
     private readonly _photobookService: PhotobookService,
     private readonly dialogRef: DialogRef<PhotoViewComponent>,
     private readonly _dialog: Dialog,
-    @Inject(DIALOG_DATA) private data: openPhotoInDataType
-  ) {}
+    @Inject(DIALOG_DATA) private _data: openPhotoInDataType,
+    @Inject(DOCUMENT) private document: Document
+  ) {
+    this.photo = _data.photo;
+    this.window = this.document.defaultView;
+  }
 
   ngOnInit(): void {
-    this.authUserProfile = this.data.authUserProfile;
-    this.photoUserProfile = this.data.photoUserProfile;
+    this.authUserProfile = this._data.authUserProfile;
+    this.photoUserProfile = this._data.photoUserProfile;
     this.form = new FormGroup({
       text: new FormControl(null, [Validators.maxLength(200)]),
     });
 
     this.loadPhoto = true;
-    this._photobookService.getPhoto(this.data.photo.id).subscribe({
+    this._photobookService.getPhoto(this._data.photo.id).subscribe({
       next: (photo: PhotoRoI) => this.updatePhotoData(photo),
       error: (err) => {
         this.loadPhoto = false;
@@ -97,7 +107,7 @@ export class PhotoViewComponent implements OnInit {
   }
 
   prevPhoto() {
-    const album_id = this.data.album_id;
+    const album_id = this._data.album_id;
     this.loadPhoto = true;
     this._photobookService.getPrevPhoto(this.photo.id, album_id).subscribe({
       next: (photo: PhotoRoI) => this.updatePhotoData(photo),
@@ -108,14 +118,21 @@ export class PhotoViewComponent implements OnInit {
   }
 
   nextPhoto() {
-    const album_id = this.data.album_id;
+    const album_id = this._data.album_id;
     this.loadPhoto = true;
-    this._photobookService.getNextPhoto(this.photo.id, album_id).subscribe({
-      next: (photo: any) => this.updatePhotoData(photo),
-      error: (err: any) => {
-        console.log(err);
-      },
-    });
+    this._photobookService
+      .getNextPhoto(this.photo.id, album_id)
+      .pipe
+      // catchError((err, caught) => {
+      //   return of(err)
+      // })
+      ()
+      .subscribe({
+        next: (photo: any) => this.updatePhotoData(photo),
+        error: (err: any) => {
+          console.log(err);
+        },
+      });
   }
 
   updatePhotoData(photo: PhotoRoI) {
@@ -294,8 +311,14 @@ export class PhotoViewComponent implements OnInit {
     return this.photo.likes.length;
   }
 
-  onloadImage(_: Event) {
+  onloadImage(_: Event, photo: PhotoRoI) {
     this.loadPhoto = false;
+    this.ratio = photo.ratio * 100 + '%';
+    if (photo.height > photo.width || photo.ratio > 0.9) {
+      this.width = `${(this.window.innerHeight - 50) / photo.ratio}px`;
+    } else {
+      this.width = '100%';
+    }
   }
 
   closeDialog() {
