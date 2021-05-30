@@ -1,8 +1,15 @@
-import { Component, ChangeDetectionStrategy, Input, HostBinding, AfterViewInit, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
 import {
-  ControlContainer,
-  FormGroupDirective,
-} from '@angular/forms';
+  Component,
+  ChangeDetectionStrategy,
+  Input,
+  HostBinding,
+  AfterViewInit,
+  ViewChild,
+  ElementRef,
+  Output,
+  EventEmitter,
+} from '@angular/core';
+import { ControlContainer, FormGroupDirective } from '@angular/forms';
 import { SpriteIconEnum } from '@photobook/data';
 
 @Component({
@@ -18,8 +25,8 @@ import { SpriteIconEnum } from '@photobook/data';
   ],
   host: {
     class: 'form-control',
-    "[class]": "className ? className : ''",
-  }
+    '[class]': "className ? className : ''",
+  },
 })
 export class FormControlComponent implements AfterViewInit {
   @Input() inputName: string;
@@ -36,14 +43,27 @@ export class FormControlComponent implements AfterViewInit {
 
   constructor(private readonly elementRef: ElementRef) {}
 
-  ngAfterViewInit():void {
-    this.input.nativeElement.addEventListener('focus', this._focusHanddler.bind(this));
-    this.input.nativeElement.addEventListener('blur', this._blurHanddler.bind(this));
+  ngAfterViewInit(): void {
+    this._blurHanddler();
+    this.input.nativeElement.addEventListener(
+      'focus',
+      this._focusHanddler.bind(this)
+    );
+    this.input.nativeElement.addEventListener(
+      'blur',
+      this._blurHanddler.bind(this)
+    );
   }
 
   ngOnDestroy(): void {
-    this.input.nativeElement.removeEventListener('focus', this._focusHanddler.bind(this));
-    this.input.nativeElement.removeEventListener('blur', this._blurHanddler.bind(this));
+    this.input.nativeElement.removeEventListener(
+      'focus',
+      this._focusHanddler.bind(this)
+    );
+    this.input.nativeElement.removeEventListener(
+      'blur',
+      this._blurHanddler.bind(this)
+    );
   }
 
   private _focusHanddler() {
@@ -51,15 +71,15 @@ export class FormControlComponent implements AfterViewInit {
   }
 
   private _blurHanddler() {
-    if(!this._value) {
+    if (!this._value) {
       this.elementRef.nativeElement.classList.remove('form-control--focused');
     }
   }
 
   @HostBinding('class') get setPrefix() {
-    if(this.iconPrefix) {
+    if (this.iconPrefix) {
       return 'iconPrefix';
-    } else if(this.iconPostfix) {
+    } else if (this.iconPostfix) {
       return 'iconPostfix';
     }
 
