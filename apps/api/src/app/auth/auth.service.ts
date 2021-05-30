@@ -28,6 +28,7 @@ export class AuthService {
     const payload = await this._authRepository.validateUserPassword(
       authCredentials
     );
+
     if (!payload) {
       throw new UnauthorizedException('Invalid credentials');
     }
