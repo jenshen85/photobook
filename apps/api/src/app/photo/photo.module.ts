@@ -4,9 +4,14 @@ import { PhotoController } from './photo.controller';
 import { PhotoService } from './photo.service';
 import { PhotoRepository } from './photo.repository';
 import { FileModule } from '../file/file.module';
+import { EventModule } from '../event/event.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([PhotoRepository]), FileModule],
+  imports: [
+    TypeOrmModule.forFeature([PhotoRepository]),
+    FileModule,
+    EventModule,
+  ],
   providers: [PhotoService],
   controllers: [PhotoController],
   exports: [PhotoService],
