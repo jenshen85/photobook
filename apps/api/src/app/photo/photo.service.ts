@@ -8,13 +8,15 @@ import { PhotoRepository } from './photo.repository';
 import { FileService } from '../file/file.service';
 import { generateFileName } from '../shared/utils/edit-file-name';
 import { GetPhotosQueryDto, PhotoQueryDto } from './dto/get-photo-query.dto';
+import { EventGateway } from '../event/event.gateway';
 
 @Injectable()
 export class PhotoService {
   constructor(
     @InjectRepository(Photo)
     private readonly _photoRepository: PhotoRepository,
-    private readonly _fileService: FileService
+    private readonly _fileService: FileService,
+    private readonly _eventGateway: EventGateway
   ) {}
 
   async getAll(getPhotosQuery: GetPhotosQueryDto): Promise<PhotoRoDto[]> {
@@ -70,6 +72,8 @@ export class PhotoService {
       album_id,
       user
     );
+
+    this._eventGateway.send<PhotoRoDto>({ type: 'server', data: photo });
     return photo;
   }
 
@@ -83,6 +87,7 @@ export class PhotoService {
         return await this.createPhoto(album_id, file, user);
       })
     );
+
     return photos;
   }
 

@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UiModule } from '@photobook/ui';
 import { PhotobookRoutingModule } from './photobook-routing.module';
+import { WebsocketModule } from '../websocket';
 
 import { PhotobookService } from './photobook.service';
 
@@ -28,6 +29,7 @@ import { EditPhotoComponent } from './album-page/components/edit-photo/edit-phot
 import { UserPageComponent } from './user-page/user-page.component';
 import { ConfirmComponent } from './components/confirm/confirm.component';
 import { TranslocoModule, TRANSLOCO_SCOPE } from '@ngneat/transloco';
+import { environment } from '../../environments/environment';
 
 @NgModule({
   declarations: [
@@ -53,7 +55,15 @@ import { TranslocoModule, TRANSLOCO_SCOPE } from '@ngneat/transloco';
     AutoFocusDirective,
     ConfirmComponent,
   ],
-  imports: [CommonModule, PhotobookRoutingModule, UiModule, TranslocoModule],
+  imports: [
+    CommonModule,
+    PhotobookRoutingModule,
+    UiModule,
+    TranslocoModule,
+    WebsocketModule.config({
+      url: environment.ws,
+    }),
+  ],
   providers: [
     PhotobookService,
     DragNDropDirective,
