@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  tokenWhiteListedDomains: ['localhost:4200']
+  tokenWhiteListedDomains: ['localhost:4200'],
+  ws: 'ws://localhost:3001',
 };
 
 /*

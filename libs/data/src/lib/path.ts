@@ -8,3 +8,13 @@ export const PATHS = {
   comment: `${API_PATH}/comment`,
   like: `${API_PATH}/like`,
 };
+
+export const WS = {
+  ON: {
+    test: `ws/${API_PATH}/test`,
+  },
+  SEND: {
+    SEND_TEXT: 'set-text',
+    REMOVE_TEXT: 'remove-text',
+  },
+};
